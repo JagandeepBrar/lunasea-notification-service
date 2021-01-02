@@ -1,0 +1,10 @@
+{
+    "restartable": "rs",
+    "ignore": [".git", "node_modules", "dist"],
+    "watch": ["src"],
+    "exec": "node -r ts-node/register -r dotenv/config -r module-alias/register",
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js,json,ts"
+}
