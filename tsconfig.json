@@ -9,7 +9,7 @@
         "target": "es2018",
         "baseUrl": ".",
         "paths": {
-            "@couchparty/*": ["src/*"]
+            "@lunasea-notification-relay/*": ["src/*"]
         }
     },
     "exclude": ["node_modules", "dist", ".git"],
