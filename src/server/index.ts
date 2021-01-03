@@ -1,5 +1,5 @@
 import express from 'express';
-import { Logger, ELogger } from '@lunasea-notification-relay/logger';
+import { Logger, ELogger } from '@lunasea-notification-relay/core/logger';
 import { router as v1 } from '@lunasea-notification-relay/server/v1';
 
 export namespace Server {
@@ -27,4 +27,11 @@ export namespace Server {
         });
         Logger.info('Server Running / Port', PORT);
     };
+
+    /**
+     * Simple interface to structure all responses to hooks
+     */
+    export interface Response {
+        message: string;
+    }
 }

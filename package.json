@@ -5,9 +5,9 @@
     "repository": "https://github.com/CometTools/LunaSea-Notification-Relay",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --config nodemon.json src/index.ts",
+        "start": "cross-env NODE_ENV=development nodemon --config nodemon.json src/index.ts",
         "build": "tsc",
-        "serve": "ts-node -r tsconfig-paths/register -r dotenv/config dist/index.js",
+        "serve": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register -r dotenv/config dist/index.js",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
     },
@@ -15,19 +15,20 @@
     "license": "GPL-3.0-only",
     "dependencies": {
         "axios": "^0.21.1",
+        "cross-env": "^7.0.3",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "firebase-admin": "^9.4.2",
         "ts-node": "^9.1.1",
         "tsconfig-paths": "^3.9.0",
-        "tslog": "^3.0.3"
+        "tslog": "^3.0.5"
     },
     "devDependencies": {
         "@types/express": "^4.17.9",
-        "@types/node": "^14.14.14",
-        "@typescript-eslint/eslint-plugin": "^4.11.0",
-        "@typescript-eslint/parser": "^4.11.0",
-        "eslint": "^7.16.0",
+        "@types/node": "^14.14.19",
+        "@typescript-eslint/eslint-plugin": "^4.11.1",
+        "@typescript-eslint/parser": "^4.11.1",
+        "eslint": "^7.17.0",
         "husky": "^4.3.6",
         "nodemon": "^2.0.6",
         "prettier": "2.2.1",
