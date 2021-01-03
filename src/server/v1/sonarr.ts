@@ -23,7 +23,7 @@ export namespace Sonarr {
      * @param response Express response object
      */
     async function handler(request: express.Request, response: express.Response): Promise<void> {
-        Logger.debug('Started handling Sonarr webhook...');
+        Logger.info('Started handling Sonarr webhook...');
         try {
             if (await Firebase.validateUserID(request.params.uid)) {
                 Logger.debug('-> Validated user:', request.params.uid);
@@ -65,7 +65,7 @@ export namespace Sonarr {
             response.status(500).send(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
-        Logger.debug('Finished handling Sonarr webhook.');
+        Logger.info('Finished handling Sonarr webhook.');
     }
 
     /**
