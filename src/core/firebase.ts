@@ -4,6 +4,9 @@ import * as admin from 'firebase-admin';
 export namespace Firebase {
     const SERVICE_ACCOUNT = require('../../serviceaccount.json');
 
+    /**
+     * Initialize the connection to Firebase and link it to the service account.
+     */
     export const initialize = (): void => {
         Logger.debug('Initializing Firebase...');
         Logger.debug('-> Project:', SERVICE_ACCOUNT['project_id']);
@@ -62,6 +65,13 @@ export namespace Firebase {
         }
     };
 
+    /**
+     * Send a message to the supplied device token list.
+     *
+     * @param devices Firebase device token list
+     * @param notification Notification message payload
+     * @param data Data message payload
+     */
     export const sendFirebaseCloudMessage = async (
         devices: string[],
         notification?: admin.messaging.NotificationMessagePayload,
