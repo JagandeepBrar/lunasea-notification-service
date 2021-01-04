@@ -7,7 +7,7 @@
     "scripts": {
         "start": "cross-env NODE_ENV=development nodemon --config nodemon.json src/index.ts",
         "build": "tsc",
-        "serve": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register -r dotenv/config dist/index.js",
+        "serve": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register -r dotenv/config dist/src/index.js",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
     },
