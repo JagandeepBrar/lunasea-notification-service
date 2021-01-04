@@ -96,9 +96,9 @@ export namespace Sonarr {
             data.episodes?.length == 1
                 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
                 : `${data.episodes.length} Episodes`;
-        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
+        const bodyLine2 = `Episode grabbed (${data.release.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: data.series?.title ?? 'Unknown Series',
+            title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -115,7 +115,7 @@ export namespace Sonarr {
         Logger.debug('-> Handling as "Health" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: 'Sonarr Health Check',
+            title: 'Sonarr: Health Check',
             body: data.message,
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -131,6 +131,12 @@ export namespace Sonarr {
     const handleRenameEventType = async (data: RenameEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Rename" event type...');
         Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `Sonarr: ${data.series.title}`,
+            body: 'Files have been renamed',
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
     };
 
     /**
@@ -143,7 +149,7 @@ export namespace Sonarr {
         Logger.debug('-> Handling as "Test" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: 'Sonarr',
+            title: 'Sonarr: Connection Test',
             body: 'LunaSea is ready for Sonarr notifications!',
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -246,6 +252,7 @@ export namespace Sonarr {
      */
     interface RenameEventType {
         eventType: EventType;
+        series: SeriesProperties;
     }
 
     /**
