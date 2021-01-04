@@ -1,16 +1,18 @@
 import { ELogger, Logger } from '@lunasea-notification-relay/core/logger';
+import * as serviceaccount from '../../serviceaccount.json';
 import * as admin from 'firebase-admin';
 
 export namespace Firebase {
-    const SERVICE_ACCOUNT = require('../../serviceaccount.json');
-
+    /**
+     * Initialize the connection to Firebase and link it to the service account.
+     */
     export const initialize = (): void => {
         Logger.debug('Initializing Firebase...');
-        Logger.debug('-> Project:', SERVICE_ACCOUNT['project_id']);
+        Logger.debug('-> Project:', serviceaccount['project_id']);
         Logger.debug('-> Database URL:', process.env.DATABASE_URL);
         Logger.debug('-> Restricted Package Name:', process.env.RESTRICTED_PACKAGE_NAME);
         admin.initializeApp({
-            credential: admin.credential.cert(SERVICE_ACCOUNT),
+            credential: admin.credential.cert(serviceaccount as admin.ServiceAccount),
             databaseURL: process.env.DATABASE_URL,
         });
         Logger.debug('Initialized Firebase.');
@@ -62,6 +64,13 @@ export namespace Firebase {
         }
     };
 
+    /**
+     * Send a message to the supplied device token list.
+     *
+     * @param devices Firebase device token list
+     * @param notification Notification message payload
+     * @param data Data message payload
+     */
     export const sendFirebaseCloudMessage = async (
         devices: string[],
         notification?: admin.messaging.NotificationMessagePayload,

@@ -31,26 +31,29 @@ export namespace Sonarr {
                 // Send an OK response once the user is verified
                 response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
                 Logger.debug('-> HTTP response sent (200 OK)');
-                switch (request.body['eventType']) {
-                    case EventType.Download:
-                        //TODO
-                        break;
-                    case EventType.Grab:
-                        //TODO
-                        break;
-                    case EventType.Health:
-                        //TODO
-                        break;
-                    case EventType.Rename:
-                        //TODO
-                        break;
-                    case EventType.Test:
-                        await handleTestEventType(request.body as TestEventType, request.params.uid);
-                        break;
-                    default:
-                        Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
-                        return;
-                }
+                const devices: string[] = await Firebase.getDeviceTokenList(request.params.uid);
+                Logger.debug('->', devices.length ?? 0, 'device(s) found');
+                if ((devices.length ?? 0) > 0)
+                    switch (request.body['eventType']) {
+                        case EventType.Download:
+                            await handleDownloadEventType(request.body as DownloadEventType, devices);
+                            break;
+                        case EventType.Grab:
+                            await handleGrabEventType(request.body as GrabEventType, devices);
+                            break;
+                        case EventType.Health:
+                            await handleHealthEventType(request.body as HealthEventType, devices);
+                            break;
+                        case EventType.Rename:
+                            await handleRenameEventType(request.body as RenameEventType, devices);
+                            break;
+                        case EventType.Test:
+                            await handleTestEventType(request.body as TestEventType, devices);
+                            break;
+                        default:
+                            Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
+                            return;
+                    }
             } else {
                 Logger.debug('Unable to validate user:', request.params.uid);
                 Logger.debug('Sending HTTP response to complete webhook...');
@@ -69,12 +72,75 @@ export namespace Sonarr {
     }
 
     /**
-     * Handle a test connection event type
+     * Handle a "Download" event type
+     *
+     * @param data Request body as DownloadEventType
+     * @param devices List of Firebase device tokens
      */
-    const handleTestEventType = async (data: TestEventType, uid: string): Promise<void> => {
+    const handleDownloadEventType = async (data: DownloadEventType, devices: string[]): Promise<void> => {
+        Logger.debug('-> Handling as "Download" event type...');
+        Logger.debug('-> Sending to devices...');
+        //TODO
+    };
+
+    /**
+     * Handle a "Grab" event type
+     *
+     * @param data Request body as GrabEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleGrabEventType = async (data: GrabEventType, devices: string[]): Promise<void> => {
+        Logger.debug('-> Handling as "Grab" event type...');
+        Logger.debug('-> Sending to devices...');
+        const bodyLine1 =
+            data.episodes?.length == 1
+                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
+                : `${data.episodes.length} Episodes`;
+        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: data.series?.title ?? 'Unknown Series',
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "Health" event type
+     *
+     * @param data Request body as HealthEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleHealthEventType = async (data: HealthEventType, devices: string[]): Promise<void> => {
+        Logger.debug('-> Handling as "Health" event type...');
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: 'Sonarr Health Check',
+            body: data.message,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "Rename" event type
+     *
+     * @param data Request body as RenameEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleRenameEventType = async (data: RenameEventType, devices: string[]): Promise<void> => {
+        Logger.debug('-> Handling as "Rename" event type...');
+        Logger.debug('-> Sending to devices...');
+    };
+
+    /**
+     * Handle a "Test" event type
+     *
+     * @param data Request body as TestEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleTestEventType = async (data: TestEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Test" event type...');
-        const devices: string[] = await Firebase.getDeviceTokenList(uid);
-        Logger.debug('->', devices.length ?? 0, 'device(s) found');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: 'Sonarr',
@@ -115,9 +181,10 @@ export namespace Sonarr {
         id: number;
         title: string;
         path: string;
-        tvdbId: number;
-        tvMazeId: number;
         type: SeriesType;
+        tvdbId?: number;
+        tvMazeId?: number;
+        imdbId?: string;
     }
 
     /**
@@ -128,6 +195,57 @@ export namespace Sonarr {
         episodeNumber: number;
         seasonNumber: number;
         title: string;
+        airDate?: string;
+        airDateUtc?: string;
+    }
+
+    /**
+     * Release object containing release details for a request
+     */
+    interface ReleaseProperties {
+        quality: string;
+        qualityVersion: number;
+        releaseGroup: string;
+        releaseTitle: string;
+        indexer: string;
+        size: number;
+    }
+
+    /**
+     * Interface for a "Grab" event type
+     */
+    interface GrabEventType {
+        eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
+        release: ReleaseProperties;
+        downloadClient: string;
+        downloadId: string;
+    }
+
+    /**
+     * Interface for a "Download" event type
+     */
+    interface DownloadEventType {
+        eventType: EventType;
+    }
+
+    /**
+     * Interface for a "Health" event type
+     */
+    interface HealthEventType {
+        eventType: EventType;
+        level: string;
+        message: string;
+        type: string;
+        wikiUrl: string;
+    }
+
+    /**
+     * Interface for a "Rename" event type
+     */
+    interface RenameEventType {
+        eventType: EventType;
     }
 
     /**

@@ -8,6 +8,7 @@
         "strict": true,
         "target": "es2018",
         "baseUrl": ".",
+        "resolveJsonModule": true,
         "paths": {
             "@lunasea-notification-relay/*": ["src/*"]
         }
