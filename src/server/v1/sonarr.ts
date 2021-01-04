@@ -79,6 +79,7 @@ export namespace Sonarr {
      */
     const handleDownloadEventType = async (data: DownloadEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
+        Logger.debug('-> Sending to devices...');
         //TODO
     };
 
@@ -90,7 +91,18 @@ export namespace Sonarr {
      */
     const handleGrabEventType = async (data: GrabEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
-        //TODO
+        Logger.debug('-> Sending to devices...');
+        const bodyLine1 =
+            data.episodes?.length == 1
+                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
+                : `${data.episodes.length} Episodes`;
+        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: data.series?.title ?? 'Unknown Series',
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
     };
 
     /**
@@ -118,7 +130,7 @@ export namespace Sonarr {
      */
     const handleRenameEventType = async (data: RenameEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Rename" event type...');
-        //TODO
+        Logger.debug('-> Sending to devices...');
     };
 
     /**
@@ -169,9 +181,10 @@ export namespace Sonarr {
         id: number;
         title: string;
         path: string;
-        tvdbId: number;
-        tvMazeId: number;
         type: SeriesType;
+        tvdbId?: number;
+        tvMazeId?: number;
+        imdbId?: string;
     }
 
     /**
@@ -182,17 +195,40 @@ export namespace Sonarr {
         episodeNumber: number;
         seasonNumber: number;
         title: string;
+        airDate?: string;
+        airDateUtc?: string;
+    }
+
+    /**
+     * Release object containing release details for a request
+     */
+    interface ReleaseProperties {
+        quality: string;
+        qualityVersion: number;
+        releaseGroup: string;
+        releaseTitle: string;
+        indexer: string;
+        size: number;
     }
 
     /**
      * Interface for a "Grab" event type
      */
-    interface GrabEventType {}
+    interface GrabEventType {
+        eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
+        release: ReleaseProperties;
+        downloadClient: string;
+        downloadId: string;
+    }
 
     /**
      * Interface for a "Download" event type
      */
-    interface DownloadEventType {}
+    interface DownloadEventType {
+        eventType: EventType;
+    }
 
     /**
      * Interface for a "Health" event type
@@ -208,7 +244,9 @@ export namespace Sonarr {
     /**
      * Interface for a "Rename" event type
      */
-    interface RenameEventType {}
+    interface RenameEventType {
+        eventType: EventType;
+    }
 
     /**
      * Interface for a "Test" event type
