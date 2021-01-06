@@ -14,24 +14,25 @@ export namespace Sonarr {
 
     // Create a router, and add the handler route
     export const instance = express.Router();
-    instance.post('/:uid', handler);
+    instance.post('/user/:id', userHandler);
+    instance.post('/device/:id', deviceHandler);
 
     /**
-     * Sonarr Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
+     * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
      *
      * @param request Express request object
      * @param response Express response object
      */
-    async function handler(request: express.Request, response: express.Response): Promise<void> {
-        Logger.info('Started handling Sonarr webhook...');
+    async function userHandler(request: express.Request, response: express.Response): Promise<void> {
+        Logger.info('Started handling Sonarr [user] webhook...');
         try {
-            if (await Firebase.validateUserID(request.params.uid)) {
-                Logger.debug('-> Validated user:', request.params.uid);
+            if (await Firebase.validateUserID(request.params.id)) {
+                Logger.debug('-> Validated user:', request.params.id);
                 Logger.debug('-> Sending HTTP response to complete webhook...');
                 // Send an OK response once the user is verified
                 response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
                 Logger.debug('-> HTTP response sent (200 OK)');
-                const devices: string[] = await Firebase.getDeviceTokenList(request.params.uid);
+                const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
                 Logger.debug('->', devices.length ?? 0, 'device(s) found');
                 if ((devices.length ?? 0) > 0)
                     switch (request.body['eventType']) {
@@ -55,7 +56,7 @@ export namespace Sonarr {
                             return;
                     }
             } else {
-                Logger.debug('Unable to validate user:', request.params.uid);
+                Logger.debug('Unable to validate user:', request.params.id);
                 Logger.debug('Sending HTTP response to complete webhook...');
                 // If the user can't be found, return a not found error (404)
                 response.status(404).json(<Server.Response>{ message: Constants.MSG_USER_NOT_FOUND });
@@ -68,7 +69,32 @@ export namespace Sonarr {
             response.status(500).send(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
-        Logger.info('Finished handling Sonarr webhook.');
+        Logger.info('Finished handling Sonarr [user] webhook.');
+    }
+
+    /**
+     * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
+     *
+     * @param request Express request object
+     * @param response Express response object
+     */
+    async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
+        Logger.info('Started handling Sonarr [device] webhook...');
+        try {
+            Logger.debug('-> Sending HTTP response to complete webhook...');
+            // Send an OK response once the user is verified
+            response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
+            Logger.debug('-> HTTP response sent (200 OK)');
+
+            //TODO: Actually handle sending the notification
+        } catch (error) {
+            // On any other thrown errors, capture, log, and return internal server error (500)
+            ELogger.error(error.message);
+            Logger.debug('Sending HTTP response to complete webhook...');
+            response.status(500).send(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
+            Logger.debug('HTTP response sent (500 Internal Server Error)');
+        }
+        Logger.info('Finished handling Sonarr [device] webhook.');
     }
 
     /**
@@ -80,7 +106,19 @@ export namespace Sonarr {
     const handleDownloadEventType = async (data: DownloadEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
-        //TODO
+        const bodyLine1 =
+            data.episodes?.length == 1
+                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
+                : `${data.episodes.length} Episodes`;
+        const bodyLine2 = data.isUpgrade
+            ? `Episode Upgraded (${data.episodeFile.quality})`
+            : `Episode Downloaded (${data.episodeFile.quality})`;
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
     };
 
     /**
@@ -96,7 +134,7 @@ export namespace Sonarr {
             data.episodes?.length == 1
                 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
                 : `${data.episodes.length} Episodes`;
-        const bodyLine2 = `Episode grabbed (${data.release.quality})`;
+        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
@@ -133,7 +171,7 @@ export namespace Sonarr {
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `Sonarr: ${data.series.title}`,
-            body: 'Files have been renamed',
+            body: 'Files Renamed',
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -218,6 +256,20 @@ export namespace Sonarr {
     }
 
     /**
+     * Episode file object containing episode file details for a request
+     */
+    interface EpisodeFileProperties {
+        id: number;
+        relativePath: string;
+        path: string;
+        quality: string;
+        qualityVersion: number;
+        releaseGroup: string;
+        sceneName: string;
+        size: number;
+    }
+
+    /**
      * Interface for a "Grab" event type
      */
     interface GrabEventType {
@@ -234,6 +286,12 @@ export namespace Sonarr {
      */
     interface DownloadEventType {
         eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
+        episodeFile: EpisodeFileProperties;
+        isUpgrade: boolean;
+        downloadClient: string;
+        downloadId: string;
     }
 
     /**
