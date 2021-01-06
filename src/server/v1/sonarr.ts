@@ -26,54 +26,62 @@ export namespace Sonarr {
     async function userHandler(request: express.Request, response: express.Response): Promise<void> {
         Logger.info('Started handling Sonarr [user] webhook...');
         try {
-            if (await Firebase.validateUserID(request.params.id)) {
-                Logger.debug('-> Validated user:', request.params.id);
+            if (!request.params.id) {
+                Logger.debug('-> A request with no UID was attempted.');
                 Logger.debug('-> Sending HTTP response to complete webhook...');
-                // Send an OK response once the user is verified
-                response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
-                Logger.debug('-> HTTP response sent (200 OK)');
-                const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
-                Logger.debug('->', devices.length ?? 0, 'device(s) found');
-                if ((devices.length ?? 0) > 0)
-                    switch (request.body['eventType']) {
-                        case EventType.Download:
-                            await handleDownloadEventType(request.body as DownloadEventType, devices);
-                            break;
-                        case EventType.Grab:
-                            await handleGrabEventType(request.body as GrabEventType, devices);
-                            break;
-                        case EventType.Health:
-                            await handleHealthEventType(request.body as HealthEventType, devices);
-                            break;
-                        case EventType.Rename:
-                            await handleRenameEventType(request.body as RenameEventType, devices);
-                            break;
-                        case EventType.Test:
-                            await handleTestEventType(request.body as TestEventType, devices);
-                            break;
-                        default:
-                            Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
-                            return;
-                    }
+                response.status(400).json(<Server.Response>{ message: Constants.MSG_NO_ID_SUPPLIED });
+                Logger.debug('-> HTTP response sent (400 Bad Request)');
             } else {
-                Logger.debug('Unable to validate user:', request.params.id);
-                Logger.debug('Sending HTTP response to complete webhook...');
-                // If the user can't be found, return a not found error (404)
-                response.status(404).json(<Server.Response>{ message: Constants.MSG_USER_NOT_FOUND });
-                Logger.debug('HTTP response sent (404 Not Found)');
+                if (await Firebase.validateUserID(request.params.id)) {
+                    Logger.debug('-> Validated user:', request.params.id);
+                    Logger.debug('-> Sending HTTP response to complete webhook...');
+                    // Send an OK response once the user is verified
+                    response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
+                    Logger.debug('-> HTTP response sent (200 OK)');
+                    const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
+                    Logger.debug('->', devices.length ?? 0, 'device(s) found');
+                    if ((devices.length ?? 0) > 0) {
+                        switch (request.body['eventType']) {
+                            case EventType.Download:
+                                await handleDownloadEventType(request.body as DownloadEventType, devices);
+                                break;
+                            case EventType.Grab:
+                                await handleGrabEventType(request.body as GrabEventType, devices);
+                                break;
+                            case EventType.Health:
+                                await handleHealthEventType(request.body as HealthEventType, devices);
+                                break;
+                            case EventType.Rename:
+                                await handleRenameEventType(request.body as RenameEventType, devices);
+                                break;
+                            case EventType.Test:
+                                await handleTestEventType(request.body as TestEventType, devices);
+                                break;
+                            default:
+                                Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
+                                return;
+                        }
+                    }
+                } else {
+                    Logger.debug('-> Unable to validate user:', request.params.id);
+                    Logger.debug('-> Sending HTTP response to complete webhook...');
+                    // If the user can't be found, return a not found error (404)
+                    response.status(404).json(<Server.Response>{ message: Constants.MSG_USER_NOT_FOUND });
+                    Logger.debug('HTTP response sent (404 Not Found)');
+                }
             }
         } catch (error) {
             // On any other thrown errors, capture, log, and return internal server error (500)
             ELogger.error(error.message);
-            Logger.debug('Sending HTTP response to complete webhook...');
-            response.status(500).send(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
+            Logger.debug('-> Sending HTTP response to complete webhook...');
+            response.status(500).json(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
         Logger.info('Finished handling Sonarr [user] webhook.');
     }
 
     /**
-     * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
+     * Sonarr Device Handler: Handles a webhook from Sonarr [device ID], and sends a notification to the single device.
      *
      * @param request Express request object
      * @param response Express response object
@@ -81,17 +89,43 @@ export namespace Sonarr {
     async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
         Logger.info('Started handling Sonarr [device] webhook...');
         try {
-            Logger.debug('-> Sending HTTP response to complete webhook...');
-            // Send an OK response once the user is verified
-            response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
-            Logger.debug('-> HTTP response sent (200 OK)');
-
-            //TODO: Actually handle sending the notification
+            if (!request.params.id) {
+                Logger.debug('-> A request with no UID was attempted.');
+                Logger.debug('-> Sending HTTP response to complete webhook...');
+                response.status(400).json(<Server.Response>{ message: Constants.MSG_NO_ID_SUPPLIED });
+                Logger.debug('-> HTTP response sent (400 Bad Request)');
+            } else {
+                Logger.debug('-> Sending HTTP response to complete webhook...');
+                response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
+                Logger.debug('-> HTTP response sent (200 OK)');
+                // Construct a simple array with the device ID to re-use handlers
+                const devices: string[] = [request.params.id];
+                switch (request.body['eventType']) {
+                    case EventType.Download:
+                        await handleDownloadEventType(request.body as DownloadEventType, devices);
+                        break;
+                    case EventType.Grab:
+                        await handleGrabEventType(request.body as GrabEventType, devices);
+                        break;
+                    case EventType.Health:
+                        await handleHealthEventType(request.body as HealthEventType, devices);
+                        break;
+                    case EventType.Rename:
+                        await handleRenameEventType(request.body as RenameEventType, devices);
+                        break;
+                    case EventType.Test:
+                        await handleTestEventType(request.body as TestEventType, devices);
+                        break;
+                    default:
+                        Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
+                        return;
+                }
+            }
         } catch (error) {
             // On any other thrown errors, capture, log, and return internal server error (500)
             ELogger.error(error.message);
             Logger.debug('Sending HTTP response to complete webhook...');
-            response.status(500).send(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
+            response.status(500).json(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
         Logger.info('Finished handling Sonarr [device] webhook.');
