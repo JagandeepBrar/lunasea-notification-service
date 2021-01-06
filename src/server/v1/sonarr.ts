@@ -14,7 +14,7 @@ export namespace Sonarr {
 
     // Create a router, and add the handler route
     export const instance = express.Router();
-    instance.post('/:uid', handler);
+    instance.post('/uid/:uid', handler);
 
     /**
      * Sonarr Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
@@ -80,7 +80,19 @@ export namespace Sonarr {
     const handleDownloadEventType = async (data: DownloadEventType, devices: string[]): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
-        //TODO
+        const bodyLine1 =
+            data.episodes?.length == 1
+                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
+                : `${data.episodes.length} Episodes`;
+        const bodyLine2 = data.isUpgrade
+            ? `Episode Upgraded (${data.episodeFile.quality})`
+            : `Episode Downloaded (${data.episodeFile.quality})`;
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
     };
 
     /**
@@ -96,7 +108,7 @@ export namespace Sonarr {
             data.episodes?.length == 1
                 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
                 : `${data.episodes.length} Episodes`;
-        const bodyLine2 = `Episode grabbed (${data.release.quality})`;
+        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
@@ -133,7 +145,7 @@ export namespace Sonarr {
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `Sonarr: ${data.series.title}`,
-            body: 'Files have been renamed',
+            body: 'Files Renamed',
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -218,6 +230,20 @@ export namespace Sonarr {
     }
 
     /**
+     * Episode file object containing episode file details for a request
+     */
+    interface EpisodeFileProperties {
+        id: number;
+        relativePath: string;
+        path: string;
+        quality: string;
+        qualityVersion: number;
+        releaseGroup: string;
+        sceneName: string;
+        size: number;
+    }
+
+    /**
      * Interface for a "Grab" event type
      */
     interface GrabEventType {
@@ -234,6 +260,12 @@ export namespace Sonarr {
      */
     interface DownloadEventType {
         eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
+        episodeFile: EpisodeFileProperties;
+        isUpgrade: boolean;
+        downloadClient: string;
+        downloadId: string;
     }
 
     /**
