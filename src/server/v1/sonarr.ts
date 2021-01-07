@@ -39,8 +39,8 @@ export namespace Sonarr {
                     response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
                     Logger.debug('-> HTTP response sent (200 OK)');
                     const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
-                    Logger.debug('->', devices.length ?? 0, 'device(s) found');
-                    if ((devices.length ?? 0) > 0) {
+                    Logger.debug('->', devices?.length ?? 0, 'device(s) found');
+                    if ((devices?.length ?? 0) > 0) {
                         switch (request.body['eventType']) {
                             case EventType.Download:
                                 await handleDownloadEventType(request.body as DownloadEventType, devices);
