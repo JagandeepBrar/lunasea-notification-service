@@ -1,6 +1,6 @@
 {
     "name": "lunasea-notification-relay",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Notification relay for LunaSea",
     "repository": "https://github.com/CometTools/LunaSea-Notification-Relay",
     "main": "index.js",

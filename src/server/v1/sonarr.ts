@@ -13,9 +13,9 @@ export namespace Sonarr {
      **/
 
     // Create a router, and add the handler route
-    export const instance = express.Router();
-    instance.post('/user/:id', userHandler);
-    instance.post('/device/:id', deviceHandler);
+    export const router = express.Router();
+    router.post('/user/:id', userHandler);
+    router.post('/device/:id', deviceHandler);
 
     /**
      * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
@@ -39,8 +39,8 @@ export namespace Sonarr {
                     response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
                     Logger.debug('-> HTTP response sent (200 OK)');
                     const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
-                    Logger.debug('->', devices.length ?? 0, 'device(s) found');
-                    if ((devices.length ?? 0) > 0) {
+                    Logger.debug('->', devices?.length ?? 0, 'device(s) found');
+                    if ((devices?.length ?? 0) > 0) {
                         switch (request.body['eventType']) {
                             case EventType.Download:
                                 await handleDownloadEventType(request.body as DownloadEventType, devices);
