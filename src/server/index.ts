@@ -1,6 +1,6 @@
 import express from 'express';
 import { Logger, ELogger } from '@lunasea-notification-relay/core/logger';
-import { router as v1 } from '@lunasea-notification-relay/server/v1';
+import { router } from '@lunasea-notification-relay/server/v1';
 
 export namespace Server {
     const PORT = process.env.PORT || '9000';
@@ -13,7 +13,7 @@ export namespace Server {
      */
     export const initialize = (): void => {
         server.use(express.json());
-        server.use('/v1', v1);
+        server.use('/v1', router);
     };
 
     /**

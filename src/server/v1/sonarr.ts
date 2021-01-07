@@ -13,9 +13,9 @@ export namespace Sonarr {
      **/
 
     // Create a router, and add the handler route
-    export const instance = express.Router();
-    instance.post('/user/:id', userHandler);
-    instance.post('/device/:id', deviceHandler);
+    export const router = express.Router();
+    router.post('/user/:id', userHandler);
+    router.post('/device/:id', deviceHandler);
 
     /**
      * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
