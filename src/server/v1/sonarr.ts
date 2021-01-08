@@ -2,6 +2,7 @@ import { Constants } from '@lunasea-notification-relay/core/constants';
 import { Firebase } from '@lunasea-notification-relay/core/firebase';
 import { ELogger, Logger } from '@lunasea-notification-relay/core/logger';
 import { Server } from '@lunasea-notification-relay/server';
+import { Middleware } from '@lunasea-notification-relay/server/v1/middleware';
 import express from 'express';
 
 /**
@@ -14,8 +15,8 @@ export namespace Sonarr {
 
     // Create a router, and add the handler route
     export const router = express.Router();
-    router.post('/user/:id', userHandler);
-    router.post('/device/:id', deviceHandler);
+    router.post('/user/:id', Middleware.checkNotificationPassword, Middleware.extractProfile, userHandler);
+    router.post('/device/:id', Middleware.extractProfile, deviceHandler);
 
     /**
      * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
