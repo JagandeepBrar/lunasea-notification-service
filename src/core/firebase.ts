@@ -80,7 +80,10 @@ export namespace Firebase {
             // Initialize the payload
             const payload: admin.messaging.MessagingPayload = {};
             if (data) payload.data = data;
-            if (notification) payload.notification = notification;
+            if (notification) {
+                payload.notification = notification;
+                payload.notification.sound = 'default';
+            }
             // Initialize the options
             const options: admin.messaging.MessagingOptions = {
                 contentAvailable: true,
