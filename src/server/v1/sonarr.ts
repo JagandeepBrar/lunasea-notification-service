@@ -15,7 +15,7 @@ export namespace Sonarr {
 
     // Create a router, and add the handler route
     export const router = express.Router();
-    router.post('/user/:id', Middleware.checkNotificationPassword, Middleware.extractProfile, userHandler);
+    router.post('/user/:id', Middleware.validateUser, Middleware.checkNotificationPassword, Middleware.extractProfile, userHandler);
     router.post('/device/:id', Middleware.extractProfile, deviceHandler);
 
     /**
@@ -40,23 +40,25 @@ export namespace Sonarr {
                     response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
                     Logger.debug('-> HTTP response sent (200 OK)');
                     const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
+                    const module =
+                        request.params.profile && request.params.profile !== 'default' ? `Sonarr (${request.params.profile})` : 'Sonarr';
                     Logger.debug('->', devices?.length ?? 0, 'device(s) found');
                     if ((devices?.length ?? 0) > 0) {
                         switch (request.body['eventType']) {
                             case EventType.Download:
-                                await handleDownloadEventType(request.body as DownloadEventType, devices);
+                                await handleDownloadEventType(request.body as DownloadEventType, devices, module);
                                 break;
                             case EventType.Grab:
-                                await handleGrabEventType(request.body as GrabEventType, devices);
+                                await handleGrabEventType(request.body as GrabEventType, devices, module);
                                 break;
                             case EventType.Health:
-                                await handleHealthEventType(request.body as HealthEventType, devices);
+                                await handleHealthEventType(request.body as HealthEventType, devices, module);
                                 break;
                             case EventType.Rename:
-                                await handleRenameEventType(request.body as RenameEventType, devices);
+                                await handleRenameEventType(request.body as RenameEventType, devices, module);
                                 break;
                             case EventType.Test:
-                                await handleTestEventType(request.body as TestEventType, devices);
+                                await handleTestEventType(request.body as TestEventType, devices, module);
                                 break;
                             default:
                                 Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
@@ -101,21 +103,23 @@ export namespace Sonarr {
                 Logger.debug('-> HTTP response sent (200 OK)');
                 // Construct a simple array with the device ID to re-use handlers
                 const devices: string[] = [request.params.id];
+                const module =
+                    request.params.profile && request.params.profile !== 'default' ? `Sonarr (${request.params.profile})` : 'Sonarr';
                 switch (request.body['eventType']) {
                     case EventType.Download:
-                        await handleDownloadEventType(request.body as DownloadEventType, devices);
+                        await handleDownloadEventType(request.body as DownloadEventType, devices, module);
                         break;
                     case EventType.Grab:
-                        await handleGrabEventType(request.body as GrabEventType, devices);
+                        await handleGrabEventType(request.body as GrabEventType, devices, module);
                         break;
                     case EventType.Health:
-                        await handleHealthEventType(request.body as HealthEventType, devices);
+                        await handleHealthEventType(request.body as HealthEventType, devices, module);
                         break;
                     case EventType.Rename:
-                        await handleRenameEventType(request.body as RenameEventType, devices);
+                        await handleRenameEventType(request.body as RenameEventType, devices, module);
                         break;
                     case EventType.Test:
-                        await handleTestEventType(request.body as TestEventType, devices);
+                        await handleTestEventType(request.body as TestEventType, devices, module);
                         break;
                     default:
                         Logger.warn('An unknown eventType was received:', request.body['eventType'], request.body);
@@ -138,7 +142,7 @@ export namespace Sonarr {
      * @param data Request body as DownloadEventType
      * @param devices List of Firebase device tokens
      */
-    const handleDownloadEventType = async (data: DownloadEventType, devices: string[]): Promise<void> => {
+    const handleDownloadEventType = async (data: DownloadEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
         const bodyLine1 =
@@ -149,7 +153,7 @@ export namespace Sonarr {
             ? `Episode Upgraded (${data.episodeFile.quality})`
             : `Episode Downloaded (${data.episodeFile.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -162,7 +166,7 @@ export namespace Sonarr {
      * @param data Request body as GrabEventType
      * @param devices List of Firebase device tokens
      */
-    const handleGrabEventType = async (data: GrabEventType, devices: string[]): Promise<void> => {
+    const handleGrabEventType = async (data: GrabEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
         Logger.debug('-> Sending to devices...');
         const bodyLine1 =
@@ -171,7 +175,7 @@ export namespace Sonarr {
                 : `${data.episodes.length} Episodes`;
         const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `Sonarr: ${data.series?.title ?? 'Unknown Series'}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -184,11 +188,11 @@ export namespace Sonarr {
      * @param data Request body as HealthEventType
      * @param devices List of Firebase device tokens
      */
-    const handleHealthEventType = async (data: HealthEventType, devices: string[]): Promise<void> => {
+    const handleHealthEventType = async (data: HealthEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Health" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: 'Sonarr: Health Check',
+            title: `${module}: Health Check`,
             body: data.message,
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -201,11 +205,11 @@ export namespace Sonarr {
      * @param data Request body as RenameEventType
      * @param devices List of Firebase device tokens
      */
-    const handleRenameEventType = async (data: RenameEventType, devices: string[]): Promise<void> => {
+    const handleRenameEventType = async (data: RenameEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Rename" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `Sonarr: ${data.series.title}`,
+            title: `${module}: ${data.series.title}`,
             body: 'Files Renamed',
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -218,11 +222,11 @@ export namespace Sonarr {
      * @param data Request body as TestEventType
      * @param devices List of Firebase device tokens
      */
-    const handleTestEventType = async (data: TestEventType, devices: string[]): Promise<void> => {
+    const handleTestEventType = async (data: TestEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Test" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: 'Sonarr: Connection Test',
+            title: `${module}: Connection Test`,
             body: 'LunaSea is ready for Sonarr notifications!',
         }))
             ? Logger.debug('-> Sent to all devices.')
