@@ -174,9 +174,10 @@ export namespace Sonarr {
                 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
                 : `${data.episodes.length} Episodes`;
         const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
+        const bodyLine3 = data.release?.releaseTitle ?? 'Unknown Release';
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
-            body: `${bodyLine1}\n${bodyLine2}`,
+            body: `${bodyLine1}\n${bodyLine2}\n${bodyLine3}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');

@@ -46,16 +46,16 @@ export namespace Radarr {
                     if ((devices?.length ?? 0) > 0) {
                         switch (request.body['eventType']) {
                             case EventType.Download:
-                                //await handleDownloadEventType(request.body as DownloadEventType, devices, module);
+                                await handleDownloadEventType(request.body as DownloadEventType, devices, module);
                                 break;
                             case EventType.Grab:
-                                //await handleGrabEventType(request.body as GrabEventType, devices, module);
+                                await handleGrabEventType(request.body as GrabEventType, devices, module);
                                 break;
                             case EventType.Health:
                                 //await handleHealthEventType(request.body as HealthEventType, devices, module);
                                 break;
                             case EventType.Rename:
-                                //await handleRenameEventType(request.body as RenameEventType, devices, module);
+                                await handleRenameEventType(request.body as RenameEventType, devices, module);
                                 break;
                             case EventType.Test:
                                 await handleTestEventType(request.body as TestEventType, devices, module);
@@ -108,7 +108,7 @@ export namespace Radarr {
                     request.params.profile && request.params.profile !== 'default' ? `Radarr (${request.params.profile})` : 'Radarr';
                 switch (request.body['eventType']) {
                     case EventType.Download:
-                        //await handleDownloadEventType(request.body as DownloadEventType, devices, module);
+                        await handleDownloadEventType(request.body as DownloadEventType, devices, module);
                         break;
                     case EventType.Grab:
                         await handleGrabEventType(request.body as GrabEventType, devices, module);
@@ -117,7 +117,7 @@ export namespace Radarr {
                         //await handleHealthEventType(request.body as HealthEventType, devices, module);
                         break;
                     case EventType.Rename:
-                        //await handleRenameEventType(request.body as RenameEventType, devices, module);
+                        await handleRenameEventType(request.body as RenameEventType, devices, module);
                         break;
                     case EventType.Test:
                         await handleTestEventType(request.body as TestEventType, devices, module);
@@ -138,17 +138,18 @@ export namespace Radarr {
     }
 
     /**
-     * Handle a "Test" event type
+     * Handle a "Download" event type
      *
-     * @param data Request body as TestEventType
+     * @param data Request body as DownloadEventType
      * @param devices List of Firebase device tokens
      */
-    const handleTestEventType = async (data: TestEventType, devices: string[], module: string): Promise<void> => {
-        Logger.debug('-> Handling as "Test" event type...');
+    const handleDownloadEventType = async (data: DownloadEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
+        const bodyLine1 = data.isUpgrade ? `Movie Upgraded (${data.movieFile.quality})` : `Movie Downloaded (${data.movieFile.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: Connection Test`,
-            body: 'LunaSea is ready for Radarr notifications!',
+            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
+            body: `${bodyLine1}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -164,10 +165,44 @@ export namespace Radarr {
         Logger.debug('-> Handling as "Grab" event type...');
         Logger.debug('-> Sending to devices...');
         const bodyLine1 = `Movie Grabbed (${data.release.quality})`;
-        const bodyLine2 = data?.release?.releaseTitle ?? 'Unknown Release Title';
+        const bodyLine2 = data?.release?.releaseTitle ?? 'Unknown Release';
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "Rename" event type
+     *
+     * @param data Request body as RenameEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleRenameEventType = async (data: RenameEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "Rename" event type...');
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
+            body: 'Files Renamed',
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "Test" event type
+     *
+     * @param data Request body as TestEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleTestEventType = async (data: TestEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "Test" event type...');
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: Connection Test`,
+            body: 'LunaSea is ready for Radarr notifications!',
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -223,13 +258,29 @@ export namespace Radarr {
     }
 
     /**
-     * Interface for a "Test" event type
+     * Movie file object, containing details on the downloaded movie file for a request
      */
-    interface TestEventType {
+    interface MovieFileProperties {
+        id: number;
+        relativePath: string;
+        path: string;
+        quality: string;
+        qualityVersion: number;
+        releaseGroup: string;
+        sceneName: string;
+        size: number;
+    }
+
+    /**
+     * Interface for a "Download" event type
+     */
+    interface DownloadEventType {
         eventType: EventType;
         movie: MovieProperties;
         remoteMovie: RemoteMovieProperties;
-        release: ReleaseProperties;
+        movieFile: MovieFileProperties;
+        isUpgrade: boolean;
+        downloadId: string;
     }
 
     /**
@@ -242,5 +293,23 @@ export namespace Radarr {
         release: ReleaseProperties;
         downloadClient: string;
         downloadId: string;
+    }
+
+    /**
+     * Interface for a "Rename" event type
+     */
+    interface RenameEventType {
+        eventType: EventType;
+        movie: MovieProperties;
+    }
+
+    /**
+     * Interface for a "Test" event type
+     */
+    interface TestEventType {
+        eventType: EventType;
+        movie: MovieProperties;
+        remoteMovie: RemoteMovieProperties;
+        release: ReleaseProperties;
     }
 }
