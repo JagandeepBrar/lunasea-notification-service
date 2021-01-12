@@ -91,7 +91,7 @@ export namespace Radarr {
      */
     async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
         Logger.info('Started handling Radarr [device] webhook...');
-        Logger.info(JSON.stringify(request.body));
+        Logger.debug(JSON.stringify(request.body));
         try {
             if (!request.params.id) {
                 Logger.debug('-> A request with no UID was attempted.');
@@ -111,7 +111,7 @@ export namespace Radarr {
                         //await handleDownloadEventType(request.body as DownloadEventType, devices, module);
                         break;
                     case EventType.Grab:
-                        //await handleGrabEventType(request.body as GrabEventType, devices, module);
+                        await handleGrabEventType(request.body as GrabEventType, devices, module);
                         break;
                     case EventType.Health:
                         //await handleHealthEventType(request.body as HealthEventType, devices, module);
@@ -155,6 +155,25 @@ export namespace Radarr {
     };
 
     /**
+     * Handle a "Grab" event type
+     *
+     * @param data Request body as GrabEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleGrabEventType = async (data: GrabEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "Grab" event type...');
+        Logger.debug('-> Sending to devices...');
+        const bodyLine1 = `Movie Grabbed (${data.release.quality})`;
+        const bodyLine2 = data?.release?.releaseTitle ?? 'Unknown Release Title';
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
      * DATA/MODEL STRUCTURES
      **/
 
@@ -169,21 +188,31 @@ export namespace Radarr {
         Test = 'Test',
     }
 
+    /**
+     * Movie object containing movie details for a request
+     */
     interface MovieProperties {
         id: number;
         title: string;
         releaseDate: string;
         folderPath: string;
         tmdbId: number;
+        imdbId?: string;
     }
 
+    /**
+     * Remote movie object containing remote details for a movie for a request
+     */
     interface RemoteMovieProperties {
         tmdbId: number;
-        imdbId: string;
+        imdbId?: string;
         title: string;
         year: number;
     }
 
+    /**
+     * Release object containing release details for a request
+     */
     interface ReleaseProperties {
         quality: string;
         qualityVersion: number;
@@ -201,5 +230,17 @@ export namespace Radarr {
         movie: MovieProperties;
         remoteMovie: RemoteMovieProperties;
         release: ReleaseProperties;
+    }
+
+    /**
+     * Interface for a "Grab" event type
+     */
+    interface GrabEventType {
+        eventType: EventType;
+        movie: MovieProperties;
+        remoteMovie: RemoteMovieProperties;
+        release: ReleaseProperties;
+        downloadClient: string;
+        downloadId: string;
     }
 }
