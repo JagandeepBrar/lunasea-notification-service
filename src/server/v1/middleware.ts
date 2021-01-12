@@ -5,6 +5,9 @@ import { Logger } from '@lunasea-notification-relay/core/logger';
 import { Server } from '@lunasea-notification-relay/server';
 import { Firebase } from '@lunasea-notification-relay/core/firebase';
 
+/**
+ * Contains various middleware for the route handlers
+ */
 export namespace Middleware {
     /**
      * Extracts the profile from the basic authentication header, and adds it to the request object (request.params.profile) for easy access.

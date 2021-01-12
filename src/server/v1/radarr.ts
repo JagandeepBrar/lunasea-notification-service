@@ -10,10 +10,10 @@ import express from 'express';
  */
 export namespace Radarr {
     /**
-     * ROUTING AND HANDLER
+     * ROUTING AND HANDLERS
      **/
 
-    // Create a router, and add the handler route
+    // Create a router, and add the handler routes
     export const router = express.Router();
     router.post(
         '/user/:id',
@@ -119,6 +119,7 @@ export namespace Radarr {
      *
      * @param data Request body as DownloadEventType
      * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
      */
     const handleDownloadEventType = async (data: DownloadEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
@@ -137,6 +138,7 @@ export namespace Radarr {
      *
      * @param data Request body as GrabEventType
      * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
      */
     const handleGrabEventType = async (data: GrabEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
@@ -156,6 +158,7 @@ export namespace Radarr {
      *
      * @param data Request body as HealthEventType
      * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
      */
     const handleHealthEventType = async (data: HealthEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Health" event type...');
@@ -173,6 +176,7 @@ export namespace Radarr {
      *
      * @param data Request body as RenameEventType
      * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
      */
     const handleRenameEventType = async (data: RenameEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Rename" event type...');
@@ -190,6 +194,7 @@ export namespace Radarr {
      *
      * @param data Request body as TestEventType
      * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
      */
     const handleTestEventType = async (data: TestEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Test" event type...');
