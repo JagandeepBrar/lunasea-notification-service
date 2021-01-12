@@ -91,7 +91,6 @@ export namespace Radarr {
      */
     async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
         Logger.info('Started handling Radarr [device] webhook...');
-        Logger.debug(JSON.stringify(request.body));
         try {
             if (!request.params.id) {
                 Logger.debug('-> A request with no UID was attempted.');
