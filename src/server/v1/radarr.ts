@@ -52,7 +52,7 @@ export namespace Radarr {
                                 await handleGrabEventType(request.body as GrabEventType, devices, module);
                                 break;
                             case EventType.Health:
-                                //await handleHealthEventType(request.body as HealthEventType, devices, module);
+                                await handleHealthEventType(request.body as HealthEventType, devices, module);
                                 break;
                             case EventType.Rename:
                                 await handleRenameEventType(request.body as RenameEventType, devices, module);
@@ -114,7 +114,7 @@ export namespace Radarr {
                         await handleGrabEventType(request.body as GrabEventType, devices, module);
                         break;
                     case EventType.Health:
-                        //await handleHealthEventType(request.body as HealthEventType, devices, module);
+                        await handleHealthEventType(request.body as HealthEventType, devices, module);
                         break;
                     case EventType.Rename:
                         await handleRenameEventType(request.body as RenameEventType, devices, module);
@@ -169,6 +169,23 @@ export namespace Radarr {
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "Health" event type
+     *
+     * @param data Request body as HealthEventType
+     * @param devices List of Firebase device tokens
+     */
+    const handleHealthEventType = async (data: HealthEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "Health" event type...');
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: Health Check`,
+            body: data.message,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -293,6 +310,17 @@ export namespace Radarr {
         release: ReleaseProperties;
         downloadClient: string;
         downloadId: string;
+    }
+
+    /**
+     * Interface for a "Health" event type
+     */
+    interface HealthEventType {
+        eventType: EventType;
+        level: string;
+        message: string;
+        type: string;
+        wikiUrl: string;
     }
 
     /**
