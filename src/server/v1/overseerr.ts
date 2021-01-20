@@ -42,17 +42,22 @@ export namespace Overseerr {
             if ((devices?.length ?? 0) > 0) {
                 switch (request.body['notification_type']) {
                     case NotificationType.MEDIA_APPROVED:
+                        await handleMediaApprovedNotificationType(request.body as RequestProperties, devices, module);
                         break;
                     case NotificationType.MEDIA_AVAILABLE:
+                        await handleMediaAvailableNotificationType(request.body as RequestProperties, devices, module);
                         break;
                     case NotificationType.MEDIA_DECLINED:
+                        await handleMediaDeclinedNotificationType(request.body as RequestProperties, devices, module);
                         break;
                     case NotificationType.MEDIA_FAILED:
+                        await handleMediaFailedNotificationType(request.body as RequestProperties, devices, module);
                         break;
                     case NotificationType.MEDIA_PENDING:
+                        await handleMediaPendingNotificationType(request.body as RequestProperties, devices, module);
                         break;
                     case NotificationType.TEST_NOTIFICATION:
-                        await handleTestEventType(request.body as RequestProperties, devices, module);
+                        await handleTestNotificationType(request.body as RequestProperties, devices, module);
                         break;
                     default:
                         Logger.warn('An unknown notification_type was received:', request.body['notification_type'], request.body);
@@ -85,17 +90,22 @@ export namespace Overseerr {
                 request.params.profile && request.params.profile !== 'default' ? `Overseerr (${request.params.profile})` : 'Overseerr';
             switch (request.body['notification_type']) {
                 case NotificationType.MEDIA_APPROVED:
+                    await handleMediaApprovedNotificationType(request.body as RequestProperties, devices, module);
                     break;
                 case NotificationType.MEDIA_AVAILABLE:
+                    await handleMediaAvailableNotificationType(request.body as RequestProperties, devices, module);
                     break;
                 case NotificationType.MEDIA_DECLINED:
+                    await handleMediaDeclinedNotificationType(request.body as RequestProperties, devices, module);
                     break;
                 case NotificationType.MEDIA_FAILED:
+                    await handleMediaFailedNotificationType(request.body as RequestProperties, devices, module);
                     break;
                 case NotificationType.MEDIA_PENDING:
+                    await handleMediaPendingNotificationType(request.body as RequestProperties, devices, module);
                     break;
                 case NotificationType.TEST_NOTIFICATION:
-                    await handleTestEventType(request.body as RequestProperties, devices, module);
+                    await handleTestNotificationType(request.body as RequestProperties, devices, module);
                     break;
                 default:
                     Logger.warn('An unknown notification_type was received:', request.body['notification_type'], request.body);
@@ -111,13 +121,103 @@ export namespace Overseerr {
     }
 
     /**
-     * Handle a "Test" event type
+     * Handle a "MEDIA_APPROVED" notification type
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
      * @param module Module name to be shown before the colon in the title
      */
-    const handleTestEventType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleMediaApprovedNotificationType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
+        Logger.debug(`-> Handling as ${data.notification_type} event type...`);
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.media?.media_type === MediaType.MOVIE ? 'Movie' : 'Series'} Approved`,
+            body: `${data.subject}\nOriginally Requested by ${data.username}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "MEDIA_AVAILABLE" notification type
+     *
+     * @param data Request body as RequestProperties
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleMediaAvailableNotificationType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
+        Logger.debug(`-> Handling as ${data.notification_type} event type...`);
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.media?.media_type === MediaType.MOVIE ? 'Movie' : 'Series'} Available`,
+            body: `${data.subject}\nOriginally Requested by ${data.username}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "MEDIA_DECLINED" notification type
+     *
+     * @param data Request body as RequestProperties
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleMediaDeclinedNotificationType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
+        Logger.debug(`-> Handling as ${data.notification_type} event type...`);
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.media?.media_type === MediaType.MOVIE ? 'Movie' : 'Series'} Declined`,
+            body: `${data.subject}\nOriginally Requested by ${data.username}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "MEDIA_FAILED" notification type
+     *
+     * @param data Request body as RequestProperties
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleMediaFailedNotificationType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
+        Logger.debug(`-> Handling as ${data.notification_type} event type...`);
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.media?.media_type === MediaType.MOVIE ? 'Movie' : 'Series'} Failed`,
+            body: `${data.subject}\n${data.message}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "MEDIA_PENDING" notification type
+     *
+     * @param data Request body as RequestProperties
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleMediaPendingNotificationType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
+        Logger.debug(`-> Handling as ${data.notification_type} event type...`);
+        Logger.debug('-> Sending to devices...');
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.media?.media_type === MediaType.MOVIE ? 'Movie' : 'Series'} Requested`,
+            body: `${data.subject}\nOriginally Requested by ${data.username}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "TEST_NOTIFICATION" notification type
+     *
+     * @param data Request body as RequestProperties
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleTestNotificationType = async (data: RequestProperties, devices: string[], module: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
@@ -132,6 +232,9 @@ export namespace Overseerr {
      * DATA/MODEL STRUCTURES
      **/
 
+    /**
+     * All possible notification types
+     */
     enum NotificationType {
         MEDIA_APPROVED = 'MEDIA_APPROVED',
         MEDIA_AVAILABLE = 'MEDIA_AVAILABLE',
@@ -139,6 +242,14 @@ export namespace Overseerr {
         MEDIA_FAILED = 'MEDIA_FAILED',
         MEDIA_PENDING = 'MEDIA_PENDING',
         TEST_NOTIFICATION = 'TEST_NOTIFICATION',
+    }
+
+    /**
+     * All possible media types
+     */
+    enum MediaType {
+        MOVIE = 'movie',
+        TV_SHOW = 'tv',
     }
 
     /**
@@ -159,7 +270,7 @@ export namespace Overseerr {
      * Media object containing the media details
      */
     interface MediaProperties {
-        media_type: string;
+        media_type: MediaType;
         tmdbId: string;
         imdbId: string;
         tvdbId: string;
