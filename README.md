@@ -11,6 +11,7 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 |   Lidarr    |  &cross;  |
 |   Radarr    |  &check;  |
 |   Sonarr    |  &check;  |
+|  Overseerr  |  &check;  |
 |   NZBGet    |  &cross;  |
 |   SABnzbd   |  &cross;  |
 |  Tautulli   |  &cross;  |
