@@ -96,8 +96,7 @@ export namespace Firebase {
                 .sendToDevice(devices, payload, options)
                 .then(() => true);
         } catch (error) {
-            console.error(error);
-            //ELogger.error(error.message);
+            ELogger.error(error.message);
             return false;
         }
     };
