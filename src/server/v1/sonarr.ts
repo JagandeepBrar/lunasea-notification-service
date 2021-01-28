@@ -45,6 +45,9 @@ export namespace Sonarr {
                     case EventType.Download:
                         await handleDownloadEventType(request.body as DownloadEventType, devices, module);
                         break;
+                    case EventType.EpisodeFileDelete:
+                        await handleDeleteEpisodeFileEventType(request.body as EpisodeFileDeleteEventType, devices, module);
+                        break;
                     case EventType.Grab:
                         await handleGrabEventType(request.body as GrabEventType, devices, module);
                         break;
@@ -82,7 +85,6 @@ export namespace Sonarr {
      */
     async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
         Logger.info('Running Sonarr [device] webhook...');
-        //console.log(JSON.stringify(request.body));
         try {
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
@@ -92,6 +94,9 @@ export namespace Sonarr {
             switch (request.body['eventType']) {
                 case EventType.Download:
                     await handleDownloadEventType(request.body as DownloadEventType, devices, module);
+                    break;
+                case EventType.EpisodeFileDelete:
+                    await handleDeleteEpisodeFileEventType(request.body as EpisodeFileDeleteEventType, devices, module);
                     break;
                 case EventType.Grab:
                     await handleGrabEventType(request.body as GrabEventType, devices, module);
@@ -120,6 +125,29 @@ export namespace Sonarr {
         }
         Logger.info('Finished Sonarr [device] webhook.');
     }
+
+    /**
+     * Handle a "EpisodeFileDelete" event type
+     *
+     * @param data Request body as RenameEventType
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleDeleteEpisodeFileEventType = async (data: EpisodeFileDeleteEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
+        Logger.debug('-> Sending to devices...');
+        const bodyLine1 =
+            data.episodes?.length == 1
+                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
+                : `${data.episodes.length} Episodes`;
+        const bodyLine2 = 'Episode File Deleted';
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.series.title}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
 
     /**
      * Handle a "SeriesDelete" event type
@@ -253,11 +281,12 @@ export namespace Sonarr {
      */
     enum EventType {
         Download = 'Download',
+        EpisodeFileDelete = 'EpisodeFileDelete',
         Grab = 'Grab',
         Health = 'Health',
         Rename = 'Rename',
-        Test = 'Test',
         SeriesDelete = 'SeriesDelete',
+        Test = 'Test',
     }
 
     /**
@@ -380,5 +409,14 @@ export namespace Sonarr {
         eventType: EventType;
         series: SeriesProperties;
         deletedFiles: boolean;
+    }
+
+    /**
+     * Interface for a "EpisodeFileDelete" event type
+     */
+    interface EpisodeFileDeleteEventType {
+        eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
     }
 }
