@@ -45,7 +45,7 @@ export namespace Webhooks {
     const handleDownloadEventType = async (data: Models.DownloadEventType, devices: string[], title: string): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = data.isUpgrade ? `Movie Upgraded (${data.movieFile.quality})` : `Movie Downloaded (${data.movieFile.quality})`;
+        const bodyLine1 = data.isUpgrade ? `Upgraded (${data.movieFile?.quality ?? 'Unknown Quality'})` : `Downloaded (${data.movieFile?.quality ?? 'Unknown Quality'})`;
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${title}: ${data.movie?.title ?? 'Unknown Movie'}`,
             body: `${bodyLine1}`,
@@ -67,7 +67,7 @@ export namespace Webhooks {
     const handleGrabEventType = async (data: Models.GrabEventType, devices: string[], title: string): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = `Movie Grabbed (${data.release.quality})`;
+        const bodyLine1 = `Grabbed (${data.release?.quality ?? 'Unknown Quality'})`;
         const bodyLine2 = data?.release?.releaseTitle ?? 'Unknown Release';
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${title}: ${data.movie?.title ?? 'Unknown Movie'}`,
