@@ -8,12 +8,12 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 | Application | Supported |
 | :---------: | :-------: |
-|   Lidarr    |  &cross;  |
-|   Radarr    |  &check;  |
-|   Sonarr    |  &check;  |
-|  Overseerr  |  &check;  |
+|   Lidarr    |  &check;  |
 |   NZBGet    |  &cross;  |
+|  Overseerr  |  &check;  |
+|   Radarr    |  &check;  |
 |   SABnzbd   |  &cross;  |
+|   Sonarr    |  &check;  |
 |  Tautulli   |  &cross;  |
 
 ## Build & Setup
