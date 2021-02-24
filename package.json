@@ -1,13 +1,13 @@
 {
     "name": "lunasea-notification-relay",
-    "version": "0.0.8",
+    "version": "0.1.0",
     "description": "Notification relay for LunaSea",
     "repository": "https://github.com/CometTools/LunaSea-Notification-Relay",
     "main": "index.js",
     "scripts": {
         "start": "cross-env NODE_ENV=development nodemon --config nodemon.json src/index.ts",
         "build": "tsc",
-        "serve": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register -r dotenv/config dist/src/index.js",
+        "serve": "cross-env NODE_ENV=production ts-node -r dotenv/config dist/src/index.js",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
     },
@@ -21,7 +21,6 @@
         "express": "^4.17.1",
         "firebase-admin": "^9.4.2",
         "ts-node": "^9.1.1",
-        "tsconfig-paths": "^3.9.0",
         "tslog": "^3.0.5"
     },
     "devDependencies": {

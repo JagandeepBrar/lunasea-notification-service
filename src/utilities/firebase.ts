@@ -1,4 +1,4 @@
-import { ELogger, Logger } from '@lunasea-notification-relay/core/logger';
+import { Logger } from './logger';
 import * as serviceaccount from '../../serviceaccount.json';
 import * as admin from 'firebase-admin';
 
@@ -35,7 +35,7 @@ export namespace Firebase {
                     return false;
                 });
         } catch (error) {
-            ELogger.error(uid, '/', error.message);
+            Logger.error(uid, '/', error.message);
             return false;
         }
     };
@@ -59,7 +59,7 @@ export namespace Firebase {
                     return [];
                 });
         } catch (error) {
-            ELogger.error(uid, '/', error.message);
+            Logger.error(uid, '/', error.message);
             return [];
         }
     };
@@ -96,7 +96,7 @@ export namespace Firebase {
                 .sendToDevice(devices, payload, options)
                 .then(() => true);
         } catch (error) {
-            ELogger.error(error.message);
+            Logger.error(error.message);
             return false;
         }
     };

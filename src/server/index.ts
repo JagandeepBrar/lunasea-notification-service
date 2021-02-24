@@ -1,6 +1,6 @@
 import express from 'express';
-import { Logger, ELogger } from '@lunasea-notification-relay/core/logger';
-import { router } from '@lunasea-notification-relay/server/v1';
+import { Logger } from '../utilities/logger';
+import { router } from './v1';
 
 export namespace Server {
     const PORT = process.env.PORT || '9000';
@@ -22,7 +22,7 @@ export namespace Server {
     export const start = (): void => {
         initialize();
         server.listen(PORT).on('error', (error) => {
-            ELogger.error(error);
+            Logger.error(error);
             process.exit(1);
         });
         Logger.info('Server Running / Port', PORT);

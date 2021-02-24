@@ -1,9 +1,9 @@
 import express from 'express';
 import basicauth from 'basic-auth';
-import { Constants } from '@lunasea-notification-relay/core/constants';
-import { Logger } from '@lunasea-notification-relay/core/logger';
-import { Server } from '@lunasea-notification-relay/server';
-import { Firebase } from '@lunasea-notification-relay/core/firebase';
+import { Constants } from '../../utilities/constants';
+import { Firebase } from '../../utilities/firebase';
+import { Logger } from '../../utilities/logger';
+import { Server } from '../../server';
 
 /**
  * Contains various middleware for the route handlers
