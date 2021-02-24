@@ -1,49 +1,45 @@
-import { Constants } from '@lunasea-notification-relay/core/constants';
-import { Firebase } from '@lunasea-notification-relay/core/firebase';
-import { ELogger, Logger } from '@lunasea-notification-relay/core/logger';
-import { Server } from '@lunasea-notification-relay/server';
-import { Middleware } from '@lunasea-notification-relay/server/v1/middleware';
+import { Constants } from '../../../utilities/constants';
+import { Firebase } from '../../../utilities/firebase';
+import { Logger } from '../../../utilities/logger';
+import { Server } from '../../../server';
+import { Middleware } from '../middleware';
 import express from 'express';
 
 /**
- * Radarr namespace to contain all Radarr-related interfaces, enums, and handlers
+ * Sonarr namespace to contain all Sonarr-related interfaces, enums, and handlers
  */
-export namespace Radarr {
+export namespace Sonarr {
     /**
      * ROUTING AND HANDLERS
      **/
 
     // Create a router, and add the handler routes
     export const router = express.Router();
-    router.post(
-        '/user/:id',
-        Middleware.checkIdentifierExists,
-        Middleware.validateUser,
-        Middleware.checkNotificationPassword,
-        Middleware.extractProfile,
-        userHandler,
-    );
+    router.post('/user/:id', Middleware.checkIdentifierExists, Middleware.validateUser, Middleware.checkNotificationPassword, Middleware.extractProfile, userHandler);
     router.post('/device/:id', Middleware.checkIdentifierExists, Middleware.extractProfile, deviceHandler);
 
     /**
-     * Radarr User Handler: Handles a webhook from Radarr, and sends a notification to all devices that are attached to the calling account.
+     * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
      *
      * @param request Express request object
      * @param response Express response object
      */
     async function userHandler(request: express.Request, response: express.Response): Promise<void> {
-        Logger.info('Running Radarr [user] webhook...');
+        Logger.info('Running Sonarr [user] webhook...');
         try {
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
             Logger.debug('-> HTTP response sent (200 OK)');
             const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
-            const module = request.params.profile && request.params.profile !== 'default' ? `Radarr (${request.params.profile})` : 'Radarr';
+            const module = request.params.profile && request.params.profile !== 'default' ? `Sonarr (${request.params.profile})` : 'Sonarr';
             Logger.debug('->', devices?.length ?? 0, 'device(s) found');
             if ((devices?.length ?? 0) > 0) {
                 switch (request.body['eventType']) {
                     case EventType.Download:
                         await handleDownloadEventType(request.body as DownloadEventType, devices, module);
+                        break;
+                    case EventType.EpisodeFileDelete:
+                        await handleDeleteEpisodeFileEventType(request.body as EpisodeFileDeleteEventType, devices, module);
                         break;
                     case EventType.Grab:
                         await handleGrabEventType(request.body as GrabEventType, devices, module);
@@ -54,6 +50,9 @@ export namespace Radarr {
                     case EventType.Rename:
                         await handleRenameEventType(request.body as RenameEventType, devices, module);
                         break;
+                    case EventType.SeriesDelete:
+                        await handleDeleteSeriesEventType(request.body as SeriesDeleteEventType, devices, module);
+                        break;
                     case EventType.Test:
                         await handleTestEventType(request.body as TestEventType, devices, module);
                         break;
@@ -63,31 +62,34 @@ export namespace Radarr {
                 }
             }
         } catch (error) {
-            ELogger.error(error.message);
+            Logger.error(error.message);
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(500).json(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
-        Logger.info('Finished Radarr [user] webhook.');
+        Logger.info('Finished Sonarr [user] webhook.');
     }
 
     /**
-     * Radarr Device Handler: Handles a webhook from Radarr [device ID], and sends a notification to the single device.
+     * Sonarr Device Handler: Handles a webhook from Sonarr [device ID], and sends a notification to the single device.
      *
      * @param request Express request object
      * @param response Express response object
      */
     async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
-        Logger.info('Running Radarr [device] webhook...');
+        Logger.info('Running Sonarr [device] webhook...');
         try {
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
             Logger.debug('-> HTTP response sent (200 OK)');
             const devices: string[] = [request.params.id];
-            const module = request.params.profile && request.params.profile !== 'default' ? `Radarr (${request.params.profile})` : 'Radarr';
+            const module = request.params.profile && request.params.profile !== 'default' ? `Sonarr (${request.params.profile})` : 'Sonarr';
             switch (request.body['eventType']) {
                 case EventType.Download:
                     await handleDownloadEventType(request.body as DownloadEventType, devices, module);
+                    break;
+                case EventType.EpisodeFileDelete:
+                    await handleDeleteEpisodeFileEventType(request.body as EpisodeFileDeleteEventType, devices, module);
                     break;
                 case EventType.Grab:
                     await handleGrabEventType(request.body as GrabEventType, devices, module);
@@ -98,6 +100,9 @@ export namespace Radarr {
                 case EventType.Rename:
                     await handleRenameEventType(request.body as RenameEventType, devices, module);
                     break;
+                case EventType.SeriesDelete:
+                    await handleDeleteSeriesEventType(request.body as SeriesDeleteEventType, devices, module);
+                    break;
                 case EventType.Test:
                     await handleTestEventType(request.body as TestEventType, devices, module);
                     break;
@@ -106,13 +111,53 @@ export namespace Radarr {
                     return;
             }
         } catch (error) {
-            ELogger.error(error.message);
+            Logger.error(error.message);
             Logger.debug('Sending HTTP response to complete webhook...');
             response.status(500).json(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
-        Logger.info('Finished Radarr [device] webhook.');
+        Logger.info('Finished Sonarr [device] webhook.');
     }
+
+    /**
+     * Handle a "EpisodeFileDelete" event type
+     *
+     * @param data Request body as RenameEventType
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleDeleteEpisodeFileEventType = async (data: EpisodeFileDeleteEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
+        Logger.debug('-> Sending to devices...');
+        const bodyLine1 = data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes.length} Episodes`;
+        const bodyLine2 = 'Episode File Deleted';
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.series.title}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
+
+    /**
+     * Handle a "SeriesDelete" event type
+     *
+     * @param data Request body as RenameEventType
+     * @param devices List of Firebase device tokens
+     * @param module Module name to be shown before the colon in the title
+     */
+    const handleDeleteSeriesEventType = async (data: SeriesDeleteEventType, devices: string[], module: string): Promise<void> => {
+        Logger.debug('-> Handling as "SeriesDelete" event type...');
+        Logger.debug('-> Sending to devices...');
+        let body = 'Series Deleted';
+        if (data.deletedFiles) body += '(With Files)';
+        (await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${module}: ${data.series.title}`,
+            body: body,
+        }))
+            ? Logger.debug('-> Sent to all devices.')
+            : Logger.debug('-> Failed to send to devices.');
+    };
 
     /**
      * Handle a "Download" event type
@@ -124,10 +169,11 @@ export namespace Radarr {
     const handleDownloadEventType = async (data: DownloadEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = data.isUpgrade ? `Movie Upgraded (${data.movieFile.quality})` : `Movie Downloaded (${data.movieFile.quality})`;
+        const bodyLine1 = data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes.length} Episodes`;
+        const bodyLine2 = data.isUpgrade ? `Episode Upgraded (${data.episodeFile.quality})` : `Episode Downloaded (${data.episodeFile.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
-            body: `${bodyLine1}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -143,11 +189,12 @@ export namespace Radarr {
     const handleGrabEventType = async (data: GrabEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = `Movie Grabbed (${data.release.quality})`;
-        const bodyLine2 = data?.release?.releaseTitle ?? 'Unknown Release';
+        const bodyLine1 = data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes.length} Episodes`;
+        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
+        const bodyLine3 = data.release?.releaseTitle ?? 'Unknown Release';
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
-            body: `${bodyLine1}\n${bodyLine2}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
+            body: `${bodyLine1}\n${bodyLine2}\n${bodyLine3}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -182,7 +229,7 @@ export namespace Radarr {
         Logger.debug('-> Handling as "Rename" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
+            title: `${module}: ${data.series.title}`,
             body: 'Files Renamed',
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -201,7 +248,7 @@ export namespace Radarr {
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: Connection Test`,
-            body: 'LunaSea is ready for Radarr notifications!',
+            body: 'LunaSea is ready for Sonarr notifications!',
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -216,32 +263,46 @@ export namespace Radarr {
      */
     enum EventType {
         Download = 'Download',
+        EpisodeFileDelete = 'EpisodeFileDelete',
         Grab = 'Grab',
         Health = 'Health',
         Rename = 'Rename',
+        SeriesDelete = 'SeriesDelete',
         Test = 'Test',
     }
 
     /**
-     * Movie object containing movie details for a request
+     * All possible series types
      */
-    interface MovieProperties {
+    enum SeriesType {
+        Standard = 'standard',
+        Anime = 'anime',
+        Daily = 'daily',
+    }
+
+    /**
+     * Series object containing series details for a request
+     */
+    interface SeriesProperties {
         id: number;
         title: string;
-        releaseDate: string;
-        folderPath: string;
-        tmdbId: number;
+        path: string;
+        type: SeriesType;
+        tvdbId?: number;
+        tvMazeId?: number;
         imdbId?: string;
     }
 
     /**
-     * Remote movie object containing remote details for a movie for a request
+     * Episode object containing episode details for a request
      */
-    interface RemoteMovieProperties {
-        tmdbId: number;
-        imdbId?: string;
+    interface EpisodeProperties {
+        id: number;
+        episodeNumber: number;
+        seasonNumber: number;
         title: string;
-        year: number;
+        airDate?: string;
+        airDateUtc?: string;
     }
 
     /**
@@ -257,9 +318,9 @@ export namespace Radarr {
     }
 
     /**
-     * Movie file object, containing details on the downloaded movie file for a request
+     * Episode file object containing episode file details for a request
      */
-    interface MovieFileProperties {
+    interface EpisodeFileProperties {
         id: number;
         relativePath: string;
         path: string;
@@ -271,25 +332,26 @@ export namespace Radarr {
     }
 
     /**
-     * Interface for a "Download" event type
-     */
-    interface DownloadEventType {
-        eventType: EventType;
-        movie: MovieProperties;
-        remoteMovie: RemoteMovieProperties;
-        movieFile: MovieFileProperties;
-        isUpgrade: boolean;
-        downloadId: string;
-    }
-
-    /**
      * Interface for a "Grab" event type
      */
     interface GrabEventType {
         eventType: EventType;
-        movie: MovieProperties;
-        remoteMovie: RemoteMovieProperties;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
         release: ReleaseProperties;
+        downloadClient: string;
+        downloadId: string;
+    }
+
+    /**
+     * Interface for a "Download" event type
+     */
+    interface DownloadEventType {
+        eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
+        episodeFile: EpisodeFileProperties;
+        isUpgrade: boolean;
         downloadClient: string;
         downloadId: string;
     }
@@ -310,7 +372,7 @@ export namespace Radarr {
      */
     interface RenameEventType {
         eventType: EventType;
-        movie: MovieProperties;
+        series: SeriesProperties;
     }
 
     /**
@@ -318,8 +380,25 @@ export namespace Radarr {
      */
     interface TestEventType {
         eventType: EventType;
-        movie: MovieProperties;
-        remoteMovie: RemoteMovieProperties;
-        release: ReleaseProperties;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
+    }
+
+    /**
+     * Interface for a "SeriesDelete" event type
+     */
+    interface SeriesDeleteEventType {
+        eventType: EventType;
+        series: SeriesProperties;
+        deletedFiles: boolean;
+    }
+
+    /**
+     * Interface for a "EpisodeFileDelete" event type
+     */
+    interface EpisodeFileDeleteEventType {
+        eventType: EventType;
+        series: SeriesProperties;
+        episodes: EpisodeProperties[];
     }
 }

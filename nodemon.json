@@ -2,7 +2,7 @@
     "restartable": "rs",
     "ignore": [".git", "node_modules", "dist"],
     "watch": ["src"],
-    "exec": "ts-node -r tsconfig-paths/register -r dotenv/config",
+    "exec": "ts-node -r dotenv/config",
     "env": {
         "NODE_ENV": "development"
     },

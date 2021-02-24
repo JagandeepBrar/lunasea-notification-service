@@ -1,52 +1,42 @@
-import { Constants } from '@lunasea-notification-relay/core/constants';
-import { Firebase } from '@lunasea-notification-relay/core/firebase';
-import { ELogger, Logger } from '@lunasea-notification-relay/core/logger';
-import { Server } from '@lunasea-notification-relay/server';
-import { Middleware } from '@lunasea-notification-relay/server/v1/middleware';
+import { Constants } from '../../../utilities/constants';
+import { Firebase } from '../../../utilities/firebase';
+import { Logger } from '../../../utilities/logger';
+import { Server } from '../../../server';
+import { Middleware } from '../middleware';
 import express from 'express';
 
 /**
- * Sonarr namespace to contain all Sonarr-related interfaces, enums, and handlers
+ * Radarr namespace to contain all Radarr-related interfaces, enums, and handlers
  */
-export namespace Sonarr {
+export namespace Radarr {
     /**
      * ROUTING AND HANDLERS
      **/
 
     // Create a router, and add the handler routes
     export const router = express.Router();
-    router.post(
-        '/user/:id',
-        Middleware.checkIdentifierExists,
-        Middleware.validateUser,
-        Middleware.checkNotificationPassword,
-        Middleware.extractProfile,
-        userHandler,
-    );
+    router.post('/user/:id', Middleware.checkIdentifierExists, Middleware.validateUser, Middleware.checkNotificationPassword, Middleware.extractProfile, userHandler);
     router.post('/device/:id', Middleware.checkIdentifierExists, Middleware.extractProfile, deviceHandler);
 
     /**
-     * Sonarr User Handler: Handles a webhook from Sonarr, and sends a notification to all devices that are attached to the calling account.
+     * Radarr User Handler: Handles a webhook from Radarr, and sends a notification to all devices that are attached to the calling account.
      *
      * @param request Express request object
      * @param response Express response object
      */
     async function userHandler(request: express.Request, response: express.Response): Promise<void> {
-        Logger.info('Running Sonarr [user] webhook...');
+        Logger.info('Running Radarr [user] webhook...');
         try {
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
             Logger.debug('-> HTTP response sent (200 OK)');
             const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
-            const module = request.params.profile && request.params.profile !== 'default' ? `Sonarr (${request.params.profile})` : 'Sonarr';
+            const module = request.params.profile && request.params.profile !== 'default' ? `Radarr (${request.params.profile})` : 'Radarr';
             Logger.debug('->', devices?.length ?? 0, 'device(s) found');
             if ((devices?.length ?? 0) > 0) {
                 switch (request.body['eventType']) {
                     case EventType.Download:
                         await handleDownloadEventType(request.body as DownloadEventType, devices, module);
-                        break;
-                    case EventType.EpisodeFileDelete:
-                        await handleDeleteEpisodeFileEventType(request.body as EpisodeFileDeleteEventType, devices, module);
                         break;
                     case EventType.Grab:
                         await handleGrabEventType(request.body as GrabEventType, devices, module);
@@ -57,9 +47,6 @@ export namespace Sonarr {
                     case EventType.Rename:
                         await handleRenameEventType(request.body as RenameEventType, devices, module);
                         break;
-                    case EventType.SeriesDelete:
-                        await handleDeleteSeriesEventType(request.body as SeriesDeleteEventType, devices, module);
-                        break;
                     case EventType.Test:
                         await handleTestEventType(request.body as TestEventType, devices, module);
                         break;
@@ -69,34 +56,31 @@ export namespace Sonarr {
                 }
             }
         } catch (error) {
-            ELogger.error(error.message);
+            Logger.error(error.message);
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(500).json(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
-        Logger.info('Finished Sonarr [user] webhook.');
+        Logger.info('Finished Radarr [user] webhook.');
     }
 
     /**
-     * Sonarr Device Handler: Handles a webhook from Sonarr [device ID], and sends a notification to the single device.
+     * Radarr Device Handler: Handles a webhook from Radarr [device ID], and sends a notification to the single device.
      *
      * @param request Express request object
      * @param response Express response object
      */
     async function deviceHandler(request: express.Request, response: express.Response): Promise<void> {
-        Logger.info('Running Sonarr [device] webhook...');
+        Logger.info('Running Radarr [device] webhook...');
         try {
             Logger.debug('-> Sending HTTP response to complete webhook...');
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
             Logger.debug('-> HTTP response sent (200 OK)');
             const devices: string[] = [request.params.id];
-            const module = request.params.profile && request.params.profile !== 'default' ? `Sonarr (${request.params.profile})` : 'Sonarr';
+            const module = request.params.profile && request.params.profile !== 'default' ? `Radarr (${request.params.profile})` : 'Radarr';
             switch (request.body['eventType']) {
                 case EventType.Download:
                     await handleDownloadEventType(request.body as DownloadEventType, devices, module);
-                    break;
-                case EventType.EpisodeFileDelete:
-                    await handleDeleteEpisodeFileEventType(request.body as EpisodeFileDeleteEventType, devices, module);
                     break;
                 case EventType.Grab:
                     await handleGrabEventType(request.body as GrabEventType, devices, module);
@@ -107,9 +91,6 @@ export namespace Sonarr {
                 case EventType.Rename:
                     await handleRenameEventType(request.body as RenameEventType, devices, module);
                     break;
-                case EventType.SeriesDelete:
-                    await handleDeleteSeriesEventType(request.body as SeriesDeleteEventType, devices, module);
-                    break;
                 case EventType.Test:
                     await handleTestEventType(request.body as TestEventType, devices, module);
                     break;
@@ -118,56 +99,13 @@ export namespace Sonarr {
                     return;
             }
         } catch (error) {
-            ELogger.error(error.message);
+            Logger.error(error.message);
             Logger.debug('Sending HTTP response to complete webhook...');
             response.status(500).json(<Server.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
             Logger.debug('HTTP response sent (500 Internal Server Error)');
         }
-        Logger.info('Finished Sonarr [device] webhook.');
+        Logger.info('Finished Radarr [device] webhook.');
     }
-
-    /**
-     * Handle a "EpisodeFileDelete" event type
-     *
-     * @param data Request body as RenameEventType
-     * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
-     */
-    const handleDeleteEpisodeFileEventType = async (data: EpisodeFileDeleteEventType, devices: string[], module: string): Promise<void> => {
-        Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
-        Logger.debug('-> Sending to devices...');
-        const bodyLine1 =
-            data.episodes?.length == 1
-                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
-                : `${data.episodes.length} Episodes`;
-        const bodyLine2 = 'Episode File Deleted';
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series.title}`,
-            body: `${bodyLine1}\n${bodyLine2}`,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
-    };
-
-    /**
-     * Handle a "SeriesDelete" event type
-     *
-     * @param data Request body as RenameEventType
-     * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
-     */
-    const handleDeleteSeriesEventType = async (data: SeriesDeleteEventType, devices: string[], module: string): Promise<void> => {
-        Logger.debug('-> Handling as "SeriesDelete" event type...');
-        Logger.debug('-> Sending to devices...');
-        let body = 'Series Deleted';
-        if (data.deletedFiles) body += '(With Files)';
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series.title}`,
-            body: body,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
-    };
 
     /**
      * Handle a "Download" event type
@@ -179,16 +117,10 @@ export namespace Sonarr {
     const handleDownloadEventType = async (data: DownloadEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 =
-            data.episodes?.length == 1
-                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
-                : `${data.episodes.length} Episodes`;
-        const bodyLine2 = data.isUpgrade
-            ? `Episode Upgraded (${data.episodeFile.quality})`
-            : `Episode Downloaded (${data.episodeFile.quality})`;
+        const bodyLine1 = data.isUpgrade ? `Movie Upgraded (${data.movieFile.quality})` : `Movie Downloaded (${data.movieFile.quality})`;
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
-            body: `${bodyLine1}\n${bodyLine2}`,
+            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
+            body: `${bodyLine1}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -204,15 +136,11 @@ export namespace Sonarr {
     const handleGrabEventType = async (data: GrabEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 =
-            data.episodes?.length == 1
-                ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
-                : `${data.episodes.length} Episodes`;
-        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
-        const bodyLine3 = data.release?.releaseTitle ?? 'Unknown Release';
+        const bodyLine1 = `Movie Grabbed (${data.release.quality})`;
+        const bodyLine2 = data?.release?.releaseTitle ?? 'Unknown Release';
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
-            body: `${bodyLine1}\n${bodyLine2}\n${bodyLine3}`,
+            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
+            body: `${bodyLine1}\n${bodyLine2}`,
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -247,7 +175,7 @@ export namespace Sonarr {
         Logger.debug('-> Handling as "Rename" event type...');
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series.title}`,
+            title: `${module}: ${data.movie?.title ?? 'Unknown Movie'}`,
             body: 'Files Renamed',
         }))
             ? Logger.debug('-> Sent to all devices.')
@@ -266,7 +194,7 @@ export namespace Sonarr {
         Logger.debug('-> Sending to devices...');
         (await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: Connection Test`,
-            body: 'LunaSea is ready for Sonarr notifications!',
+            body: 'LunaSea is ready for Radarr notifications!',
         }))
             ? Logger.debug('-> Sent to all devices.')
             : Logger.debug('-> Failed to send to devices.');
@@ -281,46 +209,32 @@ export namespace Sonarr {
      */
     enum EventType {
         Download = 'Download',
-        EpisodeFileDelete = 'EpisodeFileDelete',
         Grab = 'Grab',
         Health = 'Health',
         Rename = 'Rename',
-        SeriesDelete = 'SeriesDelete',
         Test = 'Test',
     }
 
     /**
-     * All possible series types
+     * Movie object containing movie details for a request
      */
-    enum SeriesType {
-        Standard = 'standard',
-        Anime = 'anime',
-        Daily = 'daily',
-    }
-
-    /**
-     * Series object containing series details for a request
-     */
-    interface SeriesProperties {
+    interface MovieProperties {
         id: number;
         title: string;
-        path: string;
-        type: SeriesType;
-        tvdbId?: number;
-        tvMazeId?: number;
+        releaseDate: string;
+        folderPath: string;
+        tmdbId: number;
         imdbId?: string;
     }
 
     /**
-     * Episode object containing episode details for a request
+     * Remote movie object containing remote details for a movie for a request
      */
-    interface EpisodeProperties {
-        id: number;
-        episodeNumber: number;
-        seasonNumber: number;
+    interface RemoteMovieProperties {
+        tmdbId: number;
+        imdbId?: string;
         title: string;
-        airDate?: string;
-        airDateUtc?: string;
+        year: number;
     }
 
     /**
@@ -336,9 +250,9 @@ export namespace Sonarr {
     }
 
     /**
-     * Episode file object containing episode file details for a request
+     * Movie file object, containing details on the downloaded movie file for a request
      */
-    interface EpisodeFileProperties {
+    interface MovieFileProperties {
         id: number;
         relativePath: string;
         path: string;
@@ -350,26 +264,25 @@ export namespace Sonarr {
     }
 
     /**
-     * Interface for a "Grab" event type
-     */
-    interface GrabEventType {
-        eventType: EventType;
-        series: SeriesProperties;
-        episodes: EpisodeProperties[];
-        release: ReleaseProperties;
-        downloadClient: string;
-        downloadId: string;
-    }
-
-    /**
      * Interface for a "Download" event type
      */
     interface DownloadEventType {
         eventType: EventType;
-        series: SeriesProperties;
-        episodes: EpisodeProperties[];
-        episodeFile: EpisodeFileProperties;
+        movie: MovieProperties;
+        remoteMovie: RemoteMovieProperties;
+        movieFile: MovieFileProperties;
         isUpgrade: boolean;
+        downloadId: string;
+    }
+
+    /**
+     * Interface for a "Grab" event type
+     */
+    interface GrabEventType {
+        eventType: EventType;
+        movie: MovieProperties;
+        remoteMovie: RemoteMovieProperties;
+        release: ReleaseProperties;
         downloadClient: string;
         downloadId: string;
     }
@@ -390,7 +303,7 @@ export namespace Sonarr {
      */
     interface RenameEventType {
         eventType: EventType;
-        series: SeriesProperties;
+        movie: MovieProperties;
     }
 
     /**
@@ -398,25 +311,8 @@ export namespace Sonarr {
      */
     interface TestEventType {
         eventType: EventType;
-        series: SeriesProperties;
-        episodes: EpisodeProperties[];
-    }
-
-    /**
-     * Interface for a "SeriesDelete" event type
-     */
-    interface SeriesDeleteEventType {
-        eventType: EventType;
-        series: SeriesProperties;
-        deletedFiles: boolean;
-    }
-
-    /**
-     * Interface for a "EpisodeFileDelete" event type
-     */
-    interface EpisodeFileDeleteEventType {
-        eventType: EventType;
-        series: SeriesProperties;
-        episodes: EpisodeProperties[];
+        movie: MovieProperties;
+        remoteMovie: RemoteMovieProperties;
+        release: ReleaseProperties;
     }
 }

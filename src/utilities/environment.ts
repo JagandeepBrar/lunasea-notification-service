@@ -1,4 +1,4 @@
-import { Logger } from '@lunasea-notification-relay/core/logger';
+import { Logger } from './logger';
 
 export namespace Environment {
     /**
