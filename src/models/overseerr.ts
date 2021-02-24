@@ -26,13 +26,13 @@ export namespace Models {
      * Request object containing the request details
      */
     export interface RequestProperties {
-        notification_type: NotificationType;
-        subject: string;
-        message: string;
-        image: string;
-        email: string;
-        username: string;
-        avatar: string;
+        notification_type?: NotificationType;
+        subject?: string;
+        message?: string;
+        image?: string;
+        email?: string;
+        username?: string;
+        avatar?: string;
         media?: MediaProperties;
     }
 
@@ -40,11 +40,11 @@ export namespace Models {
      * Media object containing the media details
      */
     export interface MediaProperties {
-        media_type: MediaType;
-        tmdbId: string;
-        imdbId: string;
-        tvdbId: string;
-        status: string;
-        status4k: string;
+        media_type?: MediaType;
+        tmdbId?: string;
+        imdbId?: string;
+        tvdbId?: string;
+        status?: string;
+        status4k?: string;
     }
 }

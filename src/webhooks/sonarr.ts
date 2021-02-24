@@ -52,10 +52,11 @@ export namespace Webhooks {
     const handleDeleteEpisodeFileEventType = async (data: Models.EpisodeFileDeleteEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes.length} Episodes`;
-        const bodyLine2 = 'Episode File Deleted';
+        const bodyLine1 =
+            data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes?.length ?? 0} Episodes`;
+        const bodyLine2 = 'Files Deleted';
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series.title}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
         });
         if (result) {
@@ -76,9 +77,9 @@ export namespace Webhooks {
         Logger.debug('-> Handling as "SeriesDelete" event type...');
         Logger.debug('-> Sending to devices...');
         let body = 'Series Deleted';
-        if (data.deletedFiles) body += '(With Files)';
+        if (data.deletedFiles) body += ' (With Files)';
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series.title}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
             body: body,
         });
         if (result) {
@@ -98,8 +99,9 @@ export namespace Webhooks {
     const handleDownloadEventType = async (data: Models.DownloadEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Download" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes.length} Episodes`;
-        const bodyLine2 = data.isUpgrade ? `Episode Upgraded (${data.episodeFile.quality})` : `Episode Downloaded (${data.episodeFile.quality})`;
+        const bodyLine1 =
+            data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes?.length ?? 0} Episodes`;
+        const bodyLine2 = data.isUpgrade ? `Upgraded (${data.episodeFile?.quality ?? 'Unknown Quality'})` : `Downloaded (${data.episodeFile?.quality ?? 'Unknown Quality'})`;
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
             body: `${bodyLine1}\n${bodyLine2}`,
@@ -121,8 +123,9 @@ export namespace Webhooks {
     const handleGrabEventType = async (data: Models.GrabEventType, devices: string[], module: string): Promise<void> => {
         Logger.debug('-> Handling as "Grab" event type...');
         Logger.debug('-> Sending to devices...');
-        const bodyLine1 = data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes.length} Episodes`;
-        const bodyLine2 = `Episode Grabbed (${data.release.quality})`;
+        const bodyLine1 =
+            data.episodes?.length == 1 ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}` : `${data.episodes?.length ?? 0} Episodes`;
+        const bodyLine2 = `Grabbed (${data.release?.quality ?? 'Unknown Quality'})`;
         const bodyLine3 = data.release?.releaseTitle ?? 'Unknown Release';
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
             title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
@@ -167,7 +170,7 @@ export namespace Webhooks {
         Logger.debug('-> Handling as "Rename" event type...');
         Logger.debug('-> Sending to devices...');
         const result = await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.series.title}`,
+            title: `${module}: ${data.series?.title ?? 'Unknown Series'}`,
             body: 'Files Renamed',
         });
         if (result) {
