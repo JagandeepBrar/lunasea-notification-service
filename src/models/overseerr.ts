@@ -3,7 +3,7 @@
  */
 export namespace Models {
     /**
-     * All possible notification types
+     * All possible notification types for the webhook
      */
     export enum NotificationType {
         MEDIA_APPROVED = 'MEDIA_APPROVED',

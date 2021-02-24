@@ -1,7 +1,7 @@
 import express from 'express';
 import { Route as Lidarr } from './routes/lidarr';
-import { Radarr } from './routes/radarr';
-import { Sonarr } from './routes/sonarr';
+import { Route as Radarr } from './routes/radarr';
+import { Route as Sonarr } from './routes/sonarr';
 import { Route as Overseerr } from './routes/overseerr';
 
 // Create a router and use each of the modules' own router instance for each subroute

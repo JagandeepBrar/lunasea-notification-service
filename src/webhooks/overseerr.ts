@@ -7,30 +7,31 @@ import { Logger } from '../utilities/logger';
  */
 export namespace Webhooks {
     /**
+     * Given the request data body, execute the correct webhook handler.
      *
      * @param data Webhook notification payload
      * @param devices List of devices to send the notification to
-     * @param module The module name to be used in the title of the notification
+     * @param title The module name to be used in the title of the notification
      */
-    export const execute = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    export const execute = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         switch (data.notification_type) {
             case Models.NotificationType.MEDIA_APPROVED:
-                await handleMediaApprovedNotificationType(data, devices, module);
+                await handleMediaApprovedNotificationType(data, devices, title);
                 break;
             case Models.NotificationType.MEDIA_AVAILABLE:
-                await handleMediaAvailableNotificationType(data, devices, module);
+                await handleMediaAvailableNotificationType(data, devices, title);
                 break;
             case Models.NotificationType.MEDIA_DECLINED:
-                await handleMediaDeclinedNotificationType(data, devices, module);
+                await handleMediaDeclinedNotificationType(data, devices, title);
                 break;
             case Models.NotificationType.MEDIA_FAILED:
-                await handleMediaFailedNotificationType(data, devices, module);
+                await handleMediaFailedNotificationType(data, devices, title);
                 break;
             case Models.NotificationType.MEDIA_PENDING:
-                await handleMediaPendingNotificationType(data, devices, module);
+                await handleMediaPendingNotificationType(data, devices, title);
                 break;
             case Models.NotificationType.TEST_NOTIFICATION:
-                await handleTestNotificationType(data, devices, module);
+                await handleTestNotificationType(data, devices, title);
                 break;
             default:
                 Logger.warn('An unknown notification_type was received.', data);
@@ -43,17 +44,20 @@ export namespace Webhooks {
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
+     * @param title Module name to be shown before the colon in the title
      */
-    const handleMediaApprovedNotificationType = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleMediaApprovedNotificationType = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Approved`,
+        const result = await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${title}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Approved`,
             body: `${data.subject}\nOriginally Requested by ${data.username}`,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
+        });
+        if (result) {
+            Logger.debug('-> Sent to all devices.');
+        } else {
+            Logger.warn('-> Failed to send to devices.');
+        }
     };
 
     /**
@@ -61,17 +65,20 @@ export namespace Webhooks {
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
+     * @param title Module name to be shown before the colon in the title
      */
-    const handleMediaAvailableNotificationType = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleMediaAvailableNotificationType = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Available`,
+        const result = await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${title}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Available`,
             body: `${data.subject}\nOriginally Requested by ${data.username}`,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
+        });
+        if (result) {
+            Logger.debug('-> Sent to all devices.');
+        } else {
+            Logger.warn('-> Failed to send to devices.');
+        }
     };
 
     /**
@@ -79,17 +86,20 @@ export namespace Webhooks {
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
+     * @param title Module name to be shown before the colon in the title
      */
-    const handleMediaDeclinedNotificationType = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleMediaDeclinedNotificationType = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Declined`,
+        const result = await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${title}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Declined`,
             body: `${data.subject}\nOriginally Requested by ${data.username}`,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
+        });
+        if (result) {
+            Logger.debug('-> Sent to all devices.');
+        } else {
+            Logger.warn('-> Failed to send to devices.');
+        }
     };
 
     /**
@@ -97,17 +107,20 @@ export namespace Webhooks {
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
+     * @param title Module name to be shown before the colon in the title
      */
-    const handleMediaFailedNotificationType = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleMediaFailedNotificationType = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Failed`,
+        const result = await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${title}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Failed`,
             body: `${data.subject}\n${data.message}`,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
+        });
+        if (result) {
+            Logger.debug('-> Sent to all devices.');
+        } else {
+            Logger.warn('-> Failed to send to devices.');
+        }
     };
 
     /**
@@ -115,17 +128,20 @@ export namespace Webhooks {
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
+     * @param title Module name to be shown before the colon in the title
      */
-    const handleMediaPendingNotificationType = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleMediaPendingNotificationType = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Requested`,
+        const result = await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${title}: ${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Requested`,
             body: `${data.subject}\nOriginally Requested by ${data.username}`,
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
+        });
+        if (result) {
+            Logger.debug('-> Sent to all devices.');
+        } else {
+            Logger.warn('-> Failed to send to devices.');
+        }
     };
 
     /**
@@ -133,16 +149,19 @@ export namespace Webhooks {
      *
      * @param data Request body as RequestProperties
      * @param devices List of Firebase device tokens
-     * @param module Module name to be shown before the colon in the title
+     * @param title Module name to be shown before the colon in the title
      */
-    const handleTestNotificationType = async (data: Models.RequestProperties, devices: string[], module: string): Promise<void> => {
+    const handleTestNotificationType = async (data: Models.RequestProperties, devices: string[], title: string): Promise<void> => {
         Logger.debug(`-> Handling as ${data.notification_type} event type...`);
         Logger.debug('-> Sending to devices...');
-        (await Firebase.sendFirebaseCloudMessage(devices, {
-            title: `${module}: Connection Test`,
+        const result = await Firebase.sendFirebaseCloudMessage(devices, {
+            title: `${title}: Connection Test`,
             body: 'LunaSea is ready for Overseerr notifications!',
-        }))
-            ? Logger.debug('-> Sent to all devices.')
-            : Logger.debug('-> Failed to send to devices.');
+        });
+        if (result) {
+            Logger.debug('-> Sent to all devices.');
+        } else {
+            Logger.warn('-> Failed to send to devices.');
+        }
     };
 }

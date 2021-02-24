@@ -1,19 +1,16 @@
+import { Server } from '../../../server';
+import { Models } from '../../../models/overseerr';
 import { Constants } from '../../../utilities/constants';
 import { Firebase } from '../../../utilities/firebase';
 import { Logger } from '../../../utilities/logger';
-import { Models } from '../../../models/overseerr';
-import { Server } from '../../../server';
+import { Webhooks } from '../../../webhooks/overseerr';
 import { Middleware } from '../middleware';
 import express from 'express';
-import { Webhooks } from '../../../webhooks/overseerr';
 
 /**
  * Route namespace to contain all Overseerr related routes and handlers.
  */
 export namespace Route {
-    /**
-     * ROUTING AND HANDLERS
-     */
     export const router = express.Router();
     router.post('/user/:id', Middleware.checkIdentifierExists, Middleware.validateUser, Middleware.checkNotificationPassword, Middleware.extractProfile, userHandler);
     router.post('/device/:id', Middleware.checkIdentifierExists, Middleware.extractProfile, deviceHandler);
@@ -31,9 +28,10 @@ export namespace Route {
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
             Logger.debug('-> HTTP response sent (200 OK)');
             const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
-            const module = request.params.profile && request.params.profile !== 'default' ? `Overseerr (${request.params.profile})` : 'Overseerr';
+            let title = 'Overseerr';
+            if (request.params.profile && request.params.profile !== 'default') title += ` (${request.params.profile})`;
             Logger.debug('->', devices?.length ?? 0, 'device(s) found');
-            if ((devices?.length ?? 0) > 0) await Webhooks.execute(request.body as Models.RequestProperties, devices, module);
+            if ((devices?.length ?? 0) > 0) await Webhooks.execute(request.body as Models.RequestProperties, devices, title);
         } catch (error) {
             Logger.error(error.message);
             Logger.debug('-> Sending HTTP response to complete webhook...');
@@ -56,8 +54,9 @@ export namespace Route {
             response.status(200).json(<Server.Response>{ message: Constants.MSG_OK });
             Logger.debug('-> HTTP response sent (200 OK)');
             const devices: string[] = [request.params.id];
-            const module = request.params.profile && request.params.profile !== 'default' ? `Overseerr (${request.params.profile})` : 'Overseerr';
-            await Webhooks.execute(request.body as Models.RequestProperties, devices, module);
+            let title = 'Overseerr';
+            if (request.params.profile && request.params.profile !== 'default') title += ` (${request.params.profile})`;
+            await Webhooks.execute(request.body as Models.RequestProperties, devices, title);
         } catch (error) {
             Logger.error(error.message);
             Logger.debug('Sending HTTP response to complete webhook...');
