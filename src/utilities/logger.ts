@@ -23,5 +23,5 @@ Logger.attachTransport(
         error: logToTransport,
         fatal: logToTransport,
     },
-    'silly',
+    'warn',
 );
