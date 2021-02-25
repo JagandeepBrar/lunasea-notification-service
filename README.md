@@ -6,16 +6,35 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 ## Application Support
 
-| Application | Supported |
-| :---------: | :-------: |
-|   Lidarr    |  &check;  |
-|   NZBGet    |  &cross;  |
-|  Overseerr  |  &check;  |
-|   Radarr    |  &check;  |
-|   SABnzbd   |  &cross;  |
-|   Sonarr    |  &check;  |
-|  Tautulli   |  &cross;  |
+| Application | Route           | Supported |
+| :---------- | :-------------- | :-------: |
+| Lidarr      | `v1/lidarr/`    |  &check;  |
+| NZBGet      |                 |  &cross;  |
+| Overseerr   | `v1/overseerr/` |  &check;  |
+| Radarr      | `v1/radarr/`    |  &check;  |
+| SABnzbd     |                 |  &cross;  |
+| Sonarr      | `v1/sonarr/`    |  &check;  |
+| Tautulli    |                 |  &cross;  |
 
-## Build & Setup
+## Build Guide
 
-> Coming Later
+#### 1. Environment
+
+All environment variables must either be set at an operating system-level, terminal-level, or by creating a `.env` file at the root of the project. A sample `.env` is supplied in the project (`.env.sample`).
+
+| Variable                  | Value                                                                               | Default | Required? |
+| :------------------------ | :---------------------------------------------------------------------------------- | :-----: | :-------: |
+| `DATABASE_URL`            | The Firebase database URL for your project.                                         |         |  &check;  |
+| `FANART_TV_API_KEY`       | A developer [Fanart.tv](https://fanart.tv/get-an-api-key/) API key.                 |         |  &check;  |
+| `PORT`                    | The port to attach the relay server to.                                             | `9000`  |  &cross;  |
+| `RESTRICTED_PACKAGE_NAME` | The application package name to restrict notifications to from this relay instance. |         |  &check;  |
+
+#### 2. Firebase Service Account
+
+You must place a service account file at the root of the project, named `serviceaccount.json`. A service account file can be downloaded from the Firebase console for your project.
+
+#### 3. Building the Project
+
+1. Install Node.js (v14 is recommend, v10 or higher is required).
+2. Run `npm run build` to build the project.
+3. Run `npm run serve` to run the project.
