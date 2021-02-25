@@ -1,8 +1,8 @@
-import { Server } from '../server';
-import { Middleware } from '../server/middleware';
-import { Constants } from '../utilities/constants';
-import { Logger } from '../utilities/logger';
-import { Webhooks } from '../webhooks/lidarr';
+import { Server } from '../../server';
+import { Middleware } from '../../server/middleware';
+import { Constants } from '../../utilities/constants';
+import { Logger } from '../../utilities/logger';
+import { Webhooks } from '../../webhooks/lidarr';
 import express from 'express';
 
 /**
@@ -14,7 +14,7 @@ export namespace Route {
     router.post('/device/:id', Middleware.extractProfile, Middleware.extractDeviceToken, handler);
 
     /**
-     * Lidarr Webhook Handler: Handles a webhook from Lidarr, and sends a notification to all devices that are in `responses.locals.tokens`.
+     * Lidarr Webhook Handler: Handles a webhook from Lidarr, and sends a notification to all devices that are in `response.locals.tokens`.
      *
      * @param request Express request object
      * @param response Express response object

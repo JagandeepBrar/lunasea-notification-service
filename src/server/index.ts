@@ -1,6 +1,6 @@
 import express from 'express';
 import { Logger } from '../utilities/logger';
-import { router } from './v1';
+import { router as v1 } from '../routes/v1';
 
 export namespace Server {
     const PORT = process.env.PORT || '9000';
@@ -13,7 +13,7 @@ export namespace Server {
      */
     export const initialize = (): void => {
         server.use(express.json());
-        server.use('/v1', router);
+        server.use('/v1', v1);
     };
 
     /**
