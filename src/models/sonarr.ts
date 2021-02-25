@@ -1,10 +1,4 @@
-/**
- * Namespace to contain all Sonarr-related models (interfaces, enums, etc).
- */
 export namespace Models {
-    /**
-     * All possible event types for the webhook
-     */
     export enum EventType {
         Download = 'Download',
         EpisodeFileDelete = 'EpisodeFileDelete',
@@ -15,18 +9,12 @@ export namespace Models {
         Test = 'Test',
     }
 
-    /**
-     * All possible series types
-     */
     export enum SeriesType {
         Standard = 'standard',
         Anime = 'anime',
         Daily = 'daily',
     }
 
-    /**
-     * Series object containing series details for a request
-     */
     export interface SeriesProperties {
         id?: number;
         title?: string;
@@ -37,9 +25,6 @@ export namespace Models {
         imdbId?: string;
     }
 
-    /**
-     * Episode object containing episode details for a request
-     */
     export interface EpisodeProperties {
         id?: number;
         episodeNumber?: number;
@@ -49,9 +34,6 @@ export namespace Models {
         airDateUtc?: string;
     }
 
-    /**
-     * Release object containing release details for a request
-     */
     export interface ReleaseProperties {
         quality?: string;
         qualityVersion?: number;
@@ -61,9 +43,6 @@ export namespace Models {
         size?: number;
     }
 
-    /**
-     * Episode file object containing episode file details for a request
-     */
     export interface EpisodeFileProperties {
         id?: number;
         relativePath?: string;
@@ -75,9 +54,6 @@ export namespace Models {
         size?: number;
     }
 
-    /**
-     * Interface for a "Grab" event type
-     */
     export interface GrabEventType {
         eventType?: EventType;
         series?: SeriesProperties;
@@ -87,9 +63,6 @@ export namespace Models {
         downloadId?: string;
     }
 
-    /**
-     * Interface for a "Download" event type
-     */
     export interface DownloadEventType {
         eventType?: EventType;
         series?: SeriesProperties;
@@ -100,9 +73,6 @@ export namespace Models {
         downloadId?: string;
     }
 
-    /**
-     * Interface for a "Health" event type
-     */
     export interface HealthEventType {
         eventType?: EventType;
         level?: string;
@@ -111,35 +81,23 @@ export namespace Models {
         wikiUrl?: string;
     }
 
-    /**
-     * Interface for a "Rename" event type
-     */
     export interface RenameEventType {
         eventType?: EventType;
         series?: SeriesProperties;
     }
 
-    /**
-     * Interface for a "Test" event type
-     */
     export interface TestEventType {
         eventType?: EventType;
         series?: SeriesProperties;
         episodes?: EpisodeProperties[];
     }
 
-    /**
-     * Interface for a "SeriesDelete" event type
-     */
     export interface SeriesDeleteEventType {
         eventType?: EventType;
         series?: SeriesProperties;
         deletedFiles?: boolean;
     }
 
-    /**
-     * Interface for a "EpisodeFileDelete" event type
-     */
     export interface EpisodeFileDeleteEventType {
         eventType?: EventType;
         series?: SeriesProperties;

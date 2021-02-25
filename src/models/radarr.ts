@@ -1,6 +1,3 @@
-/**
- * Namespace to contain all Radarr-related models (export interfaces, enums, etc).
- */
 export namespace Models {
     export enum EventType {
         Download = 'Download',

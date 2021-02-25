@@ -31,8 +31,10 @@ export namespace FanartTV {
             }).then((response) => {
                 if (response.data.artistthumb && Array.isArray(response.data.artistthumb) && response.data.artistthumb.length > 0) {
                     const url = convertToPreview(response.data.artistthumb[0]?.url);
-                    Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
-                    return url;
+                    if (url) {
+                        Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
+                        return url;
+                    }
                 }
                 Logger.warn(`-> No artist thumbnail found (${artistId})`);
                 return undefined;
@@ -59,14 +61,16 @@ export namespace FanartTV {
             }).then((response) => {
                 if (
                     response.data.albums &&
-                    response.data[albumId] &&
-                    response.data[albumId].albumcover &&
-                    Array.isArray(response.data[albumId].albumcover) &&
-                    response.data[albumId].albumcover.length > 0
+                    response.data.albums[albumId] &&
+                    response.data.albums[albumId].albumcover &&
+                    Array.isArray(response.data.albums[albumId].albumcover) &&
+                    response.data.albums[albumId].albumcover.length > 0
                 ) {
                     const url = convertToPreview(response.data[albumId].albumcover[0]?.url);
-                    Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
-                    return url;
+                    if (url) {
+                        Logger.debug(`-> ...${url?.substr(url.length - 50, 50)}`);
+                        return url;
+                    }
                 }
                 Logger.warn('-> No album cover found', albumId);
                 return undefined;
@@ -93,8 +97,10 @@ export namespace FanartTV {
             }).then((response) => {
                 if (response.data.movieposter && Array.isArray(response.data.movieposter) && response.data.movieposter.length > 0) {
                     const url = convertToPreview(response.data.movieposter[0]?.url);
-                    Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
-                    return url;
+                    if (url) {
+                        Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
+                        return url;
+                    }
                 }
                 Logger.warn(`-> No movie poster found (${movieId})`);
                 return undefined;
@@ -121,8 +127,10 @@ export namespace FanartTV {
             }).then((response) => {
                 if (response.data.tvposter && Array.isArray(response.data.tvposter) && response.data.tvposter.length > 0) {
                     const url = convertToPreview(response.data.tvposter[0]?.url);
-                    Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
-                    return url;
+                    if (url) {
+                        Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
+                        return url;
+                    }
                 }
                 Logger.warn(`-> No series poster found (${seriesId})`);
                 return undefined;
