@@ -15,7 +15,7 @@ const title = (profile: string, body: string): string => payloadTitle('Sonarr', 
 /**
  * Construct a NotificationPayload based on a delete episode file event.
  */
-export const deleteEpisodeFileEventType = async (data: EpisodeFileDeleteEventType, profile: string): Promise<NotificationPayload> => {
+export const deleteEpisodeFilePayload = async (data: EpisodeFileDeleteEventType, profile: string): Promise<NotificationPayload> => {
     const body1 =
         data.episodes?.length == 1
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
@@ -32,7 +32,7 @@ export const deleteEpisodeFileEventType = async (data: EpisodeFileDeleteEventTyp
 /**
  * Construct a NotificationPayload based on a delete series event.
  */
-export const deleteSeriesEventType = async (data: SeriesDeleteEventType, profile: string): Promise<NotificationPayload> => {
+export const deleteSeriesPayload = async (data: SeriesDeleteEventType, profile: string): Promise<NotificationPayload> => {
     let body = 'Series Deleted';
     if (data.deletedFiles) body += ' (With Files)';
     const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
@@ -46,7 +46,7 @@ export const deleteSeriesEventType = async (data: SeriesDeleteEventType, profile
 /**
  * Construct a NotificationPayload based on a download event.
  */
-export const downloadEventType = async (data: DownloadEventType, profile: string): Promise<NotificationPayload> => {
+export const downloadPayload = async (data: DownloadEventType, profile: string): Promise<NotificationPayload> => {
     const body1 =
         data.episodes?.length == 1
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
@@ -64,7 +64,7 @@ export const downloadEventType = async (data: DownloadEventType, profile: string
 /**
  * Construct a NotificationPayload based on a grab event.
  */
-export const grabEventType = async (data: GrabEventType, profile: string): Promise<NotificationPayload> => {
+export const grabPayload = async (data: GrabEventType, profile: string): Promise<NotificationPayload> => {
     const body1 =
         data.episodes?.length == 1
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
@@ -82,7 +82,7 @@ export const grabEventType = async (data: GrabEventType, profile: string): Promi
 /**
  * Construct a NotificationPayload based on a health event.
  */
-export const healthEventType = async (data: HealthEventType, profile: string): Promise<NotificationPayload> => {
+export const healthPayload = async (data: HealthEventType, profile: string): Promise<NotificationPayload> => {
     return <NotificationPayload>{
         title: title(profile, 'Health Check'),
         body: data.message ?? 'Unknown Message',
@@ -92,7 +92,7 @@ export const healthEventType = async (data: HealthEventType, profile: string): P
 /**
  * Construct a NotificationPayload based on a rename event.
  */
-export const renameEventType = async (data: RenameEventType, profile: string): Promise<NotificationPayload> => {
+export const renamePayload = async (data: RenameEventType, profile: string): Promise<NotificationPayload> => {
     const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
@@ -104,7 +104,7 @@ export const renameEventType = async (data: RenameEventType, profile: string): P
 /**
  * Construct a NotificationPayload based on a test event.
  */
-export const testEventType = async (data: TestEventType, profile: string): Promise<NotificationPayload> => {
+export const testPayload = async (data: TestEventType, profile: string): Promise<NotificationPayload> => {
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Sonarr notifications!',

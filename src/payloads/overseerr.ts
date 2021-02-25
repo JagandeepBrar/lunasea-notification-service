@@ -6,7 +6,7 @@ const title = (profile: string, body: string): string => payloadTitle('Overseerr
 /**
  * Construct a NotificationPayload based on a media approved event.
  */
-export const mediaApprovedNotificationType = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+export const mediaApprovedPayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
     const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
     return <NotificationPayload>{
@@ -18,7 +18,7 @@ export const mediaApprovedNotificationType = async (data: RequestProperties, pro
 /**
  * Construct a NotificationPayload based on a media available event.
  */
-export const mediaAvailableNotificationType = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+export const mediaAvailablePayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
     const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
     return <NotificationPayload>{
@@ -30,7 +30,7 @@ export const mediaAvailableNotificationType = async (data: RequestProperties, pr
 /**
  * Construct a NotificationPayload based on a media declined event.
  */
-export const mediaDeclinedNotificationType = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+export const mediaDeclinedPayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
     const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
     return <NotificationPayload>{
@@ -42,7 +42,7 @@ export const mediaDeclinedNotificationType = async (data: RequestProperties, pro
 /**
  * Construct a NotificationPayload based on a media failed event.
  */
-export const mediaFailedNotificationType = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+export const mediaFailedPayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
     const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
     return <NotificationPayload>{
@@ -54,7 +54,7 @@ export const mediaFailedNotificationType = async (data: RequestProperties, profi
 /**
  * Construct a NotificationPayload based on a media pending event.
  */
-export const mediaPendingNotificationType = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+export const mediaPendingPayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
     const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
     return <NotificationPayload>{
@@ -66,7 +66,7 @@ export const mediaPendingNotificationType = async (data: RequestProperties, prof
 /**
  * Construct a NotificationPayload based on a test event.
  */
-export const testNotificationType = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+export const testPayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Overseerr notifications!',

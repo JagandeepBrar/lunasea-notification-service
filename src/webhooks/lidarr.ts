@@ -1,6 +1,6 @@
 import { DownloadEventType, EventType, GrabEventType, RenameEventType, RetagEventType, TestEventType } from '../models/lidarr';
 import { NotificationPayload } from '../payloads';
-import { downloadEventType, grabEventType, renameEventType, retagEventType, testEventType } from '../payloads/lidarr';
+import { downloadPayload, grabPayload, renamePayload, retagPayload, testPayload } from '../payloads/lidarr';
 import { Firebase } from '../utilities/firebase';
 import { Logger } from '../utilities/logger';
 
@@ -17,23 +17,23 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
     switch (data.eventType) {
         case EventType.Download:
             Logger.debug('-> Handling as "Download" event type...');
-            payload = await downloadEventType(data as DownloadEventType, profile);
+            payload = await downloadPayload(data as DownloadEventType, profile);
             break;
         case EventType.Grab:
             Logger.debug('-> Handling as "Grab" event type...');
-            payload = await grabEventType(data as GrabEventType, profile);
+            payload = await grabPayload(data as GrabEventType, profile);
             break;
         case EventType.Rename:
             Logger.debug('-> Handling as "Rename" event type...');
-            payload = await renameEventType(data as RenameEventType, profile);
+            payload = await renamePayload(data as RenameEventType, profile);
             break;
         case EventType.Retag:
             Logger.debug('-> Handling as "Retag" event type...');
-            payload = await retagEventType(data as RetagEventType, profile);
+            payload = await retagPayload(data as RetagEventType, profile);
             break;
         case EventType.Test:
             Logger.debug('-> Handling as "Test" event type...');
-            payload = await testEventType(data as TestEventType, profile);
+            payload = await testPayload(data as TestEventType, profile);
             break;
         default:
             Logger.warn('-> An unknown eventType was received:', data);
