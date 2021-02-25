@@ -1,10 +1,15 @@
 import { appendFileSync } from 'fs';
 import { Logger as TSLog, ILogObject } from 'tslog';
 
-function logToTransport(log: ILogObject) {
-    const message = [log.date.toISOString(), log.logLevel?.toUpperCase()?.padEnd(5), `${log.filePath}:${log.lineNumber}`.padEnd(35), log.argumentsArray.join(' ')].join(' ');
+const transportLogToFilesystem = (logObject: ILogObject): void => {
+    const message = [
+        logObject.date.toISOString(),
+        logObject.logLevel?.toUpperCase()?.padEnd(5),
+        `${logObject.filePath}:${logObject.lineNumber}`.padEnd(35),
+        logObject.argumentsArray.join(' '),
+    ].join(' ');
     appendFileSync('server.log', message + '\n');
-}
+};
 
 export const Logger = new TSLog({
     displayInstanceName: false,
@@ -15,13 +20,13 @@ export const Logger = new TSLog({
 
 Logger.attachTransport(
     {
-        silly: logToTransport,
-        debug: logToTransport,
-        trace: logToTransport,
-        info: logToTransport,
-        warn: logToTransport,
-        error: logToTransport,
-        fatal: logToTransport,
+        silly: transportLogToFilesystem,
+        debug: transportLogToFilesystem,
+        trace: transportLogToFilesystem,
+        info: transportLogToFilesystem,
+        warn: transportLogToFilesystem,
+        error: transportLogToFilesystem,
+        fatal: transportLogToFilesystem,
     },
     'warn',
 );
