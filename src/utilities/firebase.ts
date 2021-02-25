@@ -73,7 +73,7 @@ export namespace Firebase {
      * @param data Data message payload
      */
     export const sendNotification = async (tokens: string[], payload: LunaNotificationPayload): Promise<boolean> => {
-        Logger.debug('-> Sending notification(s)...');
+        Logger.debug('Sending notification(s)...');
         try {
             const message: admin.messaging.MulticastMessage = <admin.messaging.MulticastMessage>{
                 tokens: tokens,

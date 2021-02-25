@@ -41,7 +41,7 @@ export namespace Middleware {
         Logger.debug(`Running extractDeviceToken middleware...`);
         if (request.params.id) {
             response.locals.tokens = [request.params.id];
-            Logger.debug(`-> Device Token: ${request.params.id.substr(0, 15)}...`);
+            Logger.debug(`-> Device Token: ${request.params.id.substr(0, 50)}...`);
             Logger.debug('Finished extractDeviceToken middleware.');
             next();
         } else {
