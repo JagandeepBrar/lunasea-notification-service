@@ -73,7 +73,7 @@ export namespace Firebase {
      * @param data Data message payload
      */
     export const sendNotification = async (tokens: string[], payload: LunaNotificationPayload): Promise<boolean> => {
-        Logger.debug('-> Sending notification(s)...');
+        Logger.debug('Sending notification(s)...');
         try {
             const message: admin.messaging.MulticastMessage = <admin.messaging.MulticastMessage>{
                 tokens: tokens,
@@ -109,43 +109,6 @@ export namespace Firebase {
                     Logger.debug(`-> Sent notification(s): success: ${response.successCount} / failure: ${response.failureCount}`);
                     return response.successCount > 0;
                 });
-        } catch (error) {
-            Logger.error(error.message);
-            return false;
-        }
-    };
-
-    /**
-     * Send a message to the supplied device token list.
-     *
-     * @param devices Firebase device token list
-     * @param notification Notification message payload
-     * @param data Data message payload
-     */
-    export const sendFirebaseCloudMessage = async (
-        devices: string[],
-        notification?: admin.messaging.NotificationMessagePayload,
-        data?: admin.messaging.DataMessagePayload,
-    ): Promise<boolean> => {
-        try {
-            // Initialize the payload
-            const payload: admin.messaging.MessagingPayload = {};
-            if (data) payload.data = data;
-            if (notification) {
-                payload.notification = notification;
-                payload.notification.sound = 'default';
-            }
-            // Initialize the options
-            const options: admin.messaging.MessagingOptions = {
-                contentAvailable: true,
-                timeToLive: 604800,
-                restrictedPackageName: process.env.RESTRICTED_PACKAGE_NAME,
-            };
-            // Send the messages
-            return await admin
-                .messaging()
-                .sendToDevice(devices, payload, options)
-                .then(() => true);
         } catch (error) {
             Logger.error(error.message);
             return false;

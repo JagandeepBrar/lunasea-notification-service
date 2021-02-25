@@ -7,7 +7,7 @@ export namespace Payloads {
     /**
      * Construct a LunaNotificationPayload based on a media approved event.
      */
-    export const mediaApprovedNotificationType = (data: Models.RequestProperties, profile: string): LunaNotificationPayload => {
+    export const mediaApprovedNotificationType = async (data: Models.RequestProperties, profile: string): Promise<LunaNotificationPayload> => {
         const body1 = data.subject;
         const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
         return <LunaNotificationPayload>{
@@ -19,7 +19,7 @@ export namespace Payloads {
     /**
      * Construct a LunaNotificationPayload based on a media available event.
      */
-    export const mediaAvailableNotificationType = (data: Models.RequestProperties, profile: string): LunaNotificationPayload => {
+    export const mediaAvailableNotificationType = async (data: Models.RequestProperties, profile: string): Promise<LunaNotificationPayload> => {
         const body1 = data.subject;
         const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
         return <LunaNotificationPayload>{
@@ -31,7 +31,7 @@ export namespace Payloads {
     /**
      * Construct a LunaNotificationPayload based on a media declined event.
      */
-    export const mediaDeclinedNotificationType = (data: Models.RequestProperties, profile: string): LunaNotificationPayload => {
+    export const mediaDeclinedNotificationType = async (data: Models.RequestProperties, profile: string): Promise<LunaNotificationPayload> => {
         const body1 = data.subject;
         const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
         return <LunaNotificationPayload>{
@@ -43,7 +43,7 @@ export namespace Payloads {
     /**
      * Construct a LunaNotificationPayload based on a media failed event.
      */
-    export const mediaFailedNotificationType = (data: Models.RequestProperties, profile: string): LunaNotificationPayload => {
+    export const mediaFailedNotificationType = async (data: Models.RequestProperties, profile: string): Promise<LunaNotificationPayload> => {
         const body1 = data.subject;
         const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
         return <LunaNotificationPayload>{
@@ -55,7 +55,7 @@ export namespace Payloads {
     /**
      * Construct a LunaNotificationPayload based on a media pending event.
      */
-    export const mediaPendingNotificationType = (data: Models.RequestProperties, profile: string): LunaNotificationPayload => {
+    export const mediaPendingNotificationType = async (data: Models.RequestProperties, profile: string): Promise<LunaNotificationPayload> => {
         const body1 = data.subject;
         const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
         return <LunaNotificationPayload>{
@@ -67,7 +67,7 @@ export namespace Payloads {
     /**
      * Construct a LunaNotificationPayload based on a test event.
      */
-    export const testNotificationType = (data: Models.RequestProperties, profile: string): LunaNotificationPayload => {
+    export const testNotificationType = async (data: Models.RequestProperties, profile: string): Promise<LunaNotificationPayload> => {
         return <LunaNotificationPayload>{
             title: title(profile, 'Connection Test'),
             body: 'LunaSea is ready for Overseerr notifications!',

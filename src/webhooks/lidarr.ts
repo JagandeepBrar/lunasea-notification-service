@@ -21,23 +21,23 @@ export namespace Webhooks {
         switch (data.eventType) {
             case Models.EventType.Download:
                 Logger.debug('-> Handling as "Download" event type...');
-                payload = Payloads.downloadEventType(data as Models.DownloadEventType, profile);
+                payload = await Payloads.downloadEventType(data as Models.DownloadEventType, profile);
                 break;
             case Models.EventType.Grab:
                 Logger.debug('-> Handling as "Grab" event type...');
-                payload = Payloads.grabEventType(data as Models.GrabEventType, profile);
+                payload = await Payloads.grabEventType(data as Models.GrabEventType, profile);
                 break;
             case Models.EventType.Rename:
                 Logger.debug('-> Handling as "Rename" event type...');
-                payload = Payloads.renameEventType(data as Models.RenameEventType, profile);
+                payload = await Payloads.renameEventType(data as Models.RenameEventType, profile);
                 break;
             case Models.EventType.Retag:
                 Logger.debug('-> Handling as "Retag" event type...');
-                payload = Payloads.retagEventType(data as Models.RetagEventType, profile);
+                payload = await Payloads.retagEventType(data as Models.RetagEventType, profile);
                 break;
             case Models.EventType.Test:
                 Logger.debug('-> Handling as "Test" event type...');
-                payload = Payloads.testEventType(data as Models.TestEventType, profile);
+                payload = await Payloads.testEventType(data as Models.TestEventType, profile);
                 break;
             default:
                 Logger.warn('-> An unknown eventType was received:', data);
