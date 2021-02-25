@@ -1,7 +1,7 @@
 import { Logger } from './logger';
 import * as serviceaccount from '../../serviceaccount.json';
 import * as admin from 'firebase-admin';
-import { LunaNotificationPayload } from '../payloads';
+import { NotificationPayload } from '../payloads';
 
 export namespace Firebase {
     /**
@@ -10,8 +10,7 @@ export namespace Firebase {
     export const initialize = (): void => {
         Logger.debug('Initializing Firebase...');
         Logger.debug('-> Project:', serviceaccount['project_id']);
-        Logger.debug('-> Database URL:', process.env.DATABASE_URL);
-        Logger.debug('-> Restricted Package Name:', process.env.RESTRICTED_PACKAGE_NAME);
+        Logger.debug('-> Database:', process.env.DATABASE_URL);
         admin.initializeApp({
             credential: admin.credential.cert(serviceaccount as admin.ServiceAccount),
             databaseURL: process.env.DATABASE_URL,
@@ -69,10 +68,10 @@ export namespace Firebase {
      * Send a message to the supplied device token list.
      *
      * @param tokens Firebase device token list
-     * @param payload Preconstructed LunaNotificationPayload
+     * @param payload Preconstructed NotificationPayload
      * @param data Data message payload
      */
-    export const sendNotification = async (tokens: string[], payload: LunaNotificationPayload): Promise<boolean> => {
+    export const sendNotification = async (tokens: string[], payload: NotificationPayload): Promise<boolean> => {
         Logger.debug('Sending notification(s)...');
         try {
             const message: admin.messaging.MulticastMessage = <admin.messaging.MulticastMessage>{

@@ -1,4 +1,4 @@
-export interface LunaNotificationPayload {
+export interface NotificationPayload {
     title: string;
     body: string;
     image?: string;
