@@ -118,3 +118,4 @@ dist
 # Comet.Tools
 .env
 serviceaccount.json
+server.log

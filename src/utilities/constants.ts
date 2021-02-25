@@ -3,6 +3,8 @@ export namespace Constants {
     export const MSG_OK = 'OK';
     /** HTTP 400 response */
     export const MSG_NO_ID_SUPPLIED = 'No ID was supplied';
+    /** HTTP 400 response */
+    export const MSG_NO_DEVICES_FOUND = 'No devices found';
     /** HTTP 404 response */
     export const MSG_USER_NOT_FOUND = 'Invalid User ID';
     /** HTTP 500 response */

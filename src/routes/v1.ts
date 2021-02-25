@@ -1,8 +1,8 @@
 import express from 'express';
-import { Route as Lidarr } from './routes/lidarr';
-import { Route as Radarr } from './routes/radarr';
-import { Route as Sonarr } from './routes/sonarr';
-import { Route as Overseerr } from './routes/overseerr';
+import { Route as Lidarr } from './v1/lidarr';
+import { Route as Radarr } from './v1/radarr';
+import { Route as Sonarr } from './v1/sonarr';
+import { Route as Overseerr } from './v1/overseerr';
 
 // Create a router and use each of the modules' own router instance for each subroute
 export const router = express.Router();

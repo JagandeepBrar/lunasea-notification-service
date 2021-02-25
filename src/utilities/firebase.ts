@@ -1,6 +1,7 @@
 import { Logger } from './logger';
 import * as serviceaccount from '../../serviceaccount.json';
 import * as admin from 'firebase-admin';
+import { LunaNotificationPayload } from '../payloads';
 
 export namespace Firebase {
     /**
@@ -61,6 +62,56 @@ export namespace Firebase {
         } catch (error) {
             Logger.error(uid, '/', error.message);
             return [];
+        }
+    };
+
+    /**
+     * Send a message to the supplied device token list.
+     *
+     * @param tokens Firebase device token list
+     * @param payload Preconstructed LunaNotificationPayload
+     * @param data Data message payload
+     */
+    export const sendNotification = async (tokens: string[], payload: LunaNotificationPayload): Promise<boolean> => {
+        Logger.debug('-> Sending notification(s)...');
+        try {
+            const message: admin.messaging.MulticastMessage = <admin.messaging.MulticastMessage>{
+                tokens: tokens,
+                notification: {
+                    title: payload.title,
+                    body: payload.body,
+                    imageUrl: payload.image,
+                },
+                data: payload.data,
+                android: {
+                    notification: {
+                        sound: 'default',
+                    },
+                    priority: 'high',
+                    restrictedPackageName: process.env.RESTRICTED_PACKAGE_NAME,
+                    ttl: 2419200,
+                },
+                apns: {
+                    payload: {
+                        aps: {
+                            mutableContent: payload.image !== undefined,
+                            sound: 'default',
+                            contentAvailable: true,
+                        },
+                    },
+                },
+            };
+            // Send the message
+            return await admin
+                .messaging()
+                .sendMulticast(message)
+                .then((response) => {
+                    Logger.debug(`-> Sent notification(s): success: ${response.successCount} / failure: ${response.failureCount}`);
+                    return response.successCount > 0;
+                });
+        } catch (error) {
+            Logger.error(error.message);
+            return false;
         }
     };
 
