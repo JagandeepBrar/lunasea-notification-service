@@ -15,6 +15,11 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: body,
         image: image,
+        data: {
+            module: 'radarr',
+            event: 'grab',
+            id: data.movie?.id?.toString() ?? '-1',
+        },
     };
 };
 
