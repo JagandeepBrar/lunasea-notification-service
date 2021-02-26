@@ -3,6 +3,7 @@ import { DownloadEventType, GrabEventType, HealthEventType, RenameEventType, Tes
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const title = (profile: string, body: string): string => payloadTitle('Radarr', profile, body);
+const moduleKey = 'radarr';
 
 /**
  * Construct a NotificationPayload based on a download event.
@@ -16,8 +17,8 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
         body: body,
         image: image,
         data: {
-            module: 'radarr',
-            event: 'grab',
+            module: moduleKey,
+            event: data.eventType,
             id: data.movie?.id?.toString() ?? '-1',
         },
     };
@@ -34,6 +35,11 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: [body1, body2].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            event: data.eventType,
+            id: data.movie?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -44,6 +50,10 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
     return <NotificationPayload>{
         title: title(profile, 'Health Check'),
         body: data.message ?? 'Unknown Message',
+        data: {
+            module: moduleKey,
+            event: data.eventType,
+        },
     };
 };
 
@@ -56,6 +66,11 @@ export const renamePayload = async (data: RenameEventType, profile: string): Pro
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: 'Files Renamed',
         image: image,
+        data: {
+            module: moduleKey,
+            event: data.eventType,
+            id: data.movie?.id?.toString() ?? '-1',
+        },
     };
 };
 
