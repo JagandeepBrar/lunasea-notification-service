@@ -18,6 +18,7 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
         image: image,
         data: {
             module: moduleKey,
+            profile: profile,
             event: data.eventType,
             id: data.movie?.id?.toString() ?? '-1',
         },
@@ -37,6 +38,7 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
         image: image,
         data: {
             module: moduleKey,
+            profile: profile,
             event: data.eventType,
             id: data.movie?.id?.toString() ?? '-1',
         },
@@ -52,6 +54,7 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
         body: data.message ?? 'Unknown Message',
         data: {
             module: moduleKey,
+            profile: profile,
             event: data.eventType,
         },
     };
@@ -68,6 +71,7 @@ export const renamePayload = async (data: RenameEventType, profile: string): Pro
         image: image,
         data: {
             module: moduleKey,
+            profile: profile,
             event: data.eventType,
             id: data.movie?.id?.toString() ?? '-1',
         },
