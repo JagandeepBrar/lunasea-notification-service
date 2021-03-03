@@ -85,5 +85,10 @@ export const testPayload = async (data: TestEventType, profile: string): Promise
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Radarr notifications!',
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
