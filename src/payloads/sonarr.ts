@@ -11,6 +11,7 @@ import {
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const title = (profile: string, body: string): string => payloadTitle('Sonarr', profile, body);
+const moduleKey = 'sonarr';
 
 /**
  * Construct a NotificationPayload based on a delete episode file event.
@@ -26,6 +27,13 @@ export const deleteEpisodeFilePayload = async (data: EpisodeFileDeleteEventType,
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: [body1, body2].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            seriesId: data.series?.id?.toString() ?? '-1',
+            seasonNumber: data.episodes && data.episodes.length > 0 ? data.episodes[0]?.seasonNumber?.toString() ?? '-1' : '-1',
+        },
     };
 };
 
@@ -40,6 +48,11 @@ export const deleteSeriesPayload = async (data: SeriesDeleteEventType, profile: 
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: body,
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
 
@@ -58,6 +71,13 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: [body1, body2].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            seriesId: data.series?.id?.toString() ?? '-1',
+            seasonNumber: data.episodes && data.episodes.length > 0 ? data.episodes[0]?.seasonNumber?.toString() ?? '-1' : '-1',
+        },
     };
 };
 
@@ -76,6 +96,13 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: [body1, body2, body3].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            seriesId: data.series?.id?.toString() ?? '-1',
+            seasonNumber: data.episodes && data.episodes.length > 0 ? data.episodes[0]?.seasonNumber?.toString() ?? '-1' : '-1',
+        },
     };
 };
 
@@ -86,6 +113,11 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
     return <NotificationPayload>{
         title: title(profile, 'Health Check'),
         body: data.message ?? 'Unknown Message',
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
 
@@ -98,6 +130,12 @@ export const renamePayload = async (data: RenameEventType, profile: string): Pro
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: 'Files Renamed',
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            seriesId: data.series?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -108,5 +146,10 @@ export const testPayload = async (data: TestEventType, profile: string): Promise
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Sonarr notifications!',
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
