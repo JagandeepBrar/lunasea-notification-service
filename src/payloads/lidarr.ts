@@ -3,6 +3,7 @@ import { DownloadEventType, GrabEventType, RenameEventType, RetagEventType, Test
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const title = (profile: string, body: string): string => payloadTitle('Lidarr', profile, body);
+const moduleKey = 'lidarr';
 
 /**
  * Construct a NotificationPayload based on a grab event.
@@ -16,6 +17,13 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
         title: title(profile, data.artist?.name ?? 'Unknown Artist'),
         body: [body1, body2, body3].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            artistId: data?.artist?.id?.toString() ?? '-1',
+            albumId: data.albums && data.albums.length > 0 ? data.albums[0]?.id?.toString() ?? '-1' : '-1',
+        },
     };
 };
 
@@ -31,6 +39,12 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
         title: title(profile, data.artist?.name ?? 'Unknown Artist'),
         body: [body1, body2].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            artistId: data?.artist?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -43,6 +57,12 @@ export const renamePayload = async (data: RenameEventType, profile: string): Pro
         title: title(profile, data.artist?.name ?? 'Unknown Artist'),
         body: 'Files Renamed',
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            artistId: data?.artist?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -55,6 +75,12 @@ export const retagPayload = async (data: RetagEventType, profile: string): Promi
         title: title(profile, data.artist?.name ?? 'Unknown Artist'),
         body: 'Tracks Retagged',
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            artistId: data?.artist?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -65,5 +91,10 @@ export const testPayload = async (data: TestEventType, profile: string): Promise
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Lidarr notifications!',
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
