@@ -1,4 +1,4 @@
-import { FanartTV } from '../api/fanart';
+import { TheMovieDB } from '../api';
 import { DownloadEventType, GrabEventType, HealthEventType, RenameEventType, TestEventType } from '../models/radarr';
 import { NotificationPayload, payloadTitle } from '../payloads';
 
@@ -11,7 +11,7 @@ const moduleKey = 'radarr';
 export const downloadPayload = async (data: DownloadEventType, profile: string): Promise<NotificationPayload> => {
     const quality = data.movieFile?.quality ? data.movieFile.quality : 'Unknown Quality';
     const body = data.isUpgrade ? `Upgraded (${quality})` : `Downloaded (${quality})`;
-    const image = data.movie?.tmdbId ? await FanartTV.getMoviePoster(data.movie.tmdbId) : undefined;
+    const image = data.movie?.tmdbId ? await TheMovieDB.getMoviePoster(data.movie.tmdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: body,
@@ -31,7 +31,7 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
 export const grabPayload = async (data: GrabEventType, profile: string): Promise<NotificationPayload> => {
     const body1 = `Grabbed (${data.release?.quality ?? 'Unknown Quality'})`;
     const body2 = data?.release?.releaseTitle ?? 'Unknown Release';
-    const image = data.movie?.tmdbId ? await FanartTV.getMoviePoster(data.movie.tmdbId) : undefined;
+    const image = data.movie?.tmdbId ? await TheMovieDB.getMoviePoster(data.movie.tmdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: [body1, body2].join('\n'),
@@ -64,7 +64,7 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
  * Construct a NotificationPayload based on a rename event.
  */
 export const renamePayload = async (data: RenameEventType, profile: string): Promise<NotificationPayload> => {
-    const image = data.movie?.tmdbId ? await FanartTV.getMoviePoster(data.movie.tmdbId) : undefined;
+    const image = data.movie?.tmdbId ? await TheMovieDB.getMoviePoster(data.movie.tmdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: 'Files Renamed',
