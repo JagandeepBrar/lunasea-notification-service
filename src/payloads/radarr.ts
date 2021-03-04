@@ -3,6 +3,7 @@ import { DownloadEventType, GrabEventType, HealthEventType, RenameEventType, Tes
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const title = (profile: string, body: string): string => payloadTitle('Radarr', profile, body);
+const moduleKey = 'radarr';
 
 /**
  * Construct a NotificationPayload based on a download event.
@@ -15,6 +16,12 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: body,
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            id: data.movie?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -29,6 +36,12 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: [body1, body2].join('\n'),
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            id: data.movie?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -39,6 +52,11 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
     return <NotificationPayload>{
         title: title(profile, 'Health Check'),
         body: data.message ?? 'Unknown Message',
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
 
@@ -51,6 +69,12 @@ export const renamePayload = async (data: RenameEventType, profile: string): Pro
         title: title(profile, data.movie?.title ?? 'Unknown Movie'),
         body: 'Files Renamed',
         image: image,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+            id: data.movie?.id?.toString() ?? '-1',
+        },
     };
 };
 
@@ -61,5 +85,10 @@ export const testPayload = async (data: TestEventType, profile: string): Promise
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Radarr notifications!',
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.eventType,
+        },
     };
 };
