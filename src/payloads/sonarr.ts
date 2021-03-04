@@ -1,4 +1,4 @@
-import { FanartTV } from '../api/fanart';
+import { TheMovieDB } from '../api';
 import {
     DownloadEventType,
     EpisodeFileDeleteEventType,
@@ -22,7 +22,7 @@ export const deleteEpisodeFilePayload = async (data: EpisodeFileDeleteEventType,
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
             : `${data.episodes?.length ?? 0} Episodes`;
     const body2 = 'Files Deleted';
-    const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
+    const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: [body1, body2].join('\n'),
@@ -43,7 +43,7 @@ export const deleteEpisodeFilePayload = async (data: EpisodeFileDeleteEventType,
 export const deleteSeriesPayload = async (data: SeriesDeleteEventType, profile: string): Promise<NotificationPayload> => {
     let body = 'Series Deleted';
     if (data.deletedFiles) body += ' (With Files)';
-    const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
+    const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: body,
@@ -66,7 +66,7 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
             : `${data.episodes?.length ?? 0} Episodes`;
     const quality = data.episodeFile ? data.episodeFile?.quality ?? 'Unknown Quality' : 'Unknown Quality';
     const body2 = data.isUpgrade ? `Upgraded (${quality})` : `Downloaded (${quality})`;
-    const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
+    const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: [body1, body2].join('\n'),
@@ -91,7 +91,7 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
             : `${data.episodes?.length ?? 0} Episodes`;
     const body2 = `Grabbed (${data.release?.quality ?? 'Unknown Quality'})`;
     const body3 = data?.release?.releaseTitle ?? 'Unknown Release';
-    const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
+    const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: [body1, body2, body3].join('\n'),
@@ -125,7 +125,7 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
  * Construct a NotificationPayload based on a rename event.
  */
 export const renamePayload = async (data: RenameEventType, profile: string): Promise<NotificationPayload> => {
-    const image = data.series?.tvdbId ? await FanartTV.getSeriesPoster(data.series.tvdbId) : undefined;
+    const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
         body: 'Files Renamed',

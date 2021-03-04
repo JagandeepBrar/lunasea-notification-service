@@ -1,4 +1,4 @@
-import { FanartTV } from '../api/fanart';
+import { FanartTV } from '../api';
 import { DownloadEventType, GrabEventType, RenameEventType, RetagEventType, TestEventType } from '../models/lidarr';
 import { NotificationPayload, payloadTitle } from '../payloads';
 

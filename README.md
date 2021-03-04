@@ -25,9 +25,10 @@ All environment variables must either be set at an operating system-level, termi
 | Variable                  | Value                                                                               | Default | Required? |
 | :------------------------ | :---------------------------------------------------------------------------------- | :-----: | :-------: |
 | `DATABASE_URL`            | The Firebase database URL for your project.                                         |         |  &check;  |
-| `FANART_TV_API_KEY`       | A developer [Fanart.tv](https://fanart.tv/get-an-api-key/) API key.                 |         |  &check;  |
+| `FANART_TV_API_KEY`       | A developer [Fanart.tv](https://fanart.tv/) API key.                                |         |  &check;  |
 | `PORT`                    | The port to attach the relay server to.                                             | `9000`  |  &cross;  |
 | `RESTRICTED_PACKAGE_NAME` | The application package name to restrict notifications to from this relay instance. |         |  &check;  |
+| `THEMOVIEDB_API_KEY`      | A developer [The Movie Database](https://www.themoviedb.org) API key.               |         |  &check;  |
 
 #### 2. Firebase Service Account
 

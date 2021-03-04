@@ -1,4 +1,4 @@
-import { FanartTV } from '../api/fanart';
+import { TheMovieDB } from '../api';
 import { MediaType, RequestProperties } from '../models/overseerr';
 import { NotificationPayload, payloadTitle } from '../payloads';
 import { Logger } from '../utilities/logger';
@@ -94,7 +94,7 @@ const getSeriesImageURL = async (data: RequestProperties): Promise<string | unde
     try {
         if (data.media?.tvdbId) {
             const id = parseInt(data.media.tvdbId);
-            if (!isNaN(id)) return await FanartTV.getSeriesPoster(id);
+            if (!isNaN(id)) return await TheMovieDB.getSeriesPoster(id);
         }
     } catch (error) {
         Logger.error(error);
@@ -111,7 +111,7 @@ const getMovieImageURL = async (data: RequestProperties): Promise<string | undef
     try {
         if (data.media?.tmdbId) {
             const id = parseInt(data.media.tmdbId);
-            if (!isNaN(id)) return await FanartTV.getMoviePoster(id);
+            if (!isNaN(id)) return await TheMovieDB.getMoviePoster(id);
         }
     } catch (error) {
         Logger.error(error);
