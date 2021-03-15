@@ -1,0 +1,11 @@
+{
+    "event_type": "PlaybackResume",
+    "media_type": "{media_type}",
+    "user": "{user}",
+    "user_thumb": "{user_thumb}",
+    "product": "{product}",
+    "title": "{title}",
+    "poster_url": "{poster_url}",
+    "stream_local": "{stream_local}",
+    "quality_profile": "{quality_profile}"
+}
