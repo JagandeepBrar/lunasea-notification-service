@@ -20,6 +20,20 @@ export const mediaApprovedPayload = async (data: RequestProperties, profile: str
 };
 
 /**
+ * Construct a NotificationPayload based on a media auto approved event.
+ */
+export const mediaAutoApprovedPayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {
+    const body1 = data.subject;
+    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    const image = data.media?.media_type === MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
+    return <NotificationPayload>{
+        title: title(profile, `${data.media?.media_type === MediaType.MOVIE ? 'Movie' : 'Series'} Auto Approved`),
+        body: [body1, body2].join('\n'),
+        image: image,
+    };
+};
+
+/**
  * Construct a NotificationPayload based on a media available event.
  */
 export const mediaAvailablePayload = async (data: RequestProperties, profile: string): Promise<NotificationPayload> => {

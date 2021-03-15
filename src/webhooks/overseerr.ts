@@ -2,6 +2,7 @@ import { NotificationType, RequestProperties } from '../models/overseerr';
 import { NotificationPayload } from '../payloads';
 import {
     mediaApprovedPayload,
+    mediaAutoApprovedPayload,
     mediaAvailablePayload,
     mediaDeclinedPayload,
     mediaFailedPayload,
@@ -25,6 +26,10 @@ export const handleWebhook = async (data: RequestProperties, devices: string[], 
         case NotificationType.MEDIA_APPROVED:
             Logger.debug('-> Handling as "MEDIA_APPROVED" event type...');
             payload = await mediaApprovedPayload(data, profile);
+            break;
+        case NotificationType.MEDIA_AUTO_APPROVED:
+            Logger.debug('-> Handling as "MEDIA_AUTO_APPROVED" event type...');
+            payload = await mediaAutoApprovedPayload(data, profile);
             break;
         case NotificationType.MEDIA_AVAILABLE:
             Logger.debug('-> Handling as "MEDIA_AVAILABLE" event type...');
