@@ -2,7 +2,7 @@
     "event_type": "PlaybackStop",
     "media_type": "{media_type}",
     "user": "{user}",
-    "user_thumb": "{user_thumb}",
+    "user_id": "{user_id}",
     "product": "{product}",
     "title": "{title}",
     "poster_url": "{poster_url}",

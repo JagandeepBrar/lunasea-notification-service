@@ -20,43 +20,46 @@ export interface PlaybackPauseEventType {
     event_type?: EventType;
     media_type?: MediaType;
     user?: string;
-    user_thumb?: string;
+    user_id?: string;
     product?: string;
     title?: string;
     poster_url?: string;
     stream_local?: string;
     quality_profile?: string;
+    session_id?: string;
 }
 
 export interface PlaybackResumeEventType {
     event_type?: EventType;
     media_type?: MediaType;
     user?: string;
-    user_thumb?: string;
+    user_id?: string;
     product?: string;
     title?: string;
     poster_url?: string;
     stream_local?: string;
     quality_profile?: string;
+    session_id?: string;
 }
 
 export interface PlaybackStartEventType {
     event_type?: EventType;
     media_type?: MediaType;
     user?: string;
-    user_thumb?: string;
+    user_id?: string;
     product?: string;
     title?: string;
     poster_url?: string;
     stream_local?: string;
     quality_profile?: string;
+    session_id?: string;
 }
 
 export interface PlaybackStopEventType {
     event_type?: EventType;
     media_type?: MediaType;
     user?: string;
-    user_thumb?: string;
+    user_id?: string;
     product?: string;
     title?: string;
     poster_url?: string;

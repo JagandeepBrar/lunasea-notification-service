@@ -17,6 +17,8 @@ export const playbackPausePayload = async (data: PlaybackPauseEventType, profile
         data: {
             module: moduleKey,
             profile: profile,
+            event: data.event_type,
+            session_id: data.session_id,
         },
     };
 };
@@ -34,6 +36,8 @@ export const playbackResumePayload = async (data: PlaybackResumeEventType, profi
         data: {
             module: moduleKey,
             profile: profile,
+            event: data.event_type,
+            session_id: data.session_id,
         },
     };
 };
@@ -51,6 +55,8 @@ export const playbackStartPayload = async (data: PlaybackStartEventType, profile
         data: {
             module: moduleKey,
             profile: profile,
+            event: data.event_type,
+            session_id: data.session_id,
         },
     };
 };
@@ -68,6 +74,8 @@ export const playbackStopPayload = async (data: PlaybackStopEventType, profile: 
         data: {
             module: moduleKey,
             profile: profile,
+            event: data.event_type,
+            user_id: data.user_id,
         },
     };
 };

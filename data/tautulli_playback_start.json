@@ -2,10 +2,11 @@
     "event_type": "PlaybackStart",
     "media_type": "{media_type}",
     "user": "{user}",
-    "user_thumb": "{user_thumb}",
+    "user_id": "{user_id}",
     "product": "{product}",
     "title": "{title}",
     "poster_url": "{poster_url}",
     "stream_local": "{stream_local}",
-    "quality_profile": "{quality_profile}"
+    "quality_profile": "{quality_profile}",
+    "session_id": "{session_id}"
 }
