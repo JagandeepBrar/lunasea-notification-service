@@ -1,8 +1,33 @@
-import { PlaybackPauseEventType, PlaybackResumeEventType, PlaybackStartEventType, PlaybackStopEventType } from '../models/tautulli';
+import {
+    PlaybackErrorEventType,
+    PlaybackPauseEventType,
+    PlaybackResumeEventType,
+    PlaybackStartEventType,
+    PlaybackStopEventType,
+} from '../models/tautulli';
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const title = (profile: string, body: string): string => payloadTitle('Tautulli', profile, body);
 const moduleKey = 'tautulli';
+
+/**
+ * Construct a NotificationPayload based on a playback stop event.
+ */
+export const playbackErrorPayload = async (data: PlaybackErrorEventType, profile: string): Promise<NotificationPayload> => {
+    const body1 = `${data.title ?? 'Unknown Content'} (${data.quality_profile ?? 'Unknown Quality'})`;
+    const body2 = `${data.user ?? 'Unknown User'} on ${data.product ?? 'Unknown Product'}`;
+    return <NotificationPayload>{
+        title: title(profile, `${data.stream_local === '0' ? 'Remote' : 'Local'} Playback Error`),
+        body: [body1, body2].join('\n'),
+        image: data.poster_url,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+            user_id: data.user_id,
+        },
+    };
+};
 
 /**
  * Construct a NotificationPayload based on a playback pause event.

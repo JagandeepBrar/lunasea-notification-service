@@ -1,6 +1,12 @@
-import { EventType, PlaybackPauseEventType } from '../models/tautulli';
+import { EventType, PlaybackErrorEventType, PlaybackPauseEventType } from '../models/tautulli';
 import { NotificationPayload } from '../payloads';
-import { playbackPausePayload, playbackResumePayload, playbackStartPayload, playbackStopPayload } from '../payloads/tautulli';
+import {
+    playbackErrorPayload,
+    playbackPausePayload,
+    playbackResumePayload,
+    playbackStartPayload,
+    playbackStopPayload,
+} from '../payloads/tautulli';
 import { Firebase } from '../utilities/firebase';
 import { Logger } from '../utilities/logger';
 
@@ -15,6 +21,10 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
     Logger.debug('-> Preparing payload...');
     let payload: NotificationPayload;
     switch (data.event_type) {
+        case EventType.PlaybackError:
+            Logger.debug('-> Handling as "PlaybackStop" event type...');
+            payload = await playbackErrorPayload(data as PlaybackErrorEventType, profile);
+            break;
         case EventType.PlaybackPause:
             Logger.debug('-> Handling as "PlaybackPause" event type...');
             payload = await playbackPausePayload(data as PlaybackPauseEventType, profile);

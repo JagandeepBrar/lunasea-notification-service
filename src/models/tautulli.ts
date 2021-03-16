@@ -1,4 +1,5 @@
 export enum EventType {
+    PlaybackError = 'PlaybackError',
     PlaybackStart = 'PlaybackStart',
     PlaybackStop = 'PlaybackStop',
     PlaybackPause = 'PlaybackPause',
@@ -14,6 +15,18 @@ export enum MediaType {
     Album = 'album',
     Track = 'track',
     Clip = 'clip',
+}
+
+export interface PlaybackErrorEventType {
+    event_type?: EventType;
+    media_type?: MediaType;
+    user?: string;
+    user_id?: string;
+    product?: string;
+    title?: string;
+    poster_url?: string;
+    stream_local?: string;
+    quality_profile?: string;
 }
 
 export interface PlaybackPauseEventType {
