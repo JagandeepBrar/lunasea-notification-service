@@ -22,13 +22,13 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 All environment variables must either be set at an operating system-level, terminal-level, or by creating a `.env` file at the root of the project. A sample `.env` is supplied in the project (`.env.sample`).
 
-| Variable                  | Value                                                                               | Default | Required? |
-| :------------------------ | :---------------------------------------------------------------------------------- | :-----: | :-------: |
-| `DATABASE_URL`            | The Firebase database URL for your project.                                         |         |  &check;  |
-| `FANART_TV_API_KEY`       | A developer [Fanart.tv](https://fanart.tv/) API key.                                |         |  &check;  |
-| `PORT`                    | The port to attach the relay server to.                                             | `9000`  |  &cross;  |
-| `RESTRICTED_PACKAGE_NAME` | The application package name to restrict notifications to from this relay instance. |         |  &check;  |
-| `THEMOVIEDB_API_KEY`      | A developer [The Movie Database](https://www.themoviedb.org) API key.               |         |  &check;  |
+| Variable             | Value                                                                 | Default | Required? |
+| :------------------- | :-------------------------------------------------------------------- | :-----: | :-------: |
+| `DATABASE_URL`       | The Firebase database URL for your project.                           |         |  &check;  |
+| `FANART_TV_API_KEY`  | A developer [Fanart.tv](https://fanart.tv/) API key.                  |         |  &check;  |
+| `PORT`               | The port to attach the relay server to.                               | `9000`  |  &cross;  |
+| `LOG_LEVEL`          | The minimum logging level to store in `server.log`.                   | `warn`  |  &cross;  |
+| `THEMOVIEDB_API_KEY` | A developer [The Movie Database](https://www.themoviedb.org) API key. |         |  &check;  |
 
 #### 2. Firebase Service Account
 
