@@ -12,8 +12,8 @@ export namespace Environment {
         Logger.debug('-> DATABASE_URL:', process.env.DATABASE_URL);
         if (!process.env.FANART_TV_API_KEY) shutdown('FANART_TV_API_KEY');
         Logger.debug('-> FANART_TV_API_KEY:', process.env.FANART_TV_API_KEY);
-        if (!process.env.RESTRICTED_PACKAGE_NAME) shutdown('RESTRICTED_PACKAGE_NAME');
-        Logger.debug('-> RESTRICTED_PACKAGE_NAME:', process.env.RESTRICTED_PACKAGE_NAME);
+        if (!process.env.LOG_LEVEL) shutdown('LOG_LEVEL');
+        Logger.debug('-> LOG_LEVEL:', process.env.LOG_LEVEL);
         if (!process.env.THEMOVIEDB_API_KEY) shutdown('THEMOVIEDB_API_KEY');
         Logger.debug('-> THEMOVIEDB_API_KEY:', process.env.THEMOVIEDB_API_KEY);
         Logger.debug('Loaded environment.');
