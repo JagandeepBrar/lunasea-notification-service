@@ -1,5 +1,4 @@
 import { Logger } from './logger';
-import * as serviceaccount from '../../serviceaccount.json';
 import * as admin from 'firebase-admin';
 import { NotificationPayload } from '../payloads';
 
@@ -8,11 +7,21 @@ export namespace Firebase {
      * Initialize the connection to Firebase and link it to the service account.
      */
     export const initialize = (): void => {
+        // Determine service account path
+        let serviceaccount: string;
+        switch ((process.env.NODE_ENV ?? '').toLowerCase()) {
+            case 'docker':
+                serviceaccount = '../config/serviceaccount.json';
+                break;
+            case 'production':
+            case 'development':
+            default:
+                serviceaccount = 'serviceaccount.json';
+                break;
+        }
         Logger.debug('Initializing Firebase...');
-        Logger.debug('-> Project:', serviceaccount['project_id']);
-        Logger.debug('-> Database:', process.env.DATABASE_URL);
         admin.initializeApp({
-            credential: admin.credential.cert(serviceaccount as admin.ServiceAccount),
+            credential: admin.credential.cert(serviceaccount),
             databaseURL: process.env.DATABASE_URL,
         });
         Logger.debug('Initialized Firebase.');
@@ -87,7 +96,6 @@ export namespace Firebase {
                         sound: 'default',
                     },
                     priority: 'high',
-                    restrictedPackageName: process.env.RESTRICTED_PACKAGE_NAME,
                     ttl: 2419200,
                 },
                 apns: {
