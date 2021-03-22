@@ -1,5 +1,38 @@
 import { appendFileSync } from 'fs';
-import { Logger as TSLog, ILogObject } from 'tslog';
+import { Logger as TSLog, ILogObject, TLogLevelName } from 'tslog';
+
+export const Logger = new TSLog({
+    displayInstanceName: false,
+    minLevel: 'silly',
+    displayFunctionName: false,
+    displayFilePath: 'hidden',
+});
+
+const filesystemLogPath = (): string => {
+    switch ((process.env.NODE_ENV ?? '').toLowerCase()) {
+        case 'docker':
+            return '../config/server.log';
+        case 'production':
+        case 'development':
+        default:
+            return 'server.log';
+    }
+};
+
+const environmentLogLevel = (): TLogLevelName => {
+    switch ((process.env.LOG_LEVEL ?? '').toLowerCase()) {
+        case 'silly':
+        case 'trace':
+        case 'debug':
+        case 'info':
+        case 'warn':
+        case 'error':
+        case 'fatal':
+            return (process.env.LOG_LEVEL ?? '').toLowerCase() as TLogLevelName;
+        default:
+            return 'warn';
+    }
+};
 
 const transportLogToFilesystem = (logObject: ILogObject): void => {
     const message = [
@@ -8,15 +41,8 @@ const transportLogToFilesystem = (logObject: ILogObject): void => {
         `${logObject.filePath}:${logObject.lineNumber}`.padEnd(35),
         logObject.argumentsArray.join(' '),
     ].join(' ');
-    appendFileSync('server.log', message + '\n');
+    appendFileSync(filesystemLogPath(), message + '\n');
 };
-
-export const Logger = new TSLog({
-    displayInstanceName: false,
-    minLevel: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
-    displayFunctionName: false,
-    displayFilePath: 'hidden',
-});
 
 Logger.attachTransport(
     {
@@ -28,5 +54,5 @@ Logger.attachTransport(
         error: transportLogToFilesystem,
         fatal: transportLogToFilesystem,
     },
-    'warn',
+    environmentLogLevel(),
 );
