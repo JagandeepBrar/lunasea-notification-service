@@ -1,13 +1,5 @@
 import { TheMovieDB } from '../api';
-import {
-    DownloadEventType,
-    EpisodeFileDeleteEventType,
-    GrabEventType,
-    HealthEventType,
-    RenameEventType,
-    SeriesDeleteEventType,
-    TestEventType,
-} from '../models/sonarr';
+import * as Models from '../models/sonarr';
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const title = (profile: string, body: string): string => payloadTitle('Sonarr', profile, body);
@@ -16,7 +8,7 @@ const moduleKey = 'sonarr';
 /**
  * Construct a NotificationPayload based on a delete episode file event.
  */
-export const deleteEpisodeFilePayload = async (data: EpisodeFileDeleteEventType, profile: string): Promise<NotificationPayload> => {
+export const deleteEpisodeFilePayload = async (data: Models.EpisodeFileDeleteEventType, profile: string): Promise<NotificationPayload> => {
     const body1 =
         data.episodes?.length == 1
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
@@ -40,7 +32,7 @@ export const deleteEpisodeFilePayload = async (data: EpisodeFileDeleteEventType,
 /**
  * Construct a NotificationPayload based on a delete series event.
  */
-export const deleteSeriesPayload = async (data: SeriesDeleteEventType, profile: string): Promise<NotificationPayload> => {
+export const deleteSeriesPayload = async (data: Models.SeriesDeleteEventType, profile: string): Promise<NotificationPayload> => {
     let body = 'Series Deleted';
     if (data.deletedFiles) body += ' (With Files)';
     const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
@@ -59,7 +51,7 @@ export const deleteSeriesPayload = async (data: SeriesDeleteEventType, profile: 
 /**
  * Construct a NotificationPayload based on a download event.
  */
-export const downloadPayload = async (data: DownloadEventType, profile: string): Promise<NotificationPayload> => {
+export const downloadPayload = async (data: Models.DownloadEventType, profile: string): Promise<NotificationPayload> => {
     const body1 =
         data.episodes?.length == 1
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
@@ -84,7 +76,7 @@ export const downloadPayload = async (data: DownloadEventType, profile: string):
 /**
  * Construct a NotificationPayload based on a grab event.
  */
-export const grabPayload = async (data: GrabEventType, profile: string): Promise<NotificationPayload> => {
+export const grabPayload = async (data: Models.GrabEventType, profile: string): Promise<NotificationPayload> => {
     const body1 =
         data.episodes?.length == 1
             ? `Season ${data.episodes[0].seasonNumber} – Episode ${data.episodes[0].episodeNumber}`
@@ -109,7 +101,7 @@ export const grabPayload = async (data: GrabEventType, profile: string): Promise
 /**
  * Construct a NotificationPayload based on a health event.
  */
-export const healthPayload = async (data: HealthEventType, profile: string): Promise<NotificationPayload> => {
+export const healthPayload = async (data: Models.HealthEventType, profile: string): Promise<NotificationPayload> => {
     return <NotificationPayload>{
         title: title(profile, 'Health Check'),
         body: data.message ?? 'Unknown Message',
@@ -124,7 +116,7 @@ export const healthPayload = async (data: HealthEventType, profile: string): Pro
 /**
  * Construct a NotificationPayload based on a rename event.
  */
-export const renamePayload = async (data: RenameEventType, profile: string): Promise<NotificationPayload> => {
+export const renamePayload = async (data: Models.RenameEventType, profile: string): Promise<NotificationPayload> => {
     const image = data.series?.tvdbId ? await TheMovieDB.getSeriesPoster(data.series.tvdbId) : undefined;
     return <NotificationPayload>{
         title: title(profile, data.series?.title ?? 'Unknown Series'),
@@ -142,7 +134,7 @@ export const renamePayload = async (data: RenameEventType, profile: string): Pro
 /**
  * Construct a NotificationPayload based on a test event.
  */
-export const testPayload = async (data: TestEventType, profile: string): Promise<NotificationPayload> => {
+export const testPayload = async (data: Models.TestEventType, profile: string): Promise<NotificationPayload> => {
     return <NotificationPayload>{
         title: title(profile, 'Connection Test'),
         body: 'LunaSea is ready for Sonarr notifications!',

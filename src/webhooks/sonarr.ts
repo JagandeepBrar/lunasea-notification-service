@@ -1,23 +1,6 @@
-import {
-    DownloadEventType,
-    EpisodeFileDeleteEventType,
-    EventType,
-    GrabEventType,
-    HealthEventType,
-    RenameEventType,
-    SeriesDeleteEventType,
-    TestEventType,
-} from '../models/sonarr';
+import * as Models from '../models/sonarr';
 import { NotificationPayload } from '../payloads';
-import {
-    deleteEpisodeFilePayload,
-    deleteSeriesPayload,
-    downloadPayload,
-    grabPayload,
-    healthPayload,
-    renamePayload,
-    testPayload,
-} from '../payloads/sonarr';
+import * as Payloads from '../payloads/sonarr';
 import { Firebase } from '../utilities/firebase';
 import { Logger } from '../utilities/logger';
 
@@ -32,33 +15,33 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
     Logger.debug('-> Preparing payload...');
     let payload: NotificationPayload;
     switch (data.eventType) {
-        case EventType.Download:
+        case Models.EventType.Download:
             Logger.debug('-> Handling as "Download" event type...');
-            payload = await downloadPayload(data as DownloadEventType, profile);
+            payload = await Payloads.downloadPayload(data as Models.DownloadEventType, profile);
             break;
-        case EventType.EpisodeFileDelete:
+        case Models.EventType.EpisodeFileDelete:
             Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
-            payload = await deleteEpisodeFilePayload(data as EpisodeFileDeleteEventType, profile);
+            payload = await Payloads.deleteEpisodeFilePayload(data as Models.EpisodeFileDeleteEventType, profile);
             break;
-        case EventType.Grab:
+        case Models.EventType.Grab:
             Logger.debug('-> Handling as "Grab" event type...');
-            payload = await grabPayload(data as GrabEventType, profile);
+            payload = await Payloads.grabPayload(data as Models.GrabEventType, profile);
             break;
-        case EventType.Health:
+        case Models.EventType.Health:
             Logger.debug('-> Handling as "Health" event type...');
-            payload = await healthPayload(data as HealthEventType, profile);
+            payload = await Payloads.healthPayload(data as Models.HealthEventType, profile);
             break;
-        case EventType.Rename:
+        case Models.EventType.Rename:
             Logger.debug('-> Handling as "Rename" event type...');
-            payload = await renamePayload(data as RenameEventType, profile);
+            payload = await Payloads.renamePayload(data as Models.RenameEventType, profile);
             break;
-        case EventType.SeriesDelete:
+        case Models.EventType.SeriesDelete:
             Logger.debug('-> Handling as "SeriesDelete" event type...');
-            payload = await deleteSeriesPayload(data as SeriesDeleteEventType, profile);
+            payload = await Payloads.deleteSeriesPayload(data as Models.SeriesDeleteEventType, profile);
             break;
-        case EventType.Test:
+        case Models.EventType.Test:
             Logger.debug('-> Handling as "Test" event type...');
-            payload = await testPayload(data as TestEventType, profile);
+            payload = await Payloads.testPayload(data as Models.TestEventType, profile);
             break;
         default:
             Logger.warn('-> An unknown eventType was received:', data);
