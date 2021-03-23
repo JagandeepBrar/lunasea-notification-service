@@ -1,11 +1,9 @@
 {
     "event_type": "PlaybackStop",
-    "media_type": "{media_type}",
     "user": "{user}",
     "user_id": "{user_id}",
-    "product": "{product}",
+    "player": "{player}",
     "title": "{title}",
     "poster_url": "{poster_url}",
-    "stream_local": "{stream_local}",
-    "quality_profile": "{quality_profile}"
+    "message": ""
 }
