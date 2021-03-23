@@ -32,63 +32,63 @@ export enum MediaType {
 
 export interface PlaybackErrorEventType {
     event_type?: EventType;
-    media_type?: MediaType;
     user?: string;
     user_id?: string;
-    product?: string;
+    player?: string;
     title?: string;
     poster_url?: string;
-    stream_local?: string;
-    quality_profile?: string;
+    message?: string;
 }
 
 export interface PlaybackPauseEventType {
     event_type?: EventType;
-    media_type?: MediaType;
     user?: string;
     user_id?: string;
-    product?: string;
+    player?: string;
     title?: string;
     poster_url?: string;
-    stream_local?: string;
-    quality_profile?: string;
     session_id?: string;
+    message?: string;
 }
 
 export interface PlaybackResumeEventType {
     event_type?: EventType;
-    media_type?: MediaType;
     user?: string;
     user_id?: string;
-    product?: string;
+    player?: string;
     title?: string;
     poster_url?: string;
-    stream_local?: string;
-    quality_profile?: string;
     session_id?: string;
+    message?: string;
 }
 
 export interface PlaybackStartEventType {
     event_type?: EventType;
-    media_type?: MediaType;
     user?: string;
     user_id?: string;
-    product?: string;
+    player?: string;
     title?: string;
     poster_url?: string;
-    stream_local?: string;
-    quality_profile?: string;
     session_id?: string;
+    message?: string;
 }
 
 export interface PlaybackStopEventType {
     event_type?: EventType;
-    media_type?: MediaType;
     user?: string;
     user_id?: string;
-    product?: string;
+    player?: string;
     title?: string;
     poster_url?: string;
-    stream_local?: string;
-    quality_profile?: string;
+    message?: string;
+}
+
+export interface TranscodeDecisionChangeEventType {
+    event_type?: EventType;
+    user?: string;
+    user_id?: string;
+    player?: string;
+    title?: string;
+    poster_url?: string;
+    message?: string;
 }
