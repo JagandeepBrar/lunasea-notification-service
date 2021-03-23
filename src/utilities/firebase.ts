@@ -22,7 +22,7 @@ export namespace Firebase {
         Logger.debug('Initializing Firebase...');
         admin.initializeApp({
             credential: admin.credential.cert(serviceaccount),
-            databaseURL: process.env.DATABASE_URL,
+            databaseURL: process.env.FIREBASE_DATABASE_URL,
         });
         Logger.debug('Initialized Firebase.');
     };
