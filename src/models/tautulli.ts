@@ -1,9 +1,22 @@
 export enum EventType {
+    BufferWarning = 'BufferWarning',
     PlaybackError = 'PlaybackError',
     PlaybackStart = 'PlaybackStart',
     PlaybackStop = 'PlaybackStop',
     PlaybackPause = 'PlaybackPause',
     PlaybackResume = 'PlaybackResume',
+    PlexRemoteAccessDown = 'PlexRemoteAccessDown',
+    PlexRemoteAccessBackUp = 'PlexRemoteAccessBackUp',
+    PlexServerDown = 'PlexServerDown',
+    PlexServerBackUp = 'PlexServerBackUp',
+    PlexUpdateAvailable = 'PlexUpdateAvailable',
+    RecentlyAdded = 'RecentlyAdded',
+    TautulliDatabaseCorruption = 'TautulliDatabaseCorruption',
+    TautulliUpdateAvailable = 'TautulliUpdateAvailable',
+    TranscodeDecisionChange = 'TranscodeDecisionChange',
+    UserConcurrentStreams = 'UserConcurrentStreams',
+    UserNewDevice = 'UserNewDevice',
+    Watched = 'Watched',
 }
 
 export enum MediaType {
