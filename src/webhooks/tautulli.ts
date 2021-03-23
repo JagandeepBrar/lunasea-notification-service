@@ -39,6 +39,10 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
             Logger.debug('-> Handling as "TranscodeDecisionChange" event type...');
             payload = await Payloads.transcodeDecisionChangePayload(data as Models.TranscodeDecisionChangeEventType, profile);
             break;
+        case Models.EventType.Watched:
+            Logger.debug('-> Handling as "Watched" event type...');
+            payload = await Payloads.watchedPayload(data as Models.WatchedEventType, profile);
+            break;
         default:
             Logger.warn('-> An unknown eventType was received:', data);
             Logger.warn('-> Failed to send to device(s).');

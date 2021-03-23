@@ -1,11 +1,4 @@
-import {
-    PlaybackErrorEventType,
-    PlaybackPauseEventType,
-    PlaybackResumeEventType,
-    PlaybackStartEventType,
-    PlaybackStopEventType,
-    TranscodeDecisionChangeEventType,
-} from '../models/tautulli';
+import * as Models from '../models/tautulli';
 import { NotificationPayload, payloadTitle } from '../payloads';
 
 const createTitle = (profile: string, body: string): string => payloadTitle('Tautulli', profile, body);
@@ -14,7 +7,7 @@ const moduleKey = 'tautulli';
 /**
  * Construct a NotificationPayload based on a playback stop event.
  */
-export const playbackErrorPayload = async (data: PlaybackErrorEventType, profile: string): Promise<NotificationPayload> => {
+export const playbackErrorPayload = async (data: Models.PlaybackErrorEventType, profile: string): Promise<NotificationPayload> => {
     const user = data.user ?? 'Unknown User';
     const player = data.player ?? 'Unknown Player';
     const title = data.title ?? 'Unknown Content';
@@ -27,7 +20,7 @@ export const playbackErrorPayload = async (data: PlaybackErrorEventType, profile
             module: moduleKey,
             profile: profile,
             event: data.event_type,
-            user_id: data.user_id,
+            user_id: data.user_id ?? '',
         },
     };
 };
@@ -35,7 +28,7 @@ export const playbackErrorPayload = async (data: PlaybackErrorEventType, profile
 /**
  * Construct a NotificationPayload based on a playback pause event.
  */
-export const playbackPausePayload = async (data: PlaybackPauseEventType, profile: string): Promise<NotificationPayload> => {
+export const playbackPausePayload = async (data: Models.PlaybackPauseEventType, profile: string): Promise<NotificationPayload> => {
     const user = data.user ?? 'Unknown User';
     const player = data.player ?? 'Unknown Player';
     const title = data.title ?? 'Unknown Content';
@@ -48,7 +41,8 @@ export const playbackPausePayload = async (data: PlaybackPauseEventType, profile
             module: moduleKey,
             profile: profile,
             event: data.event_type,
-            session_id: data.session_id,
+            user_id: data.user_id ?? '',
+            session_id: data.session_id ?? '',
         },
     };
 };
@@ -56,7 +50,7 @@ export const playbackPausePayload = async (data: PlaybackPauseEventType, profile
 /**
  * Construct a NotificationPayload based on a playback resume event.
  */
-export const playbackResumePayload = async (data: PlaybackResumeEventType, profile: string): Promise<NotificationPayload> => {
+export const playbackResumePayload = async (data: Models.PlaybackResumeEventType, profile: string): Promise<NotificationPayload> => {
     const user = data.user ?? 'Unknown User';
     const player = data.player ?? 'Unknown Player';
     const title = data.title ?? 'Unknown Content';
@@ -69,7 +63,8 @@ export const playbackResumePayload = async (data: PlaybackResumeEventType, profi
             module: moduleKey,
             profile: profile,
             event: data.event_type,
-            session_id: data.session_id,
+            user_id: data.user_id ?? '',
+            session_id: data.session_id ?? '',
         },
     };
 };
@@ -77,7 +72,7 @@ export const playbackResumePayload = async (data: PlaybackResumeEventType, profi
 /**
  * Construct a NotificationPayload based on a playback start event.
  */
-export const playbackStartPayload = async (data: PlaybackStartEventType, profile: string): Promise<NotificationPayload> => {
+export const playbackStartPayload = async (data: Models.PlaybackStartEventType, profile: string): Promise<NotificationPayload> => {
     const user = data.user ?? 'Unknown User';
     const player = data.player ?? 'Unknown Player';
     const title = data.title ?? 'Unknown Content';
@@ -90,7 +85,8 @@ export const playbackStartPayload = async (data: PlaybackStartEventType, profile
             module: moduleKey,
             profile: profile,
             event: data.event_type,
-            session_id: data.session_id,
+            user_id: data.user_id ?? '',
+            session_id: data.session_id ?? '',
         },
     };
 };
@@ -98,7 +94,7 @@ export const playbackStartPayload = async (data: PlaybackStartEventType, profile
 /**
  * Construct a NotificationPayload based on a playback stop event.
  */
-export const playbackStopPayload = async (data: PlaybackStopEventType, profile: string): Promise<NotificationPayload> => {
+export const playbackStopPayload = async (data: Models.PlaybackStopEventType, profile: string): Promise<NotificationPayload> => {
     const user = data.user ?? 'Unknown User';
     const player = data.player ?? 'Unknown Player';
     const title = data.title ?? 'Unknown Content';
@@ -111,7 +107,7 @@ export const playbackStopPayload = async (data: PlaybackStopEventType, profile: 
             module: moduleKey,
             profile: profile,
             event: data.event_type,
-            user_id: data.user_id,
+            user_id: data.user_id ?? '',
         },
     };
 };
@@ -120,7 +116,7 @@ export const playbackStopPayload = async (data: PlaybackStopEventType, profile: 
  * Construct a NotificationPayload based on a transcode decision change event.
  */
 export const transcodeDecisionChangePayload = async (
-    data: TranscodeDecisionChangeEventType,
+    data: Models.TranscodeDecisionChangeEventType,
     profile: string,
 ): Promise<NotificationPayload> => {
     const user = data.user ?? 'Unknown User';
@@ -135,7 +131,29 @@ export const transcodeDecisionChangePayload = async (
             module: moduleKey,
             profile: profile,
             event: data.event_type,
-            user_id: data.user_id,
+            user_id: data.user_id ?? '',
+            session_id: data.session_id ?? '',
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a watched event.
+ */
+export const watchedPayload = async (data: Models.WatchedEventType, profile: string): Promise<NotificationPayload> => {
+    const user = data.user ?? 'Unknown User';
+    const player = data.player ?? 'Unknown Player';
+    const title = data.title ?? 'Unknown Content';
+    const body = (data.message?.length ?? 0) == 0 ? `${user} (${player}) has watched ${title}` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Watched'),
+        body: body,
+        image: data.poster_url,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+            user_id: data.user_id ?? '',
         },
     };
 };

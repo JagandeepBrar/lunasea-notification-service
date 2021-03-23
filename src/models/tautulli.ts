@@ -90,5 +90,16 @@ export interface TranscodeDecisionChangeEventType {
     player?: string;
     title?: string;
     poster_url?: string;
+    session_id?: string;
+    message?: string;
+}
+
+export interface WatchedEventType {
+    event_type?: EventType;
+    user?: string;
+    user_id?: string;
+    player?: string;
+    title?: string;
+    poster_url?: string;
     message?: string;
 }
