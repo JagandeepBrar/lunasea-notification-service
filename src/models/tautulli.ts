@@ -94,6 +94,13 @@ export interface PlaybackStopEventType {
     message?: string;
 }
 
+export interface RecentlyAddedEventType {
+    event_type?: EventType;
+    title?: string;
+    poster_url?: string;
+    message?: string;
+}
+
 export interface TranscodeDecisionChangeEventType {
     event_type?: EventType;
     user?: string;

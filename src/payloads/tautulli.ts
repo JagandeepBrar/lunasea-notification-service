@@ -135,6 +135,24 @@ export const playbackStopPayload = async (data: Models.PlaybackStopEventType, pr
 };
 
 /**
+ * Construct a NotificationPayload based on a recently added event.
+ */
+export const recentlyAddedPayload = async (data: Models.RecentlyAddedEventType, profile: string): Promise<NotificationPayload> => {
+    const title = data.title ?? 'Unknown Content';
+    const body = (data.message?.length ?? 0) == 0 ? `${title} was recently added to Plex` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Recently Added'),
+        body: body,
+        image: data.poster_url,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
  * Construct a NotificationPayload based on a transcode decision change event.
  */
 export const transcodeDecisionChangePayload = async (

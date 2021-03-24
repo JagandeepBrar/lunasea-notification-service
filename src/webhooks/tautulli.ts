@@ -39,6 +39,10 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
             Logger.debug('-> Handling as "PlaybackStop" event type...');
             payload = await Payloads.playbackStopPayload(data, profile);
             break;
+        case Models.EventType.RecentlyAdded:
+            Logger.debug('-> Handling as "RecentlyAdded" event type...');
+            payload = await Payloads.recentlyAddedPayload(data, profile);
+            break;
         case Models.EventType.TranscodeDecisionChange:
             Logger.debug('-> Handling as "TranscodeDecisionChange" event type...');
             payload = await Payloads.transcodeDecisionChangePayload(data, profile);
