@@ -1,0 +1,7 @@
+{
+    "event_type": "UserNewDevice",
+    "user": "{user}",
+    "user_id": "{user_id}",
+    "player": "{player}",
+    "message": ""
+}

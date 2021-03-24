@@ -17,23 +17,23 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
     switch (data.eventType) {
         case Models.EventType.Download:
             Logger.debug('-> Handling as "Download" event type...');
-            payload = await Payloads.downloadPayload(data as Models.DownloadEventType, profile);
+            payload = await Payloads.downloadPayload(data, profile);
             break;
         case Models.EventType.Grab:
             Logger.debug('-> Handling as "Grab" event type...');
-            payload = await Payloads.grabPayload(data as Models.GrabEventType, profile);
+            payload = await Payloads.grabPayload(data, profile);
             break;
         case Models.EventType.Rename:
             Logger.debug('-> Handling as "Rename" event type...');
-            payload = await Payloads.renamePayload(data as Models.RenameEventType, profile);
+            payload = await Payloads.renamePayload(data, profile);
             break;
         case Models.EventType.Retag:
             Logger.debug('-> Handling as "Retag" event type...');
-            payload = await Payloads.retagPayload(data as Models.RetagEventType, profile);
+            payload = await Payloads.retagPayload(data, profile);
             break;
         case Models.EventType.Test:
             Logger.debug('-> Handling as "Test" event type...');
-            payload = await Payloads.testPayload(data as Models.TestEventType, profile);
+            payload = await Payloads.testPayload(data, profile);
             break;
         default:
             Logger.warn('-> An unknown eventType was received:', data);

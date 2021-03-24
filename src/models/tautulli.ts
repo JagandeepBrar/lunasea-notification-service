@@ -1,10 +1,10 @@
 export enum EventType {
     BufferWarning = 'BufferWarning',
     PlaybackError = 'PlaybackError',
-    PlaybackStart = 'PlaybackStart',
-    PlaybackStop = 'PlaybackStop',
     PlaybackPause = 'PlaybackPause',
     PlaybackResume = 'PlaybackResume',
+    PlaybackStart = 'PlaybackStart',
+    PlaybackStop = 'PlaybackStop',
     PlexRemoteAccessDown = 'PlexRemoteAccessDown',
     PlexRemoteAccessBackUp = 'PlexRemoteAccessBackUp',
     PlexServerDown = 'PlexServerDown',
@@ -28,6 +28,17 @@ export enum MediaType {
     Album = 'album',
     Track = 'track',
     Clip = 'clip',
+}
+
+export interface BufferWarningEventType {
+    event_type?: EventType;
+    user?: string;
+    user_id?: string;
+    player?: string;
+    title?: string;
+    poster_url?: string;
+    session_id?: string;
+    message?: string;
 }
 
 export interface PlaybackErrorEventType {
@@ -91,6 +102,22 @@ export interface TranscodeDecisionChangeEventType {
     title?: string;
     poster_url?: string;
     session_id?: string;
+    message?: string;
+}
+
+export interface UserConcurrentStreamsEventType {
+    event_type?: EventType;
+    user?: string;
+    user_id?: string;
+    user_streams?: string;
+    message?: string;
+}
+
+export interface UserNewDeviceEventType {
+    event_type?: EventType;
+    user?: string;
+    user_id?: string;
+    player?: string;
     message?: string;
 }
 

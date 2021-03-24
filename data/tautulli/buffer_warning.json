@@ -1,0 +1,10 @@
+{
+    "event_type": "BufferWarning",
+    "user": "{user}",
+    "user_id": "{user_id}",
+    "player": "{player}",
+    "title": "{title}",
+    "poster_url": "{poster_url}",
+    "session_id": "{session_id}",
+    "message": ""
+}

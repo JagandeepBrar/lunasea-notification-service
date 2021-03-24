@@ -5,6 +5,28 @@ const createTitle = (profile: string, body: string): string => payloadTitle('Tau
 const moduleKey = 'tautulli';
 
 /**
+ * Construct a NotificationPayload based on a buffer warning event.
+ */
+export const bufferWarningPayload = async (data: Models.BufferWarningEventType, profile: string): Promise<NotificationPayload> => {
+    const user = data.user ?? 'Unknown User';
+    const player = data.player ?? 'Unknown Player';
+    const title = data.title ?? 'Unknown Content';
+    const body = (data.message?.length ?? 0) == 0 ? `${user} (${player}) is buffering ${title}` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Buffer Warning'),
+        body: body,
+        image: data.poster_url,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+            user_id: data.user_id ?? '',
+            session_id: data.session_id ?? '',
+        },
+    };
+};
+
+/**
  * Construct a NotificationPayload based on a playback stop event.
  */
 export const playbackErrorPayload = async (data: Models.PlaybackErrorEventType, profile: string): Promise<NotificationPayload> => {
@@ -133,6 +155,47 @@ export const transcodeDecisionChangePayload = async (
             event: data.event_type,
             user_id: data.user_id ?? '',
             session_id: data.session_id ?? '',
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a user concurrent streams event.
+ */
+export const userConcurrentStreamsPayload = async (
+    data: Models.UserConcurrentStreamsEventType,
+    profile: string,
+): Promise<NotificationPayload> => {
+    const user = data.user ?? 'Unknown User';
+    const streams = data.user_streams ?? '??';
+    const body = (data.message?.length ?? 0) == 0 ? `${user} has ${streams} concurrent streams` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'User Concurrent Streams'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+            user_id: data.user_id ?? '',
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a user concurrent streams event.
+ */
+export const userNewDevicePayload = async (data: Models.UserNewDeviceEventType, profile: string): Promise<NotificationPayload> => {
+    const user = data.user ?? 'Unknown User';
+    const player = data.player ?? 'Unknown Player';
+    const body = (data.message?.length ?? 0) == 0 ? `${user} is streaming from a new device: ${player}` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'User New Device'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+            user_id: data.user_id ?? '',
         },
     };
 };

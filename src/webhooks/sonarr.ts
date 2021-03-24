@@ -17,31 +17,31 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
     switch (data.eventType) {
         case Models.EventType.Download:
             Logger.debug('-> Handling as "Download" event type...');
-            payload = await Payloads.downloadPayload(data as Models.DownloadEventType, profile);
+            payload = await Payloads.downloadPayload(data, profile);
             break;
         case Models.EventType.EpisodeFileDelete:
             Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
-            payload = await Payloads.deleteEpisodeFilePayload(data as Models.EpisodeFileDeleteEventType, profile);
+            payload = await Payloads.deleteEpisodeFilePayload(data, profile);
             break;
         case Models.EventType.Grab:
             Logger.debug('-> Handling as "Grab" event type...');
-            payload = await Payloads.grabPayload(data as Models.GrabEventType, profile);
+            payload = await Payloads.grabPayload(data, profile);
             break;
         case Models.EventType.Health:
             Logger.debug('-> Handling as "Health" event type...');
-            payload = await Payloads.healthPayload(data as Models.HealthEventType, profile);
+            payload = await Payloads.healthPayload(data, profile);
             break;
         case Models.EventType.Rename:
             Logger.debug('-> Handling as "Rename" event type...');
-            payload = await Payloads.renamePayload(data as Models.RenameEventType, profile);
+            payload = await Payloads.renamePayload(data, profile);
             break;
         case Models.EventType.SeriesDelete:
             Logger.debug('-> Handling as "SeriesDelete" event type...');
-            payload = await Payloads.deleteSeriesPayload(data as Models.SeriesDeleteEventType, profile);
+            payload = await Payloads.deleteSeriesPayload(data, profile);
             break;
         case Models.EventType.Test:
             Logger.debug('-> Handling as "Test" event type...');
-            payload = await Payloads.testPayload(data as Models.TestEventType, profile);
+            payload = await Payloads.testPayload(data, profile);
             break;
         default:
             Logger.warn('-> An unknown eventType was received:', data);
