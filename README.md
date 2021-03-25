@@ -16,7 +16,11 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 | Sonarr      | `v1/sonarr/`    |  &check;  |
 | Tautulli    |                 |  &cross;  |
 
-## Build Guide
+## Setup Guide (Docker)
+
+> **Coming Soon**
+
+## Setup Guide (Development)
 
 #### 1. Environment
 
@@ -34,8 +38,15 @@ All environment variables must either be set at an operating system-level, termi
 
 You must place a service account file at the root of the project, named `serviceaccount.json`. A service account file can be downloaded from the Firebase console for your project.
 
-#### 3. Building the Project
+#### 3. Running the Project
 
 1. Install Node.js (v14 is recommend, v10 or higher is required).
-2. Run `npm run build` to build the project.
-3. Run `npm run serve` to run the project.
+2. Run `npm install`
+3. Run `npm start`
+
+#### 4. Building the Project
+
+1. Install Node.js (v14 is recommend, v10 or higher is required).
+2. Run `npm install`
+3. Run `npm run build`
+4. Run `npm run serve`
