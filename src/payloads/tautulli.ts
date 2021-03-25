@@ -135,6 +135,97 @@ export const playbackStopPayload = async (data: Models.PlaybackStopEventType, pr
 };
 
 /**
+ * Construct a NotificationPayload based on a plex remote access back up event.
+ */
+export const plexRemoteAccessBackUpPayload = async (
+    data: Models.PlexRemoteAccessBackUpEventType,
+    profile: string,
+): Promise<NotificationPayload> => {
+    const body = (data.message?.length ?? 0) == 0 ? 'The Plex Media Server remote access is back up' : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Plex Remote Access Back Up'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a plex remote access down event.
+ */
+export const plexRemoteAccessDownPayload = async (
+    data: Models.PlexRemoteAccessDownEventType,
+    profile: string,
+): Promise<NotificationPayload> => {
+    const reason = data.remote_access_reason ?? 'Unknown Reason';
+    const body = (data.message?.length ?? 0) == 0 ? `The Plex Media Server remote access is down (${reason})` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Plex Remote Access Down'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a plex server back up event.
+ */
+export const plexServerBackUpPayload = async (data: Models.PlexServerBackUpEventType, profile: string): Promise<NotificationPayload> => {
+    const body = (data.message?.length ?? 0) == 0 ? 'The Plex Media Server is back up' : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Plex Server Back Up'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a plex server down event.
+ */
+export const plexServerDownPayload = async (data: Models.PlexServerDownEventType, profile: string): Promise<NotificationPayload> => {
+    const body = (data.message?.length ?? 0) == 0 ? 'The Plex Media Server is down' : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Plex Server Down'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a plex update available event.
+ */
+export const plexUpdateAvailablePayload = async (
+    data: Models.PlexUpdateAvailableEventType,
+    profile: string,
+): Promise<NotificationPayload> => {
+    const version = data.update_version ?? 'Unknown Version';
+    const body = (data.message?.length ?? 0) == 0 ? `An update is available for the Plex Media Server (version ${version})` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Plex Update Available'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
  * Construct a NotificationPayload based on a recently added event.
  */
 export const recentlyAddedPayload = async (data: Models.RecentlyAddedEventType, profile: string): Promise<NotificationPayload> => {
@@ -144,6 +235,48 @@ export const recentlyAddedPayload = async (data: Models.RecentlyAddedEventType, 
         title: createTitle(profile, 'Recently Added'),
         body: body,
         image: data.poster_url,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a tautulli database corruption event.
+ */
+export const tautulliDatabaseCorruptionPayload = async (
+    data: Models.TautulliDatabaseCorruptionEventType,
+    profile: string,
+): Promise<NotificationPayload> => {
+    const body =
+        (data.message?.length ?? 0) == 0
+            ? `Tautulli database corruption detected: Automatic cleanup of database backups is suspended`
+            : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Tautulli Database Corruption'),
+        body: body,
+        data: {
+            module: moduleKey,
+            profile: profile,
+            event: data.event_type,
+        },
+    };
+};
+
+/**
+ * Construct a NotificationPayload based on a tautulli update available event.
+ */
+export const tautulliUpdateAvailablePayload = async (
+    data: Models.TautulliUpdateAvailableEventType,
+    profile: string,
+): Promise<NotificationPayload> => {
+    const version = data.tautulli_update_version ?? 'Unknown Version';
+    const body = (data.message?.length ?? 0) == 0 ? `An update is available for Tautulli (version ${version})` : data.message;
+    return <NotificationPayload>{
+        title: createTitle(profile, 'Tautulli Update Available'),
+        body: body,
         data: {
             module: moduleKey,
             profile: profile,

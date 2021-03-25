@@ -39,9 +39,37 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
             Logger.debug('-> Handling as "PlaybackStop" event type...');
             payload = await Payloads.playbackStopPayload(data, profile);
             break;
+        case Models.EventType.PlexRemoteAccessBackUp:
+            Logger.debug('-> Handling as "PlexRemoteAccessBackUp" event type...');
+            payload = await Payloads.plexRemoteAccessBackUpPayload(data, profile);
+            break;
+        case Models.EventType.PlexRemoteAccessDown:
+            Logger.debug('-> Handling as "PlexRemoteAccessDown" event type...');
+            payload = await Payloads.plexRemoteAccessDownPayload(data, profile);
+            break;
+        case Models.EventType.PlexServerBackUp:
+            Logger.debug('-> Handling as "PlexServerBackUp" event type...');
+            payload = await Payloads.plexServerBackUpPayload(data, profile);
+            break;
+        case Models.EventType.PlexServerDown:
+            Logger.debug('-> Handling as "PlexServerDown" event type...');
+            payload = await Payloads.plexServerDownPayload(data, profile);
+            break;
+        case Models.EventType.PlexUpdateAvailable:
+            Logger.debug('-> Handling as "PlexUpdateAvailable" event type...');
+            payload = await Payloads.plexUpdateAvailablePayload(data, profile);
+            break;
         case Models.EventType.RecentlyAdded:
             Logger.debug('-> Handling as "RecentlyAdded" event type...');
             payload = await Payloads.recentlyAddedPayload(data, profile);
+            break;
+        case Models.EventType.TautulliDatabaseCorruption:
+            Logger.debug('-> Handling as "TautulliDatabaseCorruption" event type...');
+            payload = await Payloads.tautulliDatabaseCorruptionPayload(data, profile);
+            break;
+        case Models.EventType.TautulliUpdateAvailable:
+            Logger.debug('-> Handling as "TautulliUpdateAvailable" event type...');
+            payload = await Payloads.tautulliUpdateAvailablePayload(data, profile);
             break;
         case Models.EventType.TranscodeDecisionChange:
             Logger.debug('-> Handling as "TranscodeDecisionChange" event type...');
