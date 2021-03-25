@@ -1,0 +1,5 @@
+{
+    "event_type": "TautulliUpdateAvailable",
+    "tautulli_update_version": "{tautulli_update_version}",
+    "message": ""
+}

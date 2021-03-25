@@ -14,28 +14,39 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 | Radarr      | `v1/radarr/`    |  &check;  |
 | SABnzbd     |                 |  &cross;  |
 | Sonarr      | `v1/sonarr/`    |  &check;  |
-| Tautulli    |                 |  &cross;  |
+| Tautulli    | `v1/tautulli/`  |  &check;  |
 
-## Build Guide
+## Setup Guide (Docker)
+
+> **Coming Soon**
+
+## Setup Guide (Development)
 
 #### 1. Environment
 
 All environment variables must either be set at an operating system-level, terminal-level, or by creating a `.env` file at the root of the project. A sample `.env` is supplied in the project (`.env.sample`).
 
-| Variable                  | Value                                                                               | Default | Required? |
-| :------------------------ | :---------------------------------------------------------------------------------- | :-----: | :-------: |
-| `DATABASE_URL`            | The Firebase database URL for your project.                                         |         |  &check;  |
-| `FANART_TV_API_KEY`       | A developer [Fanart.tv](https://fanart.tv/) API key.                                |         |  &check;  |
-| `PORT`                    | The port to attach the relay server to.                                             | `9000`  |  &cross;  |
-| `RESTRICTED_PACKAGE_NAME` | The application package name to restrict notifications to from this relay instance. |         |  &check;  |
-| `THEMOVIEDB_API_KEY`      | A developer [The Movie Database](https://www.themoviedb.org) API key.               |         |  &check;  |
+| Variable                | Value                                                                 | Default | Required? |
+| :---------------------- | :-------------------------------------------------------------------- | :-----: | :-------: |
+| `FIREBASE_DATABASE_URL` | The Firebase database URL for your project.                           |         |  &check;  |
+| `FANART_TV_API_KEY`     | A developer [Fanart.tv](https://fanart.tv/) API key.                  |         |  &check;  |
+| `PORT`                  | The port to attach the relay server to.                               | `9000`  |  &cross;  |
+| `LOG_LEVEL`             | The minimum logging level to store in `server.log`.                   | `warn`  |  &cross;  |
+| `THEMOVIEDB_API_KEY`    | A developer [The Movie Database](https://www.themoviedb.org) API key. |         |  &check;  |
 
 #### 2. Firebase Service Account
 
 You must place a service account file at the root of the project, named `serviceaccount.json`. A service account file can be downloaded from the Firebase console for your project.
 
-#### 3. Building the Project
+#### 3. Running the Project
 
 1. Install Node.js (v14 is recommend, v10 or higher is required).
-2. Run `npm run build` to build the project.
-3. Run `npm run serve` to run the project.
+2. Run `npm install`
+3. Run `npm start`
+
+#### 4. Building the Project
+
+1. Install Node.js (v14 is recommend, v10 or higher is required).
+2. Run `npm install`
+3. Run `npm run build`
+4. Run `npm run serve`
