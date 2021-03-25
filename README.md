@@ -14,7 +14,7 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 | Radarr      | `v1/radarr/`    |  &check;  |
 | SABnzbd     |                 |  &cross;  |
 | Sonarr      | `v1/sonarr/`    |  &check;  |
-| Tautulli    |                 |  &cross;  |
+| Tautulli    | `v1/tautulli/`  |  &check;  |
 
 ## Setup Guide (Docker)
 
