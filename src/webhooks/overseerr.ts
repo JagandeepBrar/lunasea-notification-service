@@ -44,7 +44,7 @@ export const handleWebhook = async (data: Models.RequestProperties, devices: str
             payload = await Payloads.testPayload(data, profile);
             break;
         default:
-            Logger.warn('-> An unknown notification_type was received:', data);
+            Logger.warn('-> An unknown notification_type was received:', JSON.stringify(data));
             Logger.warn('-> Failed to send to device(s).');
             return;
     }

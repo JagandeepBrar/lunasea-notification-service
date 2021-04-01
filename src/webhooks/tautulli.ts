@@ -88,7 +88,7 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
             payload = await Payloads.watchedPayload(data, profile);
             break;
         default:
-            Logger.warn('-> An unknown eventType was received:', data);
+            Logger.warn('-> An unknown eventType was received:', JSON.stringify(data));
             Logger.warn('-> Failed to send to device(s).');
             return;
     }
