@@ -13,17 +13,18 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 ## Usage
 
-### Module Support
+### Endpoints
 
-| Module    | Route                  | HTTP Method | Supported |
-| :-------- | :--------------------- | :---------: | :-------: |
-| Lidarr    | `.../v1/lidarr/...`    |    POST     |  &check;  |
-| NZBGet    |                        |   &cross;   |  &cross;  |
-| Overseerr | `.../v1/overseerr/...` |    POST     |  &check;  |
-| Radarr    | `.../v1/radarr/...`    |    POST     |  &check;  |
-| SABnzbd   |                        |   &cross;   |  &cross;  |
-| Sonarr    | `.../v1/sonarr/...`    |    POST     |  &check;  |
-| Tautulli  | `.../v1/tautulli/...`  |    POST     |  &check;  |
+| Module    | Route                  | HTTP Method |
+| :-------- | :--------------------- | :---------: |
+| &mdash;   | `.../health`           |     GET     |
+| Lidarr    | `.../v1/lidarr/...`    |    POST     |
+| NZBGet    | &mdash;                |   &mdash;   |
+| Overseerr | `.../v1/overseerr/...` |    POST     |
+| Radarr    | `.../v1/radarr/...`    |    POST     |
+| SABnzbd   | &mdash;                |   &mdash;   |
+| Sonarr    | `.../v1/sonarr/...`    |    POST     |
+| Tautulli  | `.../v1/tautulli/...`  |    POST     |
 
 ### Client Types
 
@@ -37,13 +38,13 @@ The notification relay supports both:
 
 With the given routes above, append `device/{device_id}` to the route to send to a single device.
 
-> Example: [https://notify.lunasea.app/v1/radarr/device/1234567890](https://notify.lunasea.app/v1/radarr/device/1234567890) to send a Radarr webhook to the Firebase device token `1234567890`.
+> **Example**: [https://notify.lunasea.app/v1/radarr/device/1234567890](https://notify.lunasea.app/v1/radarr/device/1234567890) to send a Radarr webhook to the Firebase device token `1234567890`.
 
 #### 2. Sending to User's Firebase Auth UID
 
 With the given routes above, append `user/{user_id}` to the route to send to all devices registered to the user's account. The device list is pulled from Cloud Firestore, with device tokens registered upon signing into a LunaSea account within the application.
 
-> Example: [https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno](https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno) to send a Radarr webhook to the user with the Firebase Auth UID of `abcdefghijklmno`.
+> **Example**: [https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno](https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno) to send a Radarr webhook to the user with the Firebase Auth UID of `abcdefghijklmno`.
 
 ---
 
@@ -55,11 +56,11 @@ All environment variables must either be set at an operating system-level, termi
 
 | Variable                | Value                                                                 | Default | Required? |
 | :---------------------- | :-------------------------------------------------------------------- | :-----: | :-------: |
-| `FIREBASE_DATABASE_URL` | The Firebase database URL for your project.                           |         |  &check;  |
-| `FANART_TV_API_KEY`     | A developer [Fanart.tv](https://fanart.tv/) API key.                  |         |  &check;  |
+| `FIREBASE_DATABASE_URL` | The Firebase database URL for your project.                           | &mdash; |  &check;  |
+| `FANART_TV_API_KEY`     | A developer [Fanart.tv](https://fanart.tv/) API key.                  | &mdash; |  &check;  |
+| `THEMOVIEDB_API_KEY`    | A developer [The Movie Database](https://www.themoviedb.org) API key. | &mdash; |  &check;  |
 | `PORT`                  | The port to attach the relay server to.                               | `9000`  |  &cross;  |
 | `LOG_LEVEL`             | The minimum logging level to store in `server.log`.                   | `warn`  |  &cross;  |
-| `THEMOVIEDB_API_KEY`    | A developer [The Movie Database](https://www.themoviedb.org) API key. |         |  &check;  |
 
 ### Setup Guide (Docker)
 
