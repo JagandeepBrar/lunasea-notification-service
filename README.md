@@ -7,7 +7,7 @@
 
 A simple TypeScript backend system that handles receiving webhooks from applications supported in [LunaSea](https://github.com/CometTools/LunaSea) and sends notifications to the respective user or device.
 
-> Setting up an instance of your own notification relay is **not** necessary to get notifications with LunaSea. Simply use the Comet.Tools' hosted notification relay, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance will not send notifications to the officially published LunaSea application.
+> Setting up an instance of your own notification relay is **not** necessary to get webhook notifications in LunaSea. Simply use the Comet.Tools' hosted notification relay, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance _will not_ send notifications to the officially published LunaSea application.
 >
 > Setting up your own instance of the notification relay is only necessary when building your own version of LunaSea, which utilizes a different Firebase project.
 
@@ -15,15 +15,15 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 ### Module Support
 
-| Module    | Route               | Supported |
-| :-------- | :------------------ | :-------: |
-| Lidarr    | `.../v1/lidarr/`    |  &check;  |
-| NZBGet    |                     |  &cross;  |
-| Overseerr | `.../v1/overseerr/` |  &check;  |
-| Radarr    | `.../v1/radarr/`    |  &check;  |
-| SABnzbd   |                     |  &cross;  |
-| Sonarr    | `.../v1/sonarr/`    |  &check;  |
-| Tautulli  | `.../v1/tautulli/`  |  &check;  |
+| Module    | Route                  | HTTP Method | Supported |
+| :-------- | :--------------------- | :---------: | :-------: |
+| Lidarr    | `.../v1/lidarr/...`    |    POST     |  &check;  |
+| NZBGet    |                        |   &cross;   |  &cross;  |
+| Overseerr | `.../v1/overseerr/...` |    POST     |  &check;  |
+| Radarr    | `.../v1/radarr/...`    |    POST     |  &check;  |
+| SABnzbd   |                        |   &cross;   |  &cross;  |
+| Sonarr    | `.../v1/sonarr/...`    |    POST     |  &check;  |
+| Tautulli  | `.../v1/tautulli/...`  |    POST     |  &check;  |
 
 ### Client Types
 
@@ -37,13 +37,13 @@ The notification relay supports both:
 
 With the given routes above, append `device/{device_id}` to the route to send to a single device.
 
-> Example: `https://notify.lunasea.app/v1/radarr/device/1234567890` to send a Radarr webhook to the Firebase device token `1234567890`.
+> Example: [https://notify.lunasea.app/v1/radarr/device/1234567890](https://notify.lunasea.app/v1/radarr/device/1234567890) to send a Radarr webhook to the Firebase device token `1234567890`.
 
 #### 2. Sending to User's Firebase Auth UID
 
 With the given routes above, append `user/{uid}` to the route to send to all devices registered to the user's account. The device list is pulled from Cloud Firestore, with device tokens registered upon signing into a LunaSea account within the application.
 
-> Example: `https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno` to send a Radarr webhook to the user with the Firebase Auth UID of `abcdefghijklmno`.
+> Example: [https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno](https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno) to send a Radarr webhook to the user with the Firebase Auth UID of `abcdefghijklmno`.
 
 ---
 
