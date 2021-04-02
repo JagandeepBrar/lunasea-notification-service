@@ -7,19 +7,49 @@
 
 A simple TypeScript backend system that handles receiving webhooks from applications supported in [LunaSea](https://github.com/CometTools/LunaSea) and sends notifications to the respective user or device.
 
-## Application Support
+> Setting up an instance of your own notification relay is **not** necessary to get notifications with LunaSea. Simply use the Comet.Tools' hosted notification relay, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance will not send notifications to the officially published LunaSea application.
+>
+> Setting up your own instance of the notification relay is only necessary when building your own version of LunaSea, which utilizes a different Firebase project.
 
-| Application | Route           | Supported |
-| :---------- | :-------------- | :-------: |
-| Lidarr      | `v1/lidarr/`    |  &check;  |
-| NZBGet      |                 |  &cross;  |
-| Overseerr   | `v1/overseerr/` |  &check;  |
-| Radarr      | `v1/radarr/`    |  &check;  |
-| SABnzbd     |                 |  &cross;  |
-| Sonarr      | `v1/sonarr/`    |  &check;  |
-| Tautulli    | `v1/tautulli/`  |  &check;  |
+## Usage
 
-## Environment
+### Module Support
+
+| Module    | Route               | Supported |
+| :-------- | :------------------ | :-------: |
+| Lidarr    | `.../v1/lidarr/`    |  &check;  |
+| NZBGet    |                     |  &cross;  |
+| Overseerr | `.../v1/overseerr/` |  &check;  |
+| Radarr    | `.../v1/radarr/`    |  &check;  |
+| SABnzbd   |                     |  &cross;  |
+| Sonarr    | `.../v1/sonarr/`    |  &check;  |
+| Tautulli  | `.../v1/tautulli/`  |  &check;  |
+
+### Client Types
+
+The notification relay supports both:
+
+-   Sending to a single device via a **Firebase Device Token**
+    -   Registering for a LunaSea account is _not_ necessary to get device-based notifications
+-   Sending to a group of devices via a user's **Firebase Auth UID**
+
+#### 1. Sending to a Firebase Device Token
+
+With the given routes above, append `device/{device_id}` to the route to send to a single device.
+
+> Example: `https://notify.lunasea.app/v1/radarr/device/1234567890` to send a Radarr webhook to the Firebase device token `1234567890`.
+
+#### 2. Sending to User's Firebase Auth UID
+
+With the given routes above, append `user/{uid}` to the route to send to all devices registered to the user's account. The device list is pulled from Cloud Firestore, with device tokens registered upon signing into a LunaSea account within the application.
+
+> Example: `https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno` to send a Radarr webhook to the user with the Firebase Auth UID of `abcdefghijklmno`.
+
+---
+
+## Development & Installation
+
+### Environment
 
 All environment variables must either be set at an operating system-level, terminal-level, as Docker environment variables, or by creating a `.env` file at the root of the project. A sample `.env` is supplied in the project (`.env.sample`).
 
@@ -31,7 +61,7 @@ All environment variables must either be set at an operating system-level, termi
 | `LOG_LEVEL`             | The minimum logging level to store in `server.log`.                   | `warn`  |  &cross;  |
 | `THEMOVIEDB_API_KEY`    | A developer [The Movie Database](https://www.themoviedb.org) API key. |         |  &check;  |
 
-## Setup Guide (Docker)
+### Setup Guide (Docker)
 
 You must use a bind mount to mount a host OS directory to the Docker image. **This folder must contain the Firebase service account file**, named `serviceaccount.json`. A server log file, `server.log` will be written to this directory.
 
@@ -47,7 +77,7 @@ docker run -d \
 comettools/lunasea-notification-relay:latest
 ```
 
-## Setup Guide (Development)
+### Setup Guide (Development)
 
 You must place a service account file at the root of the project, named `serviceaccount.json`. A service account file can be downloaded from the Firebase console for your project.
 
