@@ -41,7 +41,7 @@ With the given routes above, append `device/{device_id}` to the route to send to
 
 #### 2. Sending to User's Firebase Auth UID
 
-With the given routes above, append `user/{uid}` to the route to send to all devices registered to the user's account. The device list is pulled from Cloud Firestore, with device tokens registered upon signing into a LunaSea account within the application.
+With the given routes above, append `user/{user_id}` to the route to send to all devices registered to the user's account. The device list is pulled from Cloud Firestore, with device tokens registered upon signing into a LunaSea account within the application.
 
 > Example: [https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno](https://notify.lunasea.app/v1/radarr/user/abcdefghijklmno) to send a Radarr webhook to the user with the Firebase Auth UID of `abcdefghijklmno`.
 

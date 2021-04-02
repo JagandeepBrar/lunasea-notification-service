@@ -14,6 +14,7 @@ export namespace Server {
     export const initialize = (): void => {
         server.use(express.json());
         server.use('/v1', v1);
+        server.get('/healthcheck', (req, res) => res.status(200).json({ status: 'OK' }));
     };
 
     /**
