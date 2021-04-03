@@ -13,8 +13,9 @@ export namespace Server {
      */
     export const initialize = (): void => {
         server.use(express.json());
+        server.get('/', (_, res) => res.redirect(301, 'https://docs.lunasea.app/lunasea/notifications'));
+        server.get('/health', (_, res) => res.status(200).json({ status: 'OK' }));
         server.use('/v1', v1);
-        server.get('/health', (req, res) => res.status(200).json({ status: 'OK' }));
     };
 
     /**
