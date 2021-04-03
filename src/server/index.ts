@@ -7,14 +7,37 @@ export namespace Server {
     const server = express();
 
     /**
+     * Handle redirecting a request to the documentation.
+     *
+     * @param request Express request object
+     * @param response Express response object
+     */
+    const docs = async (request: express.Request, response: express.Response): Promise<void> => {
+        response.redirect(301, 'https://docs.lunasea.app/lunasea/notifications');
+    };
+
+    /**
+     * Handle sending a simple health-check response with basic server information
+     *
+     * @param request Express request object
+     * @param response Express response object
+     */
+    const health = async (request: express.Request, response: express.Response): Promise<void> => {
+        response.status(200).json({
+            status: 'OK',
+            version: process.env.npm_package_version,
+        });
+    };
+
+    /**
      * Initialize the Express server.
      *
      * Does things like set CORS, set JSON limits, adds global middleware, etc.
      */
     export const initialize = (): void => {
         server.use(express.json());
-        server.get('/', (_, res) => res.redirect(301, 'https://docs.lunasea.app/lunasea/notifications'));
-        server.get('/health', (_, res) => res.status(200).json({ status: 'OK' }));
+        server.get('/', docs);
+        server.get('/health', health);
         server.use('/v1', v1);
     };
 
