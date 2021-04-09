@@ -24,11 +24,13 @@ export const mediaApprovedPayload = async (data: Models.RequestProperties, profi
  */
 export const mediaAutoApprovedPayload = async (data: Models.RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
-    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    let body2 = '';
+    if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
+    if (data.request?.requestedBy_username) body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Auto Approved`),
-        body: [body1, body2].join('\n'),
+        body: [body1, body2].join(''),
         image: image,
     };
 };

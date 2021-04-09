@@ -16,31 +16,31 @@ export const handleWebhook = async (data: Models.RequestProperties, devices: str
     let payload: NotificationPayload;
     switch (data.notification_type) {
         case Models.NotificationType.MEDIA_APPROVED:
-            Logger.debug('-> Handling as "MEDIA_APPROVED" event type...');
+            Logger.info('-> Handling as "MEDIA_APPROVED" event type...');
             payload = await Payloads.mediaApprovedPayload(data, profile);
             break;
         case Models.NotificationType.MEDIA_AUTO_APPROVED:
-            Logger.debug('-> Handling as "MEDIA_AUTO_APPROVED" event type...');
+            Logger.info('-> Handling as "MEDIA_AUTO_APPROVED" event type...');
             payload = await Payloads.mediaAutoApprovedPayload(data, profile);
             break;
         case Models.NotificationType.MEDIA_AVAILABLE:
-            Logger.debug('-> Handling as "MEDIA_AVAILABLE" event type...');
+            Logger.info('-> Handling as "MEDIA_AVAILABLE" event type...');
             payload = await Payloads.mediaAvailablePayload(data, profile);
             break;
         case Models.NotificationType.MEDIA_DECLINED:
-            Logger.debug('-> Handling as "MEDIA_DECLINED" event type...');
+            Logger.info('-> Handling as "MEDIA_DECLINED" event type...');
             payload = await Payloads.mediaDeclinedPayload(data, profile);
             break;
         case Models.NotificationType.MEDIA_FAILED:
-            Logger.debug('-> Handling as "MEDIA_FAILED" event type...');
+            Logger.info('-> Handling as "MEDIA_FAILED" event type...');
             payload = await Payloads.mediaFailedPayload(data, profile);
             break;
         case Models.NotificationType.MEDIA_PENDING:
-            Logger.debug('-> Handling as "MEDIA_PENDING" event type...');
+            Logger.info('-> Handling as "MEDIA_PENDING" event type...');
             payload = await Payloads.mediaPendingPayload(data, profile);
             break;
         case Models.NotificationType.TEST_NOTIFICATION:
-            Logger.debug('-> Handling as "TEST_NOTIFICATION" event type...');
+            Logger.info('-> Handling as "TEST_NOTIFICATION" event type...');
             payload = await Payloads.testPayload(data, profile);
             break;
         default:
