@@ -16,31 +16,31 @@ export const handleWebhook = async (data: any, devices: string[], profile: strin
     let payload: NotificationPayload;
     switch (data.eventType) {
         case Models.EventType.Download:
-            Logger.debug('-> Handling as "Download" event type...');
+            Logger.info('-> Handling as "Download" event type...');
             payload = await Payloads.downloadPayload(data, profile);
             break;
         case Models.EventType.EpisodeFileDelete:
-            Logger.debug('-> Handling as "EpisodeFileDelete" event type...');
+            Logger.info('-> Handling as "EpisodeFileDelete" event type...');
             payload = await Payloads.deleteEpisodeFilePayload(data, profile);
             break;
         case Models.EventType.Grab:
-            Logger.debug('-> Handling as "Grab" event type...');
+            Logger.info('-> Handling as "Grab" event type...');
             payload = await Payloads.grabPayload(data, profile);
             break;
         case Models.EventType.Health:
-            Logger.debug('-> Handling as "Health" event type...');
+            Logger.info('-> Handling as "Health" event type...');
             payload = await Payloads.healthPayload(data, profile);
             break;
         case Models.EventType.Rename:
-            Logger.debug('-> Handling as "Rename" event type...');
+            Logger.info('-> Handling as "Rename" event type...');
             payload = await Payloads.renamePayload(data, profile);
             break;
         case Models.EventType.SeriesDelete:
-            Logger.debug('-> Handling as "SeriesDelete" event type...');
+            Logger.info('-> Handling as "SeriesDelete" event type...');
             payload = await Payloads.deleteSeriesPayload(data, profile);
             break;
         case Models.EventType.Test:
-            Logger.debug('-> Handling as "Test" event type...');
+            Logger.info('-> Handling as "Test" event type...');
             payload = await Payloads.testPayload(data, profile);
             break;
         default:
