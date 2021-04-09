@@ -22,6 +22,17 @@ export interface RequestProperties {
     username?: string;
     avatar?: string;
     media?: MediaProperties;
+    request?: RequestByProperties;
+    extra?: Record<string, unknown>;
+}
+
+export interface RequestByProperties {
+    request_id?: string;
+    requestedBy_username?: string;
+    requestedBy_email?: string;
+    requestedBy_avatar?: string;
+    requestedBy_settings_discordId?: string;
+    requestedBy_settings_telegramChatId?: string;
 }
 
 export interface MediaProperties {
