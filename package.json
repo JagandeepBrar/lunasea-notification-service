@@ -1,6 +1,6 @@
 {
     "name": "lunasea-notification-relay",
-    "version": "0.9.7",
+    "version": "0.9.8",
     "description": "Notification relay for LunaSea",
     "repository": "https://github.com/CometTools/LunaSea-Notification-Relay",
     "main": "index.js",
@@ -28,11 +28,11 @@
         "node-typescript-compiler": "2.2.1",
         "ts-node": "^9.1.1",
         "tslog": "^3.1.2",
-        "typescript": "^4.2.3"
+        "typescript": "^4.2.4"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^4.20.0",
-        "@typescript-eslint/parser": "^4.20.0",
+        "@typescript-eslint/eslint-plugin": "^4.21.0",
+        "@typescript-eslint/parser": "^4.21.0",
         "eslint": "^7.23.0",
         "husky": "^6.0.0",
         "nodemon": "^2.0.7",
