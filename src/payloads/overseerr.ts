@@ -16,7 +16,7 @@ export const mediaApprovedPayload = async (data: Models.RequestProperties, profi
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Approved`),
-        body: [body1, body2].join('\n'),
+        body: [body1, body2].join(''),
         image: image,
     };
 };
@@ -48,7 +48,7 @@ export const mediaAvailablePayload = async (data: Models.RequestProperties, prof
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Available`),
-        body: [body1, body2].join('\n'),
+        body: [body1, body2].join(''),
         image: image,
     };
 };
@@ -64,7 +64,7 @@ export const mediaDeclinedPayload = async (data: Models.RequestProperties, profi
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Declined`),
-        body: [body1, body2].join('\n'),
+        body: [body1, body2].join(''),
         image: image,
     };
 };
@@ -80,7 +80,7 @@ export const mediaFailedPayload = async (data: Models.RequestProperties, profile
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Failed`),
-        body: [body1, body2].join('\n'),
+        body: [body1, body2].join(''),
         image: image,
     };
 };
@@ -96,7 +96,7 @@ export const mediaPendingPayload = async (data: Models.RequestProperties, profil
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Requested`),
-        body: [body1, body2].join('\n'),
+        body: [body1, body2].join(''),
         image: image,
     };
 };
