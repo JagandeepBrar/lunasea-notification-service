@@ -10,7 +10,9 @@ const title = (profile: string, body: string): string => payloadTitle('Overseerr
  */
 export const mediaApprovedPayload = async (data: Models.RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
-    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    let body2 = '';
+    if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
+    if (data.request?.requestedBy_username) body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Approved`),
@@ -40,7 +42,9 @@ export const mediaAutoApprovedPayload = async (data: Models.RequestProperties, p
  */
 export const mediaAvailablePayload = async (data: Models.RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
-    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    let body2 = '';
+    if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
+    if (data.request?.requestedBy_username) body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Available`),
@@ -54,7 +58,9 @@ export const mediaAvailablePayload = async (data: Models.RequestProperties, prof
  */
 export const mediaDeclinedPayload = async (data: Models.RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
-    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    let body2 = '';
+    if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
+    if (data.request?.requestedBy_username) body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Declined`),
@@ -68,7 +74,9 @@ export const mediaDeclinedPayload = async (data: Models.RequestProperties, profi
  */
 export const mediaFailedPayload = async (data: Models.RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
-    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    let body2 = '';
+    if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
+    if (data.request?.requestedBy_username) body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Failed`),
@@ -82,7 +90,9 @@ export const mediaFailedPayload = async (data: Models.RequestProperties, profile
  */
 export const mediaPendingPayload = async (data: Models.RequestProperties, profile: string): Promise<NotificationPayload> => {
     const body1 = data.subject;
-    const body2 = `Originally Requested by ${data.username ?? 'Unknown User'}`;
+    let body2 = '';
+    if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
+    if (data.request?.requestedBy_username) body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
     const image = data.media?.media_type === Models.MediaType.MOVIE ? await getMovieImageURL(data) : await getSeriesImageURL(data);
     return <NotificationPayload>{
         title: title(profile, `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Requested`),
