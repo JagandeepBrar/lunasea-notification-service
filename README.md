@@ -13,7 +13,7 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 ## Usage
 
-For documentation on setting up the webhooks, please look at LunaSea's documentation, [available here](https://docs.lunasea.app/lunasea/notifications).
+For documentation on setting up the webhooks, please look at LunaSea's documentation [available here](https://docs.lunasea.app/lunasea/notifications).
 
 ### Endpoints
 
