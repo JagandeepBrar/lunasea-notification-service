@@ -13,11 +13,14 @@ A simple TypeScript backend system that handles receiving webhooks from applicat
 
 ## Usage
 
+For documentation on setting up the webhooks, please look at LunaSea's documentation, [available here](https://docs.lunasea.app/lunasea/notifications).
+
 ### Endpoints
 
 | Module    | Route                  | HTTP Method |
 | :-------- | :--------------------- | :---------: |
 | &mdash;   | `.../health`           |     GET     |
+| Custom    | `.../v1/custom/...`    |    POST     |
 | Lidarr    | `.../v1/lidarr/...`    |    POST     |
 | NZBGet    | &mdash;                |   &mdash;   |
 | Overseerr | `.../v1/overseerr/...` |    POST     |
