@@ -15,7 +15,7 @@ export const bufferWarningPayload = async (data: Models.BufferWarningEventType, 
     return <NotificationPayload>{
         title: createTitle(profile, 'Buffer Warning'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -37,7 +37,7 @@ export const playbackErrorPayload = async (data: Models.PlaybackErrorEventType, 
     return <NotificationPayload>{
         title: createTitle(profile, 'Playback Error'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -58,7 +58,7 @@ export const playbackPausePayload = async (data: Models.PlaybackPauseEventType, 
     return <NotificationPayload>{
         title: createTitle(profile, 'Playback Paused'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -80,7 +80,7 @@ export const playbackResumePayload = async (data: Models.PlaybackResumeEventType
     return <NotificationPayload>{
         title: createTitle(profile, 'Playback Resumed'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -102,7 +102,7 @@ export const playbackStartPayload = async (data: Models.PlaybackStartEventType, 
     return <NotificationPayload>{
         title: createTitle(profile, 'Playback Started'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -124,7 +124,7 @@ export const playbackStopPayload = async (data: Models.PlaybackStopEventType, pr
     return <NotificationPayload>{
         title: createTitle(profile, 'Playback Stopped'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -234,7 +234,7 @@ export const recentlyAddedPayload = async (data: Models.RecentlyAddedEventType, 
     return <NotificationPayload>{
         title: createTitle(profile, 'Recently Added'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -299,7 +299,7 @@ export const transcodeDecisionChangePayload = async (
     return <NotificationPayload>{
         title: createTitle(profile, 'Transcode Decision Changed'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
@@ -362,7 +362,7 @@ export const watchedPayload = async (data: Models.WatchedEventType, profile: str
     return <NotificationPayload>{
         title: createTitle(profile, 'Watched'),
         body: body,
-        image: data.poster_url,
+        image: !data.poster_url ? undefined : data.poster_url,
         data: {
             module: moduleKey,
             profile: profile,
