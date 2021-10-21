@@ -1,7 +1,0 @@
-{
-    "event_type": "UserConcurrentStreams",
-    "user": "{user}",
-    "user_id": "{user_id}",
-    "user_streams": "{user_streams}",
-    "message": ""
-}

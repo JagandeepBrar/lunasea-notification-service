@@ -1,9 +1,0 @@
-{
-    "event_type": "PlaybackStop",
-    "user": "{user}",
-    "user_id": "{user_id}",
-    "player": "{player}",
-    "title": "{title}",
-    "poster_url": "{poster_url}",
-    "message": ""
-}

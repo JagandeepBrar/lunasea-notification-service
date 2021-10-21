@@ -9,11 +9,11 @@ import { Logger } from '../utilities/logger';
  * @param devices List of devices to send the notification to
  */
 export const handleWebhook = async (data: any, devices: string[]): Promise<void> => {
-    Logger.debug('-> Preparing payload...');
-    const payload = <NotificationPayload>{
-        title: data?.title ?? 'Unknown Title',
-        body: data?.body ?? 'Unknown Content',
-        image: data?.image,
-    };
-    await Firebase.sendNotification(devices, payload);
+  Logger.debug('-> Preparing payload...');
+  const payload = <NotificationPayload>{
+    title: data?.title ?? 'Unknown Title',
+    body: data?.body ?? 'Unknown Content',
+    image: data?.image,
+  };
+  await Firebase.sendNotification(devices, payload);
 };
