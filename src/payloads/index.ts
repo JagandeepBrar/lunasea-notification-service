@@ -1,10 +1,10 @@
 export interface NotificationPayload {
-    title: string;
-    body: string;
-    image?: string;
-    data?: {
-        [key: string]: string;
-    };
+  title: string;
+  body: string;
+  image?: string;
+  data?: {
+    [key: string]: string;
+  };
 }
 
 /**
@@ -22,6 +22,6 @@ export interface NotificationPayload {
  * @param body The title "body", as in the text to be appended after the module and profile name.
  */
 export const payloadTitle = (module: string, profile: string, body: string): string => {
-    if (profile && profile !== 'default') return `${module} (${profile}): ${body}`;
-    return `${module}: ${body}`;
+  if (profile && profile !== 'default') return `${module} (${profile}): ${body}`;
+  return `${module}: ${body}`;
 };

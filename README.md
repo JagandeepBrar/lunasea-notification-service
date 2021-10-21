@@ -33,9 +33,9 @@ For documentation on setting up the webhooks, please look at LunaSea's documenta
 
 The notification relay supports both:
 
--   Sending to a single device via a **Firebase Device Token**
-    -   Registering for a LunaSea account is _not_ necessary to get device-based notifications
--   Sending to a group of devices via a user's **Firebase Auth UID**
+- Sending to a single device via a **Firebase Device Token**
+  - Registering for a LunaSea account is _not_ necessary to get device-based notifications
+- Sending to a group of devices via a user's **Firebase Auth UID**
 
 #### 1. Sending to a Firebase Device Token
 
