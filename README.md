@@ -1,10 +1,5 @@
 # LunaSea Notification Relay
 
-[![Docker Build Status](https://img.shields.io/docker/cloud/build/comettools/lunasea-notification-relay?style=for-the-badge)](https://hub.docker.com/r/comettools/lunasea-notification-relay)
-[![Docker Cloud Build](https://img.shields.io/docker/cloud/automated/comettools/lunasea-notification-relay?style=for-the-badge)](https://hub.docker.com/r/comettools/lunasea-notification-relay)
-[![Docker Pulls](https://img.shields.io/docker/pulls/comettools/lunasea-notification-relay?style=for-the-badge)](https://hub.docker.com/r/comettools/lunasea-notification-relay)
-![Version](https://img.shields.io/docker/v/comettools/lunasea-notification-relay?sort=semver&style=for-the-badge)
-
 A simple TypeScript backend system that handles receiving webhooks from applications supported in [LunaSea](https://github.com/CometTools/LunaSea) and sends notifications to the respective user or device.
 
 > Setting up an instance of your own notification relay is **not** necessary to get webhook notifications in LunaSea. Simply use the Comet.Tools' hosted notification relay, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance _will not_ send notifications to the officially published LunaSea application.
@@ -78,7 +73,7 @@ docker run -d \
     -p 9000:9000 \
     -v /hostos/path/to/config:/usr/src/config \
     --restart unless-stopped \
-comettools/lunasea-notification-relay:latest
+ghcr.io/comettools/lunasea-notification-relay:latest
 ```
 
 ### Setup Guide (Development)
