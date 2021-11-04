@@ -70,6 +70,48 @@ export const health = async (
 };
 
 /**
+ * Construct a Payloads.Notification based on a movie delete event.
+ */
+export const movieDelete = async (
+  data: Models.MovieDeleteEventType,
+  profile: string,
+): Promise<Payloads.Notification> => {
+  const image = data.movie?.tmdbId ? await TheMovieDB.getMoviePoster(data.movie.tmdbId) : undefined;
+  return <Payloads.Notification>{
+    title: title(profile, data.movie?.title ?? 'Unknown Movie'),
+    body: `Movie Deleted ${data.deletedFiles ? '(With Files)' : ''}`.trim(),
+    image: image,
+    data: {
+      module: moduleKey,
+      profile: profile,
+      event: data.eventType,
+      id: data.movie?.id?.toString() ?? '-1',
+    },
+  };
+};
+
+/**
+ * Construct a Payloads.Notification based on a movie file delete event.
+ */
+export const movieFileDelete = async (
+  data: Models.MovieDeleteEventType,
+  profile: string,
+): Promise<Payloads.Notification> => {
+  const image = data.movie?.tmdbId ? await TheMovieDB.getMoviePoster(data.movie.tmdbId) : undefined;
+  return <Payloads.Notification>{
+    title: title(profile, data.movie?.title ?? 'Unknown Movie'),
+    body: 'Movie File Deleted',
+    image: image,
+    data: {
+      module: moduleKey,
+      profile: profile,
+      event: data.eventType,
+      id: data.movie?.id?.toString() ?? '-1',
+    },
+  };
+};
+
+/**
  * Construct a Payloads.Notification based on a rename event.
  */
 export const rename = async (

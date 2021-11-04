@@ -67,6 +67,14 @@ const _handleWebhook = async (data: any, devices: string[], profile: string): Pr
       Logger.info('-> Handling as "Health" event type...');
       payload = await Payloads.health(data, profile);
       break;
+    case Models.EventType.MovieDelete:
+      Logger.info('-> Handling as "MovieDelete" event type...');
+      payload = await Payloads.movieDelete(data, profile);
+      break;
+    case Models.EventType.MovieFileDelete:
+      Logger.info('-> Handling as "MovieFileDelete" event type...');
+      payload = await Payloads.movieFileDelete(data, profile);
+      break;
     case Models.EventType.Rename:
       Logger.info('-> Handling as "Rename" event type...');
       payload = await Payloads.rename(data, profile);

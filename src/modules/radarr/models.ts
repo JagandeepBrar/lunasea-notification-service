@@ -3,6 +3,8 @@ export enum EventType {
   Grab = 'Grab',
   Health = 'Health',
   Rename = 'Rename',
+  MovieDelete = 'MovieDelete',
+  MovieFileDelete = 'MovieFileDelete',
   Test = 'Test',
 }
 
@@ -11,6 +13,7 @@ export interface MovieProperties {
   title?: string;
   releaseDate?: string;
   folderPath?: string;
+  year?: number;
   tmdbId?: number;
   imdbId?: string;
 }
@@ -37,6 +40,7 @@ export interface MovieFileProperties {
   path?: string;
   quality?: string;
   qualityVersion?: number;
+  indexerFlags?: string;
   releaseGroup?: string;
   sceneName?: string;
   size?: number;
@@ -66,6 +70,19 @@ export interface HealthEventType {
   message?: string;
   type?: string;
   wikiUrl?: string;
+}
+
+export interface MovieDeleteEventType {
+  eventType?: EventType;
+  movie?: MovieProperties;
+  deletedFiles?: boolean;
+}
+
+export interface MovieFileDeleteEventType {
+  eventType?: EventType;
+  movie?: MovieProperties;
+  movieFile?: MovieFileProperties;
+  deleteReason?: string;
 }
 
 export interface RenameEventType {
