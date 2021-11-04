@@ -43,11 +43,10 @@ export namespace TheMovieDB {
           Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
           return url;
         }
-        Logger.warn('-> Movie had no poster or background image.');
+        Logger.debug('-> Movie had no poster or background image.');
       });
     } catch (error: any) {
       Logger.error(error);
-      Logger.warn(`-> Failed to fetch movie poster (${movieId})`);
     }
     return undefined;
   };
@@ -80,13 +79,12 @@ export namespace TheMovieDB {
             Logger.debug(`-> ...${url.substr(url.length - 50, 50)}`);
             return url;
           }
-          Logger.warn('-> Series had no poster or background image.');
+          Logger.debug('-> Series had no poster or background image.');
         }
-        Logger.warn(`-> Failed to find a TV series $(${seriesId})`);
+        Logger.debug(`-> Failed to find a TV series $(${seriesId})`);
       });
     } catch (error: any) {
       Logger.error(error);
-      Logger.warn(`-> Failed to fetch series poster (${seriesId})`);
     }
     return undefined;
   };

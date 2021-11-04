@@ -40,14 +40,12 @@ export namespace FanartTV {
             return url;
           }
         }
-        Logger.warn(`-> No artist thumbnail found (${artistId})`);
-        return undefined;
+        Logger.debug(`-> No artist thumbnail found (${artistId})`);
       });
     } catch (error: any) {
       Logger.error(error);
-      Logger.warn(`-> Failed to fetch artist thumbnail (${artistId})`);
-      return undefined;
     }
+    return undefined;
   };
 
   /**
@@ -76,14 +74,12 @@ export namespace FanartTV {
             return url;
           }
         }
-        Logger.warn('-> No album cover found', albumId);
-        return undefined;
+        Logger.debug('-> No album cover found', albumId);
       });
     } catch (error: any) {
       Logger.error(error);
-      Logger.warn(`-> Failed to fetch album cover (${albumId})`);
-      return undefined;
     }
+    return undefined;
   };
 
   /**
@@ -110,14 +106,12 @@ export namespace FanartTV {
             return url;
           }
         }
-        Logger.warn(`-> No movie poster found (${movieId})`);
-        return undefined;
+        Logger.debug(`-> No movie poster found (${movieId})`);
       });
     } catch (error: any) {
       Logger.error(error);
-      Logger.warn(`-> Failed to fetch movie poster (${movieId})`);
-      return undefined;
     }
+    return undefined;
   };
 
   /**
@@ -144,13 +138,11 @@ export namespace FanartTV {
             return url;
           }
         }
-        Logger.warn(`-> No series poster found (${seriesId})`);
-        return undefined;
+        Logger.debug(`-> No series poster found (${seriesId})`);
       });
     } catch (error: any) {
       Logger.error(error);
-      Logger.warn(`-> Failed to fetch series poster (${seriesId})`);
-      return undefined;
     }
+    return undefined;
   };
 }

@@ -210,7 +210,6 @@ const _handleWebhook = async (data: any, devices: string[], profile: string): Pr
     }
   if (!payload) {
     Logger.warn('-> An unknown ActionType or EventType was received:', JSON.stringify(data));
-    Logger.warn('-> Failed to send to device(s).');
     return;
   }
   await Firebase.sendNotification(devices, payload);

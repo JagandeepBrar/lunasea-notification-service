@@ -8,6 +8,6 @@ let redis: Redis.Redis;
  */
 export const initialize = (): void => {
   Logger.debug('Initializing Redis...');
-  redis = new Redis(6789, '127.0.0.1');
+  redis = new Redis(6379, '127.0.0.1');
   Logger.debug('Initialized Redis.');
 };
