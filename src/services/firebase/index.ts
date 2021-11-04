@@ -4,6 +4,8 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getMessaging, MulticastMessage } from 'firebase-admin/messaging';
 import { Logger, Payloads } from '../../utils';
 
+let firebase: admin.app.App;
+
 /**
  * Initialize the connection to Firebase and link it to the service account.
  */
@@ -21,7 +23,7 @@ export const initialize = (): void => {
       break;
   }
   Logger.debug('Initializing Firebase...');
-  admin.initializeApp({
+  firebase = admin.initializeApp({
     credential: admin.credential.cert(serviceaccount),
     databaseURL: process.env.FIREBASE_DATABASE_URL,
   });
@@ -37,7 +39,7 @@ export const initialize = (): void => {
 export const validateUserID = async (uid: string): Promise<boolean> => {
   try {
     if (!uid) return false;
-    return await getAuth()
+    return await getAuth(firebase)
       .getUser(uid)
       .then((user) => {
         if (user) return true;
@@ -58,7 +60,7 @@ export const validateUserID = async (uid: string): Promise<boolean> => {
 export const getDeviceTokenList = async (uid: string): Promise<string[]> => {
   try {
     if (!uid) return [];
-    return await getFirestore()
+    return await getFirestore(firebase)
       .doc(`users/${uid}`)
       .get()
       .then((document) => {
@@ -111,7 +113,7 @@ export const sendNotification = async (
       },
     };
     // Send the message
-    return await getMessaging()
+    return await getMessaging(firebase)
       .sendMulticast(message)
       .then((response) => {
         Logger.debug(

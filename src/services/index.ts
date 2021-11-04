@@ -1,2 +1,3 @@
 import * as Firebase from './firebase';
-export { Firebase };
+import * as Redis from './redis';
+export { Firebase, Redis };
