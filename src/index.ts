@@ -1,9 +1,9 @@
 import { Server } from './server';
-import { Environment } from './utilities/environment';
-import { Logger } from './utilities/logger';
-import { Firebase } from './utilities/firebase';
+import { Firebase, Redis } from './services';
+import { Environment, Logger } from './utils';
 
 Logger.info(`LunaSea Notification Relay Server v${process.env.npm_package_version}`);
 Environment.validate();
 Firebase.initialize();
+Redis.initialize();
 Server.start();
