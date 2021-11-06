@@ -7,13 +7,37 @@ import { Logger } from './logger';
  */
 export const validate = (): void => {
   Logger.debug('Loading environment...');
-  if (!process.env.FIREBASE_DATABASE_URL) _shutdown('FIREBASE_DATABASE_URL');
-  Logger.debug('-> FIREBASE_DATABASE_URL:', process.env.FIREBASE_DATABASE_URL);
-  if (!process.env.FANART_TV_API_KEY) _shutdown('FANART_TV_API_KEY');
-  Logger.debug('-> FANART_TV_API_KEY:', process.env.FANART_TV_API_KEY);
-  if (!process.env.THEMOVIEDB_API_KEY) _shutdown('THEMOVIEDB_API_KEY');
-  Logger.debug('-> THEMOVIEDB_API_KEY:', process.env.THEMOVIEDB_API_KEY);
+
+  /// Mandatory Variables
+  _validateRequiredVariables('FIREBASE_DATABASE_URL');
+  _validateRequiredVariables('FANART_TV_API_KEY', true);
+  _validateRequiredVariables('THEMOVIEDB_API_KEY', true);
+  _validateRequiredVariables('REDIS_HOST');
+  _validateRequiredVariables('REDIS_PORT');
+
+  /// Optional Variables
+  _validateOptionalVariables('REDIS_USE_TLS');
+  _validateOptionalVariables('REDIS_USER');
+  _validateOptionalVariables('REDIS_PASS', true);
+
   Logger.debug('Loaded environment.');
+};
+
+/**
+ * @private
+ */
+const _validateRequiredVariables = (key: string, obfuscated = false) => {
+  if (!process.env[key]) _shutdown(key);
+  Logger.debug(`-> ${key}: ${obfuscated ? '******' : process.env[key]}`);
+};
+
+/**
+ * @private
+ */
+const _validateOptionalVariables = (key: string, obfuscated = false) => {
+  if (process.env[key]) {
+    Logger.debug(`-> ${key}: ${obfuscated ? '******' : process.env[key]}`);
+  }
 };
 
 /**
