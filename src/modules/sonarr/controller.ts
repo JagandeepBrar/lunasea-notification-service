@@ -29,7 +29,7 @@ async function handler(request: express.Request, response: express.Response): Pr
   Logger.info('Running Sonarr webhook...');
   try {
     Logger.debug('-> Sending HTTP response to complete webhook...');
-    response.status(200).json(<ServerModels.Response>{ message: Constants.MSG_OK });
+    response.status(200).json(<ServerModels.Response>{ message: Constants.MESSAGE.OK });
     Logger.debug('-> HTTP response sent (200 OK)');
     await _handleWebhook(request.body, response.locals.tokens, response.locals.profile);
   } catch (error: any) {
@@ -37,7 +37,7 @@ async function handler(request: express.Request, response: express.Response): Pr
     Logger.debug('-> Sending HTTP response to complete webhook...');
     response
       .status(500)
-      .json(<ServerModels.Response>{ message: Constants.MSG_INTERNAL_SERVER_ERROR });
+      .json(<ServerModels.Response>{ message: Constants.MESSAGE.INTERNAL_SERVER_ERROR });
     Logger.debug('HTTP response sent (500 Internal Server Error)');
   }
   Logger.info('Finished Sonarr webhook.');

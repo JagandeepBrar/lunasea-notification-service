@@ -48,6 +48,12 @@ With the given routes above, append `user/{user_id}` to the route to send to all
 
 ## Development & Installation
 
+LunaSea's Notification Relay requires:
+
+- Node.js v10.0.0 or higher (v14.0.0 or higher is recommended)
+- Redis 6
+- A Firebase Project
+
 ### Environment
 
 All environment variables must either be set at an operating system-level, terminal-level, as Docker environment variables, or by creating a `.env` file at the root of the project. A sample `.env` is supplied in the project (`.env.sample`).
@@ -57,6 +63,11 @@ All environment variables must either be set at an operating system-level, termi
 | `FIREBASE_DATABASE_URL` | The Firebase database URL for your project.                           | &mdash; |  &check;  |
 | `FANART_TV_API_KEY`     | A developer [Fanart.tv](https://fanart.tv/) API key.                  | &mdash; |  &check;  |
 | `THEMOVIEDB_API_KEY`    | A developer [The Movie Database](https://www.themoviedb.org) API key. | &mdash; |  &check;  |
+| `REDIS_HOST`            | Redis instance hostname.                                              | &mdash; |  &check;  |
+| `REDIS_PORT`            | Redis instance port.                                                  | &mdash; |  &check;  |
+| `REDIS_USER`            | Redis instance username.                                              |  `""`   |  &cross;  |
+| `REDIS_PASS`            | Redis instance password.                                              |  `""`   |  &cross;  |
+| `REDIS_USE_TLS`         | Use a TLS connection when communicating with Redis?                   | `false` |  &cross;  |
 | `PORT`                  | The port to attach the relay server to.                               | `9000`  |  &cross;  |
 | `LOG_LEVEL`             | The minimum logging level to store in `server.log`.                   | `warn`  |  &cross;  |
 
@@ -70,6 +81,8 @@ docker run -d \
     -e FIREBASE_DATABASE_URL=https://example-project.firebaseio.com \
     -e FANART_TV_API_KEY=1234567890 \
     -e THEMOVIEDB_API_KEY=1234567890 \
+    -e REDIS_HOST=192.168.1.100
+    -e REDIS_PORT=6379
     -p 9000:9000 \
     -v /hostos/path/to/config:/usr/src/config \
     --restart unless-stopped \
@@ -82,14 +95,12 @@ You must place a service account file at the root of the project, named `service
 
 #### 1. Running the Project
 
-1. Install Node.js (v14 is recommend, v10 or higher is required).
 2. Configure the required environmental variables
 3. Run `npm install`
 4. Run `npm start`
 
 #### 2. Building the Project
 
-1. Install Node.js (v14 is recommend, v10 or higher is required).
 2. Configure the required environmental variables
 3. Run `npm install`
 4. Run `npm run build`
