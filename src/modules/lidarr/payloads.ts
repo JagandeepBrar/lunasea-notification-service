@@ -3,7 +3,7 @@ import { FanartTV } from '../../api';
 import { Notifications } from '../../utils';
 
 const title = (profile: string, body: string): string =>
-  Notifications.title('Lidarr', profile, body);
+  Notifications.generateTitle('Lidarr', profile, body);
 const moduleKey = 'lidarr';
 
 /**

@@ -3,7 +3,7 @@ import { TheMovieDB } from '../../api';
 import { Notifications } from '../../utils';
 
 const title = (profile: string, body: string): string =>
-  Notifications.title('Radarr', profile, body);
+  Notifications.generateTitle('Radarr', profile, body);
 const moduleKey = 'radarr';
 
 /**

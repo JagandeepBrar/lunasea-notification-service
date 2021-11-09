@@ -3,7 +3,7 @@ import { TheMovieDB } from '../../api';
 import { Logger, Notifications } from '../../utils';
 
 const title = (profile: string, body: string): string =>
-  Notifications.title('Overseerr', profile, body);
+  Notifications.generateTitle('Overseerr', profile, body);
 
 /**
  * Construct a Notifications.Payload based on a media approved event.

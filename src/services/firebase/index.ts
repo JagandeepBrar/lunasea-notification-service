@@ -7,10 +7,9 @@ import { Logger, Notifications } from '../../utils';
 let firebase: admin.app.App;
 
 /**
- * Initialize the connection to Firebase and link it to the service account.
+ * @private
  */
-export const initialize = (): void => {
-  // Determine service account path
+const _getServiceAccountPath = (): string => {
   let serviceaccount: string;
   switch ((process.env.NODE_ENV ?? '').toLowerCase()) {
     case 'docker':
@@ -22,9 +21,16 @@ export const initialize = (): void => {
       serviceaccount = 'serviceaccount.json';
       break;
   }
+  return serviceaccount;
+};
+
+/**
+ * Initialize the connection to Firebase and link it to the service account.
+ */
+export const initialize = (): void => {
   Logger.debug('Initializing Firebase...');
   firebase = admin.initializeApp({
-    credential: admin.credential.cert(serviceaccount),
+    credential: admin.credential.cert(_getServiceAccountPath()),
     databaseURL: process.env.FIREBASE_DATABASE_URL,
   });
   Logger.debug('Initialized Firebase.');
@@ -89,31 +95,11 @@ export const sendNotification = async (
 ): Promise<boolean> => {
   Logger.debug('Sending notification(s)...');
   try {
-    const message: MulticastMessage = <MulticastMessage>{
-      tokens: tokens,
-      notification: {
-        title: payload.title,
-        body: payload.body,
-        imageUrl: payload.image,
-      },
-      data: payload.data,
-      android: {
-        notification: {
-          sound: settings.sound ? 'default' : undefined,
-        },
-        priority: 'high',
-        ttl: 2419200,
-      },
-      apns: {
-        payload: {
-          aps: {
-            mutableContent: payload.image !== undefined,
-            sound: settings.sound ? 'default' : undefined,
-            contentAvailable: true,
-          },
-        },
-      },
-    };
+    const message: MulticastMessage = Notifications.buildMulticastMessage(
+      tokens,
+      payload,
+      settings,
+    );
     // Send the message
     return await getMessaging(firebase)
       .sendMulticast(message)

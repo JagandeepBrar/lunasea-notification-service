@@ -3,7 +3,7 @@ import { TheMovieDB } from '../../api';
 import { Notifications } from '../../utils';
 
 const title = (profile: string, body: string): string =>
-  Notifications.title('Sonarr', profile, body);
+  Notifications.generateTitle('Sonarr', profile, body);
 const moduleKey = 'sonarr';
 
 /**

@@ -2,7 +2,7 @@ import { Models } from './';
 import { Notifications } from '../../utils';
 
 const createTitle = (profile: string, body: string): string =>
-  Notifications.title('Tautulli', profile, body);
+  Notifications.generateTitle('Tautulli', profile, body);
 const moduleKey = 'tautulli';
 
 /**
