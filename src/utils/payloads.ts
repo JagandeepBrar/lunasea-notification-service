@@ -11,6 +11,13 @@ export interface Notification {
 }
 
 /**
+ * Generic Notification Settings
+ */
+export interface NotificationSettings {
+  sound: boolean;
+}
+
+/**
  * Construct the title of any notification.
  *
  * If `profile` is undefined or "default", it does not append the profile to the title.

@@ -13,11 +13,10 @@ router.post(
   '/user/:id',
   Middleware.validateUser,
   Middleware.checkNotificationPassword,
-  Middleware.extractProfile,
   Middleware.pullUserTokens,
   handler,
 );
-router.post('/device/:id', Middleware.extractProfile, Middleware.extractDeviceToken, handler);
+router.post('/device/:id', Middleware.extractDeviceToken, handler);
 
 /**
  * Lidarr Webhook Handler: Handles a webhook from Lidarr, and sends a notification to all devices that are in `response.locals.tokens`.
@@ -31,7 +30,12 @@ async function handler(request: express.Request, response: express.Response): Pr
     Logger.debug('-> Sending HTTP response to complete webhook...');
     response.status(200).json(<ServerModels.Response>{ message: Constants.MESSAGE.OK });
     Logger.debug('-> HTTP response sent (200 OK)');
-    await _handleWebhook(request.body, response.locals.tokens, response.locals.profile);
+    await _handleWebhook(
+      request.body,
+      response.locals.tokens,
+      response.locals.profile,
+      response.locals.notificationSettings,
+    );
   } catch (error: any) {
     Logger.error(error.message);
     Logger.debug('-> Sending HTTP response to complete webhook...');
@@ -50,8 +54,14 @@ async function handler(request: express.Request, response: express.Response): Pr
  * @param data Webhook notification payload
  * @param devices List of devices to send the notification to
  * @param profile The profile name to attach to the title
+ * @param settings Notification settings
  */
-const _handleWebhook = async (data: any, devices: string[], profile: string): Promise<void> => {
+const _handleWebhook = async (
+  data: any,
+  devices: string[],
+  profile: string,
+  settings: GenericPayloads.NotificationSettings,
+): Promise<void> => {
   Logger.debug('-> Preparing payload...');
   let payload: GenericPayloads.Notification;
   switch (data.eventType) {
@@ -79,5 +89,5 @@ const _handleWebhook = async (data: any, devices: string[], profile: string): Pr
       Logger.warn('-> An unknown eventType was received:', JSON.stringify(data));
       return;
   }
-  await Firebase.sendNotification(devices, payload);
+  await Firebase.sendNotification(devices, payload, settings);
 };
