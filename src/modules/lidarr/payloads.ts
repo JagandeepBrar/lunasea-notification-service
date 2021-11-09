@@ -1,17 +1,18 @@
 import { Models } from './';
 import { FanartTV } from '../../api';
-import { Payloads } from '../../utils';
+import { Notifications } from '../../utils';
 
-const title = (profile: string, body: string): string => Payloads.title('Lidarr', profile, body);
+const title = (profile: string, body: string): string =>
+  Notifications.title('Lidarr', profile, body);
 const moduleKey = 'lidarr';
 
 /**
- * Construct a Payloads.Notification based on a grab event.
+ * Construct a Notifications.Payload based on a grab event.
  */
 export const grab = async (
   data: Models.GrabEventType,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 =
     data.albums?.length == 1
       ? data.albums[0].title ?? 'Unknown Album'
@@ -19,7 +20,7 @@ export const grab = async (
   const body2 = `Grabbed (${data.release?.quality ?? 'Unknown Quality'})`;
   const body3 = data?.release?.releaseTitle ?? 'Unknown Release';
   const image = data.artist?.mbId ? await FanartTV.getArtistThumbnail(data.artist.mbId) : undefined;
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(profile, data.artist?.name ?? 'Unknown Artist'),
     body: [body1, body2, body3].join('\n'),
     image: image,
@@ -35,12 +36,12 @@ export const grab = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a download event.
+ * Construct a Notifications.Payload based on a download event.
  */
 export const download = async (
   data: Models.DownloadEventType,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 =
     data.tracks?.length == 1
       ? data.tracks[0].title ?? 'Unknown Track'
@@ -51,7 +52,7 @@ export const download = async (
       : 'Unknown Quality';
   const body2 = data.isUpgrade ? `Upgraded (${quality})` : `Downloaded (${quality})`;
   const image = data.artist?.mbId ? await FanartTV.getArtistThumbnail(data.artist.mbId) : undefined;
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(profile, data.artist?.name ?? 'Unknown Artist'),
     body: [body1, body2].join('\n'),
     image: image,
@@ -65,14 +66,14 @@ export const download = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a rename event.
+ * Construct a Notifications.Payload based on a rename event.
  */
 export const rename = async (
   data: Models.RenameEventType,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const image = data.artist?.mbId ? await FanartTV.getArtistThumbnail(data.artist.mbId) : undefined;
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(profile, data.artist?.name ?? 'Unknown Artist'),
     body: 'Files Renamed',
     image: image,
@@ -86,14 +87,14 @@ export const rename = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a retag event.
+ * Construct a Notifications.Payload based on a retag event.
  */
 export const retag = async (
   data: Models.RetagEventType,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const image = data.artist?.mbId ? await FanartTV.getArtistThumbnail(data.artist.mbId) : undefined;
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(profile, data.artist?.name ?? 'Unknown Artist'),
     body: 'Tracks Retagged',
     image: image,
@@ -107,13 +108,13 @@ export const retag = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a test event.
+ * Construct a Notifications.Payload based on a test event.
  */
 export const test = async (
   data: Models.TestEventType,
   profile: string,
-): Promise<Payloads.Notification> => {
-  return <Payloads.Notification>{
+): Promise<Notifications.Payload> => {
+  return <Notifications.Payload>{
     title: title(profile, 'Connection Test'),
     body: 'LunaSea is ready for Lidarr notifications!',
     data: {

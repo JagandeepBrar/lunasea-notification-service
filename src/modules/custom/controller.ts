@@ -1,7 +1,7 @@
 import express from 'express';
 import { Middleware, Models as ServerModels } from '../../server';
 import { Firebase } from '../../services';
-import { Constants, Logger, Payloads } from '../../utils';
+import { Constants, Logger, Notifications } from '../../utils';
 
 export const enable = (api: express.Router) => api.use(route, router);
 
@@ -56,10 +56,10 @@ async function handler(request: express.Request, response: express.Response): Pr
 const _handleWebhook = async (
   data: any,
   devices: string[],
-  settings: Payloads.NotificationSettings,
+  settings: Notifications.Settings,
 ): Promise<void> => {
   Logger.debug('-> Preparing payload...');
-  const payload = <Payloads.Notification>{
+  const payload = <Notifications.Payload>{
     title: data?.title ?? 'Unknown Title',
     body: data?.body ?? 'Unknown Content',
     image: data?.image,

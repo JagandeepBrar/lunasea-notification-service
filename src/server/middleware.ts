@@ -2,7 +2,7 @@ import express from 'express';
 import basicauth from 'basic-auth';
 import { Models } from './';
 import { Firebase } from '../services';
-import { Constants, Logger, Payloads } from '../utils';
+import { Constants, Logger, Notifications } from '../utils';
 
 /**
  * Extract query parameters that will modify the notification settings
@@ -17,7 +17,7 @@ export async function extractNotificationOptions(
   next: express.NextFunction,
 ): Promise<void> {
   Logger.debug('Running extractNotificationOptions middleware...');
-  response.locals.notificationSettings = <Payloads.NotificationSettings>{
+  response.locals.notificationSettings = <Notifications.Settings>{
     sound: request.query.sound === 'false' ? false : true,
   };
   Logger.debug(`-> Sound: ${response.locals.notificationSettings.sound}`);

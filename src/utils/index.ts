@@ -1,6 +1,6 @@
 import * as Constants from './constants';
 import * as Environment from './environment';
-import * as Payloads from './payloads';
+import * as Notifications from './notifications';
 import { Logger } from './logger';
 
-export { Constants, Environment, Payloads, Logger };
+export { Constants, Environment, Notifications, Logger };

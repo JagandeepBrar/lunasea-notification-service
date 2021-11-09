@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getMessaging, MulticastMessage } from 'firebase-admin/messaging';
-import { Logger, Payloads } from '../../utils';
+import { Logger, Notifications } from '../../utils';
 
 let firebase: admin.app.App;
 
@@ -84,8 +84,8 @@ export const getDeviceTokenList = async (uid: string): Promise<string[]> => {
  */
 export const sendNotification = async (
   tokens: string[],
-  payload: Payloads.Notification,
-  settings: Payloads.NotificationSettings,
+  payload: Notifications.Payload,
+  settings: Notifications.Settings,
 ): Promise<boolean> => {
   Logger.debug('Sending notification(s)...');
   try {

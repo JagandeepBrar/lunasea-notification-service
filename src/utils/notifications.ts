@@ -1,7 +1,7 @@
 /**
  * Generic Notification payload
  */
-export interface Notification {
+export interface Payload {
   title: string;
   body: string;
   image?: string;
@@ -13,7 +13,7 @@ export interface Notification {
 /**
  * Generic Notification Settings
  */
-export interface NotificationSettings {
+export interface Settings {
   sound: boolean;
 }
 

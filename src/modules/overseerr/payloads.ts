@@ -1,16 +1,17 @@
 import { Models } from './';
 import { TheMovieDB } from '../../api';
-import { Logger, Payloads } from '../../utils';
+import { Logger, Notifications } from '../../utils';
 
-const title = (profile: string, body: string): string => Payloads.title('Overseerr', profile, body);
+const title = (profile: string, body: string): string =>
+  Notifications.title('Overseerr', profile, body);
 
 /**
- * Construct a Payloads.Notification based on a media approved event.
+ * Construct a Notifications.Payload based on a media approved event.
  */
 export const mediaApproved = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 = data.subject;
   let body2 = '';
   if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
@@ -20,7 +21,7 @@ export const mediaApproved = async (
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(
       profile,
       `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Approved`,
@@ -31,12 +32,12 @@ export const mediaApproved = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a media auto approved event.
+ * Construct a Notifications.Payload based on a media auto approved event.
  */
 export const mediaAutoApproved = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 = data.subject;
   let body2 = '';
   if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
@@ -46,7 +47,7 @@ export const mediaAutoApproved = async (
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(
       profile,
       `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Auto Approved`,
@@ -57,12 +58,12 @@ export const mediaAutoApproved = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a media available event.
+ * Construct a Notifications.Payload based on a media available event.
  */
 export const mediaAvailable = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 = data.subject;
   let body2 = '';
   if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
@@ -72,7 +73,7 @@ export const mediaAvailable = async (
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(
       profile,
       `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Available`,
@@ -83,12 +84,12 @@ export const mediaAvailable = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a media declined event.
+ * Construct a Notifications.Payload based on a media declined event.
  */
 export const mediaDeclined = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 = data.subject;
   let body2 = '';
   if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
@@ -98,7 +99,7 @@ export const mediaDeclined = async (
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(
       profile,
       `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Declined`,
@@ -109,12 +110,12 @@ export const mediaDeclined = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a media failed event.
+ * Construct a Notifications.Payload based on a media failed event.
  */
 export const mediaFailed = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 = data.subject;
   let body2 = '';
   if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
@@ -124,7 +125,7 @@ export const mediaFailed = async (
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(
       profile,
       `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Failed`,
@@ -135,12 +136,12 @@ export const mediaFailed = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a media pending event.
+ * Construct a Notifications.Payload based on a media pending event.
  */
 export const mediaPending = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
+): Promise<Notifications.Payload> => {
   const body1 = data.subject;
   let body2 = '';
   if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
@@ -150,7 +151,7 @@ export const mediaPending = async (
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
-  return <Payloads.Notification>{
+  return <Notifications.Payload>{
     title: title(
       profile,
       `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Requested`,
@@ -161,13 +162,13 @@ export const mediaPending = async (
 };
 
 /**
- * Construct a Payloads.Notification based on a test event.
+ * Construct a Notifications.Payload based on a test event.
  */
 export const test = async (
   data: Models.RequestProperties,
   profile: string,
-): Promise<Payloads.Notification> => {
-  return <Payloads.Notification>{
+): Promise<Notifications.Payload> => {
+  return <Notifications.Payload>{
     title: title(profile, 'Connection Test'),
     body: 'LunaSea is ready for Overseerr notifications!',
   };

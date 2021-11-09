@@ -2,7 +2,7 @@ import express from 'express';
 import { Models, Payloads } from './';
 import { Middleware, Models as ServerModels } from '../../server';
 import { Firebase } from '../../services';
-import { Constants, Logger, Payloads as GenericPayloads } from '../../utils';
+import { Constants, Logger, Notifications } from '../../utils';
 
 export const enable = (api: express.Router) => api.use(route, router);
 
@@ -60,10 +60,10 @@ const _handleWebhook = async (
   data: Models.RequestProperties,
   devices: string[],
   profile: string,
-  settings: GenericPayloads.NotificationSettings,
+  settings: Notifications.Settings,
 ): Promise<void> => {
   Logger.debug('-> Preparing payload...');
-  let payload: GenericPayloads.Notification;
+  let payload: Notifications.Payload;
   switch (data.notification_type) {
     case Models.NotificationType.MEDIA_APPROVED:
       Logger.info('-> Handling as "MEDIA_APPROVED" event type...');
