@@ -1,10 +1,12 @@
 import { Redis } from '../../services';
 import { Constants } from '../../utils';
 
-const _keyBuilderSeries = (seriesId: number) =>
-  `${Constants.REDIS.KEY_PREFIX}:THE_MOVIE_DB:SERIES:${seriesId}`;
-const _keyBuilderMovie = (movieId: number) =>
-  `${Constants.REDIS.KEY_PREFIX}:THE_MOVIE_DB:MOVIE:${movieId}`;
+const _keyBuilderSeries = (seriesId: number): string => {
+  return `${Constants.REDIS.PREFIXES.IMAGE_CACHE}:THE_MOVIE_DB:SERIES:${seriesId}`;
+};
+const _keyBuilderMovie = (movieId: number): string => {
+  return `${Constants.REDIS.PREFIXES.IMAGE_CACHE}:THE_MOVIE_DB:MOVIES:${movieId}`;
+};
 
 export const getMoviePoster = async (movieId: number): Promise<string | undefined> => {
   const key = _keyBuilderMovie(movieId);

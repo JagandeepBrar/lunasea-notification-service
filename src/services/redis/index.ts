@@ -56,7 +56,6 @@ export const set = async (key: string, value: string): Promise<boolean> => {
   } catch (error) {
     Logger.error(error);
   }
-  Logger.debug(`Redis: Set "${key}" - ${res}`);
   return res;
 };
 
@@ -74,6 +73,6 @@ export const get = async (key: string): Promise<string | null> => {
   } catch (error) {
     Logger.error(error);
   }
-  Logger.debug(`Redis: Get "${key}" - ${res}`);
+  if (!res) Logger.debug(`Redis: Cache Miss`);
   return res;
 };

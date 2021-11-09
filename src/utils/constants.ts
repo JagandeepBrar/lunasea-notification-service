@@ -9,9 +9,11 @@ export const MESSAGE = {
 export const REDIS = {
   EXPIRE: {
     MODE: 'EX', // Seconds
-    TTL: 60 * 60 * 12, // 12 Hours
+    TTL: 60 * 60 * 24, // 24 Hours
   },
-  KEY_PREFIX: 'LUNA',
+  PREFIXES: {
+    IMAGE_CACHE: 'IMAGE_CACHE',
+  },
 };
 
 export const THE_MOVIE_DB = {

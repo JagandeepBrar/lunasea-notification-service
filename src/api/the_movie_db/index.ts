@@ -1,6 +1,10 @@
-import { Logger } from '../../utils';
+import { Constants, Logger } from '../../utils';
 import * as API from './api';
 import * as Cache from './cache';
+
+const _constructImageURL = (path: string): string => {
+  return `${Constants.THE_MOVIE_DB.IMAGE.BASE_URL}${Constants.THE_MOVIE_DB.IMAGE.SIZE}${path}`;
+};
 
 /**
  * Given a movie's ID, fetch the content's poster path.
@@ -13,13 +17,13 @@ export const getMoviePoster = async (movieId: number): Promise<string | undefine
     const cacheResult = await Cache.getMoviePoster(movieId);
     if (cacheResult) {
       Logger.debug(`Fetched movie poster. (Cache, ${movieId})`);
-      return cacheResult;
+      return _constructImageURL(cacheResult);
     }
     const apiResult = await API.getMoviePoster(movieId);
     if (apiResult) {
       Logger.debug(`Fetched movie poster. (API, ${movieId})`);
       Cache.setMoviePoster(movieId, apiResult);
-      return apiResult;
+      return _constructImageURL(apiResult);
     }
   } catch (error) {
     Logger.error(error);
@@ -38,13 +42,13 @@ export const getSeriesPoster = async (seriesId: number): Promise<string | undefi
     const cacheResult = await Cache.getSeriesPoster(seriesId);
     if (cacheResult) {
       Logger.debug(`Fetched series poster. (Cache, ${seriesId})`);
-      return cacheResult;
+      return _constructImageURL(cacheResult);
     }
     const apiResult = await API.getSeriesPoster(seriesId);
     if (apiResult) {
       Logger.debug(`Fetched series poster. (API, ${seriesId})`);
       Cache.setSeriesPoster(seriesId, apiResult);
-      return apiResult;
+      return _constructImageURL(apiResult);
     }
   } catch (error) {
     Logger.error(error);
