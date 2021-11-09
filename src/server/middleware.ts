@@ -2,7 +2,28 @@ import express from 'express';
 import basicauth from 'basic-auth';
 import { Models } from './';
 import { Firebase } from '../services';
-import { Constants, Logger } from '../utils';
+import { Constants, Logger, Payloads } from '../utils';
+
+/**
+ * Extract query parameters that will modify the notification settings
+ *
+ * @param request Express request object
+ * @param response Express response object
+ * @param next Next middleware/handler to execute
+ */
+export async function extractNotificationOptions(
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction,
+): Promise<void> {
+  Logger.debug('Running extractNotificationOptions middleware...');
+  response.locals.notificationSettings = <Payloads.NotificationSettings>{
+    sound: request.query.sound === 'false' ? false : true,
+  };
+  Logger.debug(`-> Sound: ${response.locals.notificationSettings.sound}`);
+  Logger.debug('Finished extractNotificationOptions middleware.');
+  next();
+}
 
 /**
  * Extracts the profile from the basic authentication header.
@@ -67,6 +88,7 @@ export async function pullUserTokens(
   response: express.Response,
   next: express.NextFunction,
 ): Promise<void> {
+  Logger.debug(`Running pullUserTokens middleware...`);
   const devices: string[] = await Firebase.getDeviceTokenList(request.params.id);
   const deviceCount: number = devices?.length ?? 0;
   if (deviceCount > 0) {

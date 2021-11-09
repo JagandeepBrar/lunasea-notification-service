@@ -79,11 +79,13 @@ export const getDeviceTokenList = async (uid: string): Promise<string[]> => {
  *
  * @param tokens Firebase device token list
  * @param payload Preconstructed NotificationPayload
+ * @param settings Notification settings
  * @param data Data message payload
  */
 export const sendNotification = async (
   tokens: string[],
   payload: Payloads.Notification,
+  settings: Payloads.NotificationSettings,
 ): Promise<boolean> => {
   Logger.debug('Sending notification(s)...');
   try {
@@ -97,7 +99,7 @@ export const sendNotification = async (
       data: payload.data,
       android: {
         notification: {
-          sound: 'default',
+          sound: settings.sound ? 'default' : undefined,
         },
         priority: 'high',
         ttl: 2419200,
@@ -106,7 +108,7 @@ export const sendNotification = async (
         payload: {
           aps: {
             mutableContent: payload.image !== undefined,
-            sound: 'default',
+            sound: settings.sound ? 'default' : undefined,
             contentAvailable: true,
           },
         },

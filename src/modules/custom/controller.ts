@@ -29,7 +29,11 @@ async function handler(request: express.Request, response: express.Response): Pr
     Logger.debug('-> Sending HTTP response to complete webhook...');
     response.status(200).json(<ServerModels.Response>{ message: Constants.MESSAGE.OK });
     Logger.debug('-> HTTP response sent (200 OK)');
-    await _handleWebhook(request.body, response.locals.tokens);
+    await _handleWebhook(
+      request.body,
+      response.locals.tokens,
+      response.locals.notificationSettings,
+    );
   } catch (error: any) {
     Logger.error(error.message);
     Logger.debug('-> Sending HTTP response to complete webhook...');
@@ -47,13 +51,18 @@ async function handler(request: express.Request, response: express.Response): Pr
  * @private
  * @param data Webhook notification payload
  * @param devices List of devices to send the notification to
+ * @param settings Notification settings
  */
-const _handleWebhook = async (data: any, devices: string[]): Promise<void> => {
+const _handleWebhook = async (
+  data: any,
+  devices: string[],
+  settings: Payloads.NotificationSettings,
+): Promise<void> => {
   Logger.debug('-> Preparing payload...');
   const payload = <Payloads.Notification>{
     title: data?.title ?? 'Unknown Title',
     body: data?.body ?? 'Unknown Content',
     image: data?.image,
   };
-  await Firebase.sendNotification(devices, payload);
+  await Firebase.sendNotification(devices, payload, settings);
 };
