@@ -17,6 +17,17 @@ export interface Payload {
  */
 export interface Settings {
   sound: boolean;
+  ios: {
+    interruptionLevel: iOSInterruptionLevel;
+  };
+}
+/**
+ * iOS 15 Interruption Levels
+ */
+export enum iOSInterruptionLevel {
+  PASSIVE = 'passive',
+  ACTIVE = 'active',
+  TIME_SENSITIVE = 'time-sensitive',
 }
 
 /**
@@ -53,6 +64,7 @@ export const buildMulticastMessage = (
           mutableContent: payload.image !== undefined,
           sound: settings.sound ? 'default' : undefined,
           contentAvailable: true,
+          'interruption-level': settings.ios.interruptionLevel,
         },
       },
     },

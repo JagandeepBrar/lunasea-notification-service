@@ -16,11 +16,24 @@ export async function extractNotificationOptions(
   response: express.Response,
   next: express.NextFunction,
 ): Promise<void> {
+  function getSound(sound: any): boolean {
+    return sound !== 'false';
+  }
+
+  function getInterruptionLevel(level: any): Notifications.iOSInterruptionLevel {
+    const idx = Object.values(Notifications.iOSInterruptionLevel).indexOf(level) !== -1;
+    if (idx) return level as Notifications.iOSInterruptionLevel;
+    return Notifications.iOSInterruptionLevel.ACTIVE;
+  }
+
   Logger.debug('Running extractNotificationOptions middleware...');
   response.locals.notificationSettings = <Notifications.Settings>{
-    sound: request.query.sound === 'false' ? false : true,
+    sound: getSound(request.query.sound),
+    ios: {
+      interruptionLevel: getInterruptionLevel(request.query.interruption_level),
+    },
   };
-  Logger.debug(`-> Sound: ${response.locals.notificationSettings.sound}`);
+  Logger.debug(`-> Settings: ${JSON.stringify(response.locals.notificationSettings)}`);
   Logger.debug('Finished extractNotificationOptions middleware.');
   next();
 }
