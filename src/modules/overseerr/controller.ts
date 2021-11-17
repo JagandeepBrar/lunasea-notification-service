@@ -63,39 +63,41 @@ const _handleWebhook = async (
   settings: Notifications.Settings,
 ): Promise<void> => {
   Logger.debug('-> Preparing payload...');
-  let payload: Notifications.Payload;
-  switch (data.notification_type) {
-    case Models.NotificationType.MEDIA_APPROVED:
-      Logger.info('-> Handling as "MEDIA_APPROVED" event type...');
-      payload = await Payloads.mediaApproved(data, profile);
-      break;
-    case Models.NotificationType.MEDIA_AUTO_APPROVED:
-      Logger.info('-> Handling as "MEDIA_AUTO_APPROVED" event type...');
-      payload = await Payloads.mediaAutoApproved(data, profile);
-      break;
-    case Models.NotificationType.MEDIA_AVAILABLE:
-      Logger.info('-> Handling as "MEDIA_AVAILABLE" event type...');
-      payload = await Payloads.mediaAvailable(data, profile);
-      break;
-    case Models.NotificationType.MEDIA_DECLINED:
-      Logger.info('-> Handling as "MEDIA_DECLINED" event type...');
-      payload = await Payloads.mediaDeclined(data, profile);
-      break;
-    case Models.NotificationType.MEDIA_FAILED:
-      Logger.info('-> Handling as "MEDIA_FAILED" event type...');
-      payload = await Payloads.mediaFailed(data, profile);
-      break;
-    case Models.NotificationType.MEDIA_PENDING:
-      Logger.info('-> Handling as "MEDIA_PENDING" event type...');
-      payload = await Payloads.mediaPending(data, profile);
-      break;
-    case Models.NotificationType.TEST_NOTIFICATION:
-      Logger.info('-> Handling as "TEST_NOTIFICATION" event type...');
-      payload = await Payloads.test(data, profile);
-      break;
-    default:
-      Logger.warn('-> An unknown notification_type was received:', JSON.stringify(data));
-      return;
+  let payload: Notifications.Payload | undefined;
+  if (data.notification_type) {
+    switch (data.notification_type) {
+      case Models.NotificationType.MEDIA_APPROVED:
+        Logger.info('-> Handling as "MEDIA_APPROVED" event type...');
+        payload = await Payloads.mediaApproved(data, profile);
+        break;
+      case Models.NotificationType.MEDIA_AUTO_APPROVED:
+        Logger.info('-> Handling as "MEDIA_AUTO_APPROVED" event type...');
+        payload = await Payloads.mediaAutoApproved(data, profile);
+        break;
+      case Models.NotificationType.MEDIA_AVAILABLE:
+        Logger.info('-> Handling as "MEDIA_AVAILABLE" event type...');
+        payload = await Payloads.mediaAvailable(data, profile);
+        break;
+      case Models.NotificationType.MEDIA_DECLINED:
+        Logger.info('-> Handling as "MEDIA_DECLINED" event type...');
+        payload = await Payloads.mediaDeclined(data, profile);
+        break;
+      case Models.NotificationType.MEDIA_FAILED:
+        Logger.info('-> Handling as "MEDIA_FAILED" event type...');
+        payload = await Payloads.mediaFailed(data, profile);
+        break;
+      case Models.NotificationType.MEDIA_PENDING:
+        Logger.info('-> Handling as "MEDIA_PENDING" event type...');
+        payload = await Payloads.mediaPending(data, profile);
+        break;
+      case Models.NotificationType.TEST_NOTIFICATION:
+        Logger.info('-> Handling as "TEST_NOTIFICATION" event type...');
+        payload = await Payloads.test(data, profile);
+        break;
+      default:
+        Logger.warn('-> An unknown notification_type was received:', JSON.stringify(data));
+        break;
+    }
   }
-  await Firebase.sendNotification(devices, payload, settings);
+  if (payload) await Firebase.sendNotification(devices, payload, settings);
 };

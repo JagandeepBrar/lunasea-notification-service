@@ -186,7 +186,7 @@ const getSeriesImageURL = async (data: Models.RequestProperties): Promise<string
       if (!isNaN(id)) return await TheMovieDB.getSeriesPoster(id);
     }
   } catch (error: any) {
-    Logger.error(error);
+    Logger.error(error.message);
   }
   return undefined;
 };
@@ -203,7 +203,7 @@ const getMovieImageURL = async (data: Models.RequestProperties): Promise<string 
       if (!isNaN(id)) return await TheMovieDB.getMoviePoster(id);
     }
   } catch (error: any) {
-    Logger.error(error);
+    Logger.error(error.message);
   }
   return undefined;
 };

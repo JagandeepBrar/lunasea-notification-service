@@ -53,8 +53,8 @@ export const set = async (key: string, value: string): Promise<boolean> => {
       );
       res = _isSetSuccess(set);
     }
-  } catch (error) {
-    Logger.error(error);
+  } catch (error: any) {
+    Logger.error(error.message);
   }
   return res;
 };
@@ -70,8 +70,8 @@ export const get = async (key: string): Promise<string | null> => {
   let res: string | null = null;
   try {
     if (redis) res = await redis.get(key);
-  } catch (error) {
-    Logger.error(error);
+  } catch (error: any) {
+    Logger.error(error.message);
   }
   if (!res) Logger.debug(`Redis: Cache Miss`);
   return res;

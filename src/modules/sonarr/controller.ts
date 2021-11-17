@@ -63,39 +63,41 @@ const _handleWebhook = async (
   settings: Notifications.Settings,
 ): Promise<void> => {
   Logger.debug('-> Preparing payload...');
-  let payload: Notifications.Payload;
-  switch (data.eventType) {
-    case Models.EventType.Download:
-      Logger.info('-> Handling as "Download" event type...');
-      payload = await Payloads.download(data, profile);
-      break;
-    case Models.EventType.EpisodeFileDelete:
-      Logger.info('-> Handling as "EpisodeFileDelete" event type...');
-      payload = await Payloads.deleteEpisodeFile(data, profile);
-      break;
-    case Models.EventType.Grab:
-      Logger.info('-> Handling as "Grab" event type...');
-      payload = await Payloads.grab(data, profile);
-      break;
-    case Models.EventType.Health:
-      Logger.info('-> Handling as "Health" event type...');
-      payload = await Payloads.health(data, profile);
-      break;
-    case Models.EventType.Rename:
-      Logger.info('-> Handling as "Rename" event type...');
-      payload = await Payloads.rename(data, profile);
-      break;
-    case Models.EventType.SeriesDelete:
-      Logger.info('-> Handling as "SeriesDelete" event type...');
-      payload = await Payloads.deleteSeries(data, profile);
-      break;
-    case Models.EventType.Test:
-      Logger.info('-> Handling as "Test" event type...');
-      payload = await Payloads.test(data, profile);
-      break;
-    default:
-      Logger.warn('-> An unknown eventType was received:', JSON.stringify(data));
-      return;
+  let payload: Notifications.Payload | undefined;
+  if (data.eventType) {
+    switch (data.eventType) {
+      case Models.EventType.Download:
+        Logger.info('-> Handling as "Download" event type...');
+        payload = await Payloads.download(data, profile);
+        break;
+      case Models.EventType.EpisodeFileDelete:
+        Logger.info('-> Handling as "EpisodeFileDelete" event type...');
+        payload = await Payloads.deleteEpisodeFile(data, profile);
+        break;
+      case Models.EventType.Grab:
+        Logger.info('-> Handling as "Grab" event type...');
+        payload = await Payloads.grab(data, profile);
+        break;
+      case Models.EventType.Health:
+        Logger.info('-> Handling as "Health" event type...');
+        payload = await Payloads.health(data, profile);
+        break;
+      case Models.EventType.Rename:
+        Logger.info('-> Handling as "Rename" event type...');
+        payload = await Payloads.rename(data, profile);
+        break;
+      case Models.EventType.SeriesDelete:
+        Logger.info('-> Handling as "SeriesDelete" event type...');
+        payload = await Payloads.deleteSeries(data, profile);
+        break;
+      case Models.EventType.Test:
+        Logger.info('-> Handling as "Test" event type...');
+        payload = await Payloads.test(data, profile);
+        break;
+      default:
+        Logger.warn('-> An unknown eventType was received:', JSON.stringify(data));
+        break;
+    }
   }
-  await Firebase.sendNotification(devices, payload, settings);
+  if (payload) await Firebase.sendNotification(devices, payload, settings);
 };

@@ -45,8 +45,8 @@ export const initialize = (): void => {
  */
 export const start = (): void => {
   initialize();
-  server.listen(PORT).on('error', (error) => {
-    Logger.error(error);
+  server.listen(PORT).on('error', (error: Error) => {
+    Logger.error(error.message);
     process.exit(1);
   });
   Logger.info('Server Running / Port', PORT);
