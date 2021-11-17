@@ -64,92 +64,98 @@ const _handleWebhook = async (
 ): Promise<void> => {
   Logger.debug('-> Preparing payload...');
   let payload: Notifications.Payload | undefined;
-  switch (data.action) {
-    case Models.ActionType.BufferWarning:
-      Logger.info(`-> Handling as ${Models.ActionType.BufferWarning} action type...`);
-      payload = await Payloads.bufferWarning(data, profile);
-      break;
-    case Models.ActionType.PlaybackError:
-      Logger.info(`-> Handling as ${Models.ActionType.PlaybackError} action type...`);
-      payload = await Payloads.playbackError(data, profile);
-      break;
-    case Models.ActionType.PlaybackPause:
-      Logger.info(`-> Handling as ${Models.ActionType.PlaybackPause} action type...`);
-      payload = await Payloads.playbackPause(data, profile);
-      break;
-    case Models.ActionType.PlaybackResume:
-      Logger.info(`-> Handling as ${Models.ActionType.PlaybackResume} action type...`);
-      payload = await Payloads.playbackResume(data, profile);
-      break;
-    case Models.ActionType.PlaybackStart:
-      Logger.info(`-> Handling as ${Models.ActionType.PlaybackStart} action type...`);
-      payload = await Payloads.playbackStart(data, profile);
-      break;
-    case Models.ActionType.PlaybackStop:
-      Logger.info(`-> Handling as ${Models.ActionType.PlaybackStop} action type...`);
-      payload = await Payloads.playbackStop(data, profile);
-      break;
-    case Models.ActionType.PlexRemoteAccessBackUp:
-      Logger.info(`-> Handling as ${Models.ActionType.PlexRemoteAccessBackUp} action type...`);
-      payload = await Payloads.plexRemoteAccessBackUp(data, profile);
-      break;
-    case Models.ActionType.PlexRemoteAccessDown:
-      Logger.info(`-> Handling as ${Models.ActionType.PlexRemoteAccessDown} action type...`);
-      payload = await Payloads.plexRemoteAccessDown(data, profile);
-      break;
-    case Models.ActionType.PlexServerBackUp:
-      Logger.info(`-> Handling as ${Models.ActionType.PlexServerBackUp} action type...`);
-      payload = await Payloads.plexServerBackUp(data, profile);
-      break;
-    case Models.ActionType.PlexServerDown:
-      Logger.info(`-> Handling as ${Models.ActionType.PlexServerDown} action type...`);
-      payload = await Payloads.plexServerDown(data, profile);
-      break;
-    case Models.ActionType.PlexUpdateAvailable:
-      Logger.info(`-> Handling as ${Models.ActionType.PlexUpdateAvailable} action type...`);
-      payload = await Payloads.plexUpdateAvailable(data, profile);
-      break;
-    case Models.ActionType.RecentlyAdded:
-      Logger.info(`-> Handling as ${Models.ActionType.RecentlyAdded} action type...`);
-      payload = await Payloads.recentlyAdded(data, profile);
-      break;
-    case Models.ActionType.TautulliDatabaseCorruption:
-      Logger.info(`-> Handling as ${Models.ActionType.TautulliDatabaseCorruption} action type...`);
-      payload = await Payloads.tautulliDatabaseCorruption(data, profile);
-      break;
-    case Models.ActionType.TautulliUpdateAvailable:
-      Logger.info(`-> Handling as ${Models.ActionType.TautulliUpdateAvailable} action type...`);
-      payload = await Payloads.tautulliUpdateAvailable(data, profile);
-      break;
-    case Models.ActionType.TranscodeDecisionChange:
-      Logger.info(`-> Handling as ${Models.ActionType.TranscodeDecisionChange} action type...`);
-      payload = await Payloads.transcodeDecisionChange(data, profile);
-      break;
-    case Models.ActionType.UserConcurrentStreams:
-      Logger.info(`-> Handling as ${Models.ActionType.UserConcurrentStreams} action type...`);
-      payload = await Payloads.userConcurrentStreams(data, profile);
-      break;
-    case Models.ActionType.UserNewDevice:
-      Logger.info(`-> Handling as ${Models.ActionType.UserNewDevice} action type...`);
-      payload = await Payloads.userNewDevice(data, profile);
-      break;
-    case Models.ActionType.Watched:
-      Logger.info(`-> Handling as ${Models.ActionType.Watched} action type...`);
-      payload = await Payloads.watched(data, profile);
-      break;
-    case Models.ActionType.Test:
-      Logger.info(`-> Handling as ${Models.ActionType.BufferWarning} action type...`);
-      payload = await Payloads.test(data, profile);
-      break;
+  if (data.action) {
+    switch (data.action) {
+      case Models.ActionType.BufferWarning:
+        Logger.info(`-> Handling as ${Models.ActionType.BufferWarning} action type...`);
+        payload = await Payloads.bufferWarning(data, profile);
+        break;
+      case Models.ActionType.PlaybackError:
+        Logger.info(`-> Handling as ${Models.ActionType.PlaybackError} action type...`);
+        payload = await Payloads.playbackError(data, profile);
+        break;
+      case Models.ActionType.PlaybackPause:
+        Logger.info(`-> Handling as ${Models.ActionType.PlaybackPause} action type...`);
+        payload = await Payloads.playbackPause(data, profile);
+        break;
+      case Models.ActionType.PlaybackResume:
+        Logger.info(`-> Handling as ${Models.ActionType.PlaybackResume} action type...`);
+        payload = await Payloads.playbackResume(data, profile);
+        break;
+      case Models.ActionType.PlaybackStart:
+        Logger.info(`-> Handling as ${Models.ActionType.PlaybackStart} action type...`);
+        payload = await Payloads.playbackStart(data, profile);
+        break;
+      case Models.ActionType.PlaybackStop:
+        Logger.info(`-> Handling as ${Models.ActionType.PlaybackStop} action type...`);
+        payload = await Payloads.playbackStop(data, profile);
+        break;
+      case Models.ActionType.PlexRemoteAccessBackUp:
+        Logger.info(`-> Handling as ${Models.ActionType.PlexRemoteAccessBackUp} action type...`);
+        payload = await Payloads.plexRemoteAccessBackUp(data, profile);
+        break;
+      case Models.ActionType.PlexRemoteAccessDown:
+        Logger.info(`-> Handling as ${Models.ActionType.PlexRemoteAccessDown} action type...`);
+        payload = await Payloads.plexRemoteAccessDown(data, profile);
+        break;
+      case Models.ActionType.PlexServerBackUp:
+        Logger.info(`-> Handling as ${Models.ActionType.PlexServerBackUp} action type...`);
+        payload = await Payloads.plexServerBackUp(data, profile);
+        break;
+      case Models.ActionType.PlexServerDown:
+        Logger.info(`-> Handling as ${Models.ActionType.PlexServerDown} action type...`);
+        payload = await Payloads.plexServerDown(data, profile);
+        break;
+      case Models.ActionType.PlexUpdateAvailable:
+        Logger.info(`-> Handling as ${Models.ActionType.PlexUpdateAvailable} action type...`);
+        payload = await Payloads.plexUpdateAvailable(data, profile);
+        break;
+      case Models.ActionType.RecentlyAdded:
+        Logger.info(`-> Handling as ${Models.ActionType.RecentlyAdded} action type...`);
+        payload = await Payloads.recentlyAdded(data, profile);
+        break;
+      case Models.ActionType.TautulliDatabaseCorruption:
+        Logger.info(
+          `-> Handling as ${Models.ActionType.TautulliDatabaseCorruption} action type...`,
+        );
+        payload = await Payloads.tautulliDatabaseCorruption(data, profile);
+        break;
+      case Models.ActionType.TautulliUpdateAvailable:
+        Logger.info(`-> Handling as ${Models.ActionType.TautulliUpdateAvailable} action type...`);
+        payload = await Payloads.tautulliUpdateAvailable(data, profile);
+        break;
+      case Models.ActionType.TranscodeDecisionChange:
+        Logger.info(`-> Handling as ${Models.ActionType.TranscodeDecisionChange} action type...`);
+        payload = await Payloads.transcodeDecisionChange(data, profile);
+        break;
+      case Models.ActionType.UserConcurrentStreams:
+        Logger.info(`-> Handling as ${Models.ActionType.UserConcurrentStreams} action type...`);
+        payload = await Payloads.userConcurrentStreams(data, profile);
+        break;
+      case Models.ActionType.UserNewDevice:
+        Logger.info(`-> Handling as ${Models.ActionType.UserNewDevice} action type...`);
+        payload = await Payloads.userNewDevice(data, profile);
+        break;
+      case Models.ActionType.Watched:
+        Logger.info(`-> Handling as ${Models.ActionType.Watched} action type...`);
+        payload = await Payloads.watched(data, profile);
+        break;
+      case Models.ActionType.Test:
+        Logger.info(`-> Handling as ${Models.ActionType.BufferWarning} action type...`);
+        payload = await Payloads.test(data, profile);
+        break;
+      default:
+        Logger.warn('-> An unknown ActionType was received:', JSON.stringify(data));
+        break;
+    }
   }
-  if (!payload)
+  if (!payload && data.event_type) {
     switch (data.event_type) {
       case Models.EventTypeDeprecated.BufferWarning:
         Logger.info('-> Handling as "BufferWarning" event type...');
         payload = await Payloads.bufferWarningDeprecated(data, profile);
         break;
       case Models.EventTypeDeprecated.PlaybackError:
-        1;
         Logger.info('-> Handling as "PlaybackError" event type...');
         payload = await Payloads.playbackErrorDeprecated(data, profile);
         break;
@@ -217,10 +223,10 @@ const _handleWebhook = async (
         Logger.info('-> Handling as "Watched" event type...');
         payload = await Payloads.watchedDeprecated(data, profile);
         break;
+      default:
+        Logger.warn('-> An unknown EventType was received:', JSON.stringify(data));
+        break;
     }
-  if (!payload) {
-    Logger.warn('-> An unknown ActionType or EventType was received:', JSON.stringify(data));
-    return;
   }
-  await Firebase.sendNotification(devices, payload, settings);
+  if (payload) await Firebase.sendNotification(devices, payload, settings);
 };

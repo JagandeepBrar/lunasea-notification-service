@@ -25,8 +25,8 @@ export const getMoviePoster = async (movieId: number): Promise<string | undefine
       Cache.setMoviePoster(movieId, apiResult);
       return _constructImageURL(apiResult);
     }
-  } catch (error) {
-    Logger.error(error);
+  } catch (error: any) {
+    Logger.error(error.message);
   }
   return undefined;
 };
@@ -50,8 +50,8 @@ export const getSeriesPoster = async (seriesId: number): Promise<string | undefi
       Cache.setSeriesPoster(seriesId, apiResult);
       return _constructImageURL(apiResult);
     }
-  } catch (error) {
-    Logger.error(error);
+  } catch (error: any) {
+    Logger.error(error.message);
   }
   return undefined;
 };

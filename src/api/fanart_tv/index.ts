@@ -42,7 +42,7 @@ export const getArtistThumbnail = async (artistId: string): Promise<string | und
       Logger.debug(`-> No artist thumbnail found (${artistId})`);
     });
   } catch (error: any) {
-    Logger.error(error);
+    Logger.error(error.message);
   }
   return undefined;
 };
@@ -76,7 +76,7 @@ export const getAlbumCover = async (albumId: string): Promise<string | undefined
       Logger.debug('-> No album cover found', albumId);
     });
   } catch (error: any) {
-    Logger.error(error);
+    Logger.error(error.message);
   }
   return undefined;
 };
