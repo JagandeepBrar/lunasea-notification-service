@@ -10,7 +10,7 @@ export enum ExternalSourceType {
 }
 
 /**
- * Interface that only maps to fields important to the notification relay.
+ * Interface that only maps to fields important to the notification service.
  */
 export interface ContentResponse {
   backdrop_path?: string;

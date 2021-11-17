@@ -1,10 +1,10 @@
-# LunaSea Notification Relay
+# LunaSea Notification Service
 
 A simple TypeScript backend system that handles receiving webhooks from applications supported in [LunaSea](https://github.com/CometTools/LunaSea) and sends notifications to the respective user or device.
 
-> Setting up an instance of your own notification relay is **not** necessary to get webhook notifications in LunaSea. Simply use the Comet.Tools' hosted notification relay, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance _will not_ send notifications to the officially published LunaSea application.
+> Setting up an instance of your own notification service is **not** necessary to get webhook notifications in LunaSea. Simply use the Comet.Tools' hosted notification service, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance _will not_ send notifications to the officially published LunaSea application.
 >
-> Setting up your own instance of the notification relay is only necessary when building your own version of LunaSea, which utilizes a different Firebase project.
+> Setting up your own instance of the notification service is only necessary when building your own version of LunaSea, which utilizes a different Firebase project.
 
 ## Usage
 
@@ -26,7 +26,7 @@ For documentation on setting up the webhooks, please look at LunaSea's documenta
 
 ### Client Types
 
-The notification relay supports both:
+The notification service supports both:
 
 - Sending to a single device via a **Firebase Device Token**
   - Registering for a LunaSea account is _not_ necessary to get device-based notifications
@@ -48,7 +48,7 @@ With the given routes above, append `user/{user_id}` to the route to send to all
 
 ## Development & Installation
 
-LunaSea's Notification Relay requires:
+LunaSea's Notification Service requires:
 
 - Node.js v10.0.0 or higher (v14.0.0 or higher is recommended)
 - Redis 6
@@ -68,7 +68,7 @@ All environment variables must either be set at an operating system-level, termi
 | `REDIS_USER`            | Redis instance username.                                              |  `""`   |  &cross;  |
 | `REDIS_PASS`            | Redis instance password.                                              |  `""`   |  &cross;  |
 | `REDIS_USE_TLS`         | Use a TLS connection when communicating with Redis?                   | `false` |  &cross;  |
-| `PORT`                  | The port to attach the relay server to.                               | `9000`  |  &cross;  |
+| `PORT`                  | The port to attach the service web server to.                         | `9000`  |  &cross;  |
 | `LOG_LEVEL`             | The minimum logging level to store in `server.log`.                   | `warn`  |  &cross;  |
 
 ### Setup Guide (Docker)
