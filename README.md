@@ -86,7 +86,7 @@ docker run -d \
     -p 9000:9000 \
     -v /hostos/path/to/config:/usr/src/config \
     --restart unless-stopped \
-ghcr.io/comettools/lunasea-notification-relay:latest
+ghcr.io/comettools/lunasea-notification-service:latest
 ```
 
 ### Setup Guide (Development)
