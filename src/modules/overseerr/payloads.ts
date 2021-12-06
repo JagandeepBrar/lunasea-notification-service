@@ -162,6 +162,70 @@ export const mediaPending = async (
 };
 
 /**
+ * Construct a Notifications.Payload based on an issue created event.
+ */
+export const issueCreated = async (
+  data: Models.RequestProperties,
+  profile: string,
+): Promise<Notifications.Payload> => {
+  const body1 = data.subject ?? 'Unknown Content';
+  const body2 = data.message ?? '';
+  return <Notifications.Payload>{
+    title: title(profile, data.event ?? 'New Issue Reported'),
+    body: [body1, body2].join('\n'),
+    image: data.image,
+  };
+};
+
+/**
+ * Construct a Notifications.Payload based on an issue resolved event.
+ */
+export const issueResolved = async (
+  data: Models.RequestProperties,
+  profile: string,
+): Promise<Notifications.Payload> => {
+  const body1 = data.subject ?? 'Unknown Content';
+  const body2 = data.message ?? '';
+  return <Notifications.Payload>{
+    title: title(profile, data.event ?? 'Issue Resolved'),
+    body: [body1, body2].join('\n'),
+    image: data.image,
+  };
+};
+
+/**
+ * Construct a Notifications.Payload based on an issue reopened event.
+ */
+export const issueReopened = async (
+  data: Models.RequestProperties,
+  profile: string,
+): Promise<Notifications.Payload> => {
+  const body1 = data.subject ?? 'Unknown Content';
+  const body2 = data.message ?? '';
+  return <Notifications.Payload>{
+    title: title(profile, data.event ?? 'Issue Reopened'),
+    body: [body1, body2].join('\n'),
+    image: data.image,
+  };
+};
+
+/**
+ * Construct a Notifications.Payload based on an issue commented event.
+ */
+export const issueCommented = async (
+  data: Models.RequestProperties,
+  profile: string,
+): Promise<Notifications.Payload> => {
+  const body1 = data.subject ?? 'Unknown Content';
+  const body2 = data.comment?.comment_message ?? '';
+  return <Notifications.Payload>{
+    title: title(profile, data.event ?? 'New Comment on Issue'),
+    body: [body1, body2].join('\n'),
+    image: data.image,
+  };
+};
+
+/**
  * Construct a Notifications.Payload based on a test event.
  */
 export const test = async (

@@ -1,4 +1,8 @@
 export enum NotificationType {
+  ISSUE_CREATED = 'ISSUE_CREATED',
+  ISSUE_RESOLVED = 'ISSUE_RESOLVED',
+  ISSUE_REOPENED = 'ISSUE_REOPENED',
+  ISSUE_COMMENT = 'ISSUE_COMMENT',
   MEDIA_APPROVED = 'MEDIA_APPROVED',
   MEDIA_AUTO_APPROVED = 'MEDIA_AUTO_APPROVED',
   MEDIA_AVAILABLE = 'MEDIA_AVAILABLE',
@@ -13,8 +17,21 @@ export enum MediaType {
   TV_SHOW = 'tv',
 }
 
+export enum IssueType {
+  VIDEO = 'VIDEO',
+  AUDIO = 'AUDIO',
+  SUBTITLES = 'SUBTITLES',
+  OTHER = 'OTHER',
+}
+
+export enum IssueStatus {
+  OPEN = 'OPEN',
+  RESOLVED = 'RESOLVED',
+}
+
 export interface RequestProperties {
   notification_type?: NotificationType;
+  event?: string;
   subject?: string;
   message?: string;
   image?: string;
@@ -22,8 +39,10 @@ export interface RequestProperties {
   username?: string;
   avatar?: string;
   media?: MediaProperties;
-  request?: RequestByProperties;
   extra?: Record<string, unknown>;
+  request?: RequestByProperties;
+  issue?: IssueProperties;
+  comment?: CommentProperties;
 }
 
 export interface RequestByProperties {
@@ -42,4 +61,20 @@ export interface MediaProperties {
   tvdbId?: string;
   status?: string;
   status4k?: string;
+}
+
+export interface IssueProperties {
+  issue_id?: number;
+  issue_type?: IssueType;
+  issue_status?: IssueStatus;
+  createdBy_email?: string;
+  createdBy_username?: string;
+  createdBy_avatar?: string;
+}
+
+export interface CommentProperties {
+  comment_message?: string;
+  commentedBy_email?: string;
+  commentedBy_username?: string;
+  commentedBy_avatar?: string;
 }

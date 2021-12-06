@@ -94,6 +94,22 @@ const _handleWebhook = async (
         Logger.info('-> Handling as "TEST_NOTIFICATION" event type...');
         payload = await Payloads.test(data, profile);
         break;
+      case Models.NotificationType.ISSUE_CREATED:
+        Logger.info('-> Handling as "ISSUE_CREATED" event type...');
+        payload = await Payloads.issueCreated(data, profile);
+        break;
+      case Models.NotificationType.ISSUE_RESOLVED:
+        Logger.info('-> Handling as "ISSUE_RESOLVED" event type...');
+        payload = await Payloads.issueResolved(data, profile);
+        break;
+      case Models.NotificationType.ISSUE_REOPENED:
+        Logger.info('-> Handling as "ISSUE_REOPENED" event type...');
+        payload = await Payloads.issueReopened(data, profile);
+        break;
+      case Models.NotificationType.ISSUE_COMMENT:
+        Logger.info('-> Handling as "ISSUE_COMMENT" event type...');
+        payload = await Payloads.issueCommented(data, profile);
+        break;
       default:
         Logger.warn('-> An unknown notification_type was received:', JSON.stringify(data));
         break;
