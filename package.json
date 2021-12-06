@@ -1,6 +1,6 @@
 {
   "name": "lunasea-notification-service",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "Notification service for LunaSea",
   "repository": "https://github.com/CometTools/LunaSea-Notification-Service",
   "main": "index.js",
