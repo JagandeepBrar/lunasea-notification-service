@@ -12,21 +12,18 @@ export const mediaApproved = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
+  const header = data.event ?? 'Media Approved';
+  const requester = data.request?.requestedBy_username ?? data.username;
   const body1 = data.subject;
-  let body2 = '';
-  if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
-  if (data.request?.requestedBy_username)
-    body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
+  const body2 = `Originally Requested by ${requester}`;
   const image =
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(
-      profile,
-      `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Approved`,
-    ),
-    body: [body1, body2].join(''),
+    title: title(profile, header),
+    body: [body1, body2].join('\n'),
     image: image,
   };
 };
@@ -38,21 +35,18 @@ export const mediaAutoApproved = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
+  const header = data.event ?? 'Media Auto Approved';
+  const requester = data.request?.requestedBy_username ?? data.username;
   const body1 = data.subject;
-  let body2 = '';
-  if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
-  if (data.request?.requestedBy_username)
-    body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
+  const body2 = `Originally Requested by ${requester}`;
   const image =
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(
-      profile,
-      `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Auto Approved`,
-    ),
-    body: [body1, body2].join(''),
+    title: title(profile, header),
+    body: [body1, body2].join('\n'),
     image: image,
   };
 };
@@ -64,21 +58,18 @@ export const mediaAvailable = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
+  const header = data.event ?? 'Media Available';
+  const requester = data.request?.requestedBy_username ?? data.username;
   const body1 = data.subject;
-  let body2 = '';
-  if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
-  if (data.request?.requestedBy_username)
-    body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
+  const body2 = `Originally Requested by ${requester}`;
   const image =
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(
-      profile,
-      `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Available`,
-    ),
-    body: [body1, body2].join(''),
+    title: title(profile, header),
+    body: [body1, body2].join('\n'),
     image: image,
   };
 };
@@ -90,21 +81,18 @@ export const mediaDeclined = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
+  const header = data.event ?? 'Media Declined';
+  const requester = data.request?.requestedBy_username ?? data.username;
   const body1 = data.subject;
-  let body2 = '';
-  if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
-  if (data.request?.requestedBy_username)
-    body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
+  const body2 = `Originally Requested by ${requester}`;
   const image =
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(
-      profile,
-      `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Declined`,
-    ),
-    body: [body1, body2].join(''),
+    title: title(profile, header),
+    body: [body1, body2].join('\n'),
     image: image,
   };
 };
@@ -116,21 +104,18 @@ export const mediaFailed = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
+  const header = data.event ?? 'Media Failed';
+  const requester = data.request?.requestedBy_username ?? data.username;
   const body1 = data.subject;
-  let body2 = '';
-  if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
-  if (data.request?.requestedBy_username)
-    body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
+  const body2 = `Originally Requested by ${requester}`;
   const image =
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(
-      profile,
-      `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Failed`,
-    ),
-    body: [body1, body2].join(''),
+    title: title(profile, header),
+    body: [body1, body2].join('\n'),
     image: image,
   };
 };
@@ -142,21 +127,18 @@ export const mediaPending = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
+  const header = data.event ?? 'Media Requested';
+  const requester = data.request?.requestedBy_username ?? data.username;
   const body1 = data.subject;
-  let body2 = '';
-  if (data.username) body2 = `\nOriginally Requested by ${data.username}`;
-  if (data.request?.requestedBy_username)
-    body2 = `\nOriginally Requested by ${data.request?.requestedBy_username}`;
+  const body2 = `Originally Requested by ${requester}`;
   const image =
     data.media?.media_type === Models.MediaType.MOVIE
       ? await getMovieImageURL(data)
       : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(
-      profile,
-      `${data.media?.media_type === Models.MediaType.MOVIE ? 'Movie' : 'Series'} Requested`,
-    ),
-    body: [body1, body2].join(''),
+    title: title(profile, header),
+    body: [body1, body2].join('\n'),
     image: image,
   };
 };
@@ -168,12 +150,18 @@ export const issueCreated = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
-  const body1 = data.subject ?? 'Unknown Content';
-  const body2 = data.message ?? '';
+  const header = data.event ?? 'New Issue Reported';
+  const body1 = data.subject;
+  const body2 = data.message;
+  const image =
+    data.media?.media_type === Models.MediaType.MOVIE
+      ? await getMovieImageURL(data)
+      : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(profile, data.event ?? 'New Issue Reported'),
+    title: title(profile, header),
     body: [body1, body2].join('\n'),
-    image: data.image,
+    image: image,
   };
 };
 
@@ -184,12 +172,18 @@ export const issueResolved = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
-  const body1 = data.subject ?? 'Unknown Content';
-  const body2 = data.message ?? '';
+  const header = data.event ?? 'Issue Resolved';
+  const body1 = data.subject;
+  const body2 = data.message;
+  const image =
+    data.media?.media_type === Models.MediaType.MOVIE
+      ? await getMovieImageURL(data)
+      : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(profile, data.event ?? 'Issue Resolved'),
+    title: title(profile, header),
     body: [body1, body2].join('\n'),
-    image: data.image,
+    image: image,
   };
 };
 
@@ -200,12 +194,18 @@ export const issueReopened = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
-  const body1 = data.subject ?? 'Unknown Content';
-  const body2 = data.message ?? '';
+  const header = data.event ?? 'Issue Reopened';
+  const body1 = data.subject;
+  const body2 = data.message;
+  const image =
+    data.media?.media_type === Models.MediaType.MOVIE
+      ? await getMovieImageURL(data)
+      : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(profile, data.event ?? 'Issue Reopened'),
+    title: title(profile, header),
     body: [body1, body2].join('\n'),
-    image: data.image,
+    image: image,
   };
 };
 
@@ -216,12 +216,18 @@ export const issueCommented = async (
   data: Models.RequestProperties,
   profile: string,
 ): Promise<Notifications.Payload> => {
-  const body1 = data.subject ?? 'Unknown Content';
-  const body2 = data.comment?.comment_message ?? '';
+  const header = data.event ?? 'New Comment on Issue';
+  const body1 = data.subject;
+  const body2 = data.comment?.comment_message;
+  const image =
+    data.media?.media_type === Models.MediaType.MOVIE
+      ? await getMovieImageURL(data)
+      : await getSeriesImageURL(data);
+
   return <Notifications.Payload>{
-    title: title(profile, data.event ?? 'New Comment on Issue'),
+    title: title(profile, header),
     body: [body1, body2].join('\n'),
-    image: data.image,
+    image: image,
   };
 };
 
