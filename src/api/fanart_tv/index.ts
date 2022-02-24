@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { Logger } from '../../utils';
+import { Logger, Environment } from '../../utils';
 
 const http = axios.create({
   baseURL: 'http://webservice.fanart.tv/v3/',
   params: {
-    api_key: process.env.FANART_TV_API_KEY,
+    api_key: Environment.default.FANART_TV_API_KEY.read(),
   },
 });
 

@@ -1,8 +1,7 @@
-import { Logger } from '../utils';
+import { Environment, Logger } from '../utils';
 import express from 'express';
 import { router } from '../modules';
 
-const PORT = process.env.PORT || '9000';
 const server = express();
 
 /**
@@ -45,6 +44,8 @@ export const initialize = (): void => {
  */
 export const start = (): void => {
   initialize();
+
+  const PORT = Environment.default.PORT.read();
   server.listen(PORT).on('error', (error: Error) => {
     Logger.error(error.message);
     process.exit(1);

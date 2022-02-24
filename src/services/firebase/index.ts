@@ -2,27 +2,9 @@ import * as admin from 'firebase-admin';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getMessaging, MulticastMessage } from 'firebase-admin/messaging';
-import { Logger, Notifications } from '../../utils';
+import { Environment, Logger, Notifications } from '../../utils';
 
 let firebase: admin.app.App;
-
-/**
- * @private
- */
-const _getServiceAccountPath = (): string => {
-  let serviceaccount: string;
-  switch ((process.env.NODE_ENV ?? '').toLowerCase()) {
-    case 'docker':
-      serviceaccount = '../config/serviceaccount.json';
-      break;
-    case 'production':
-    case 'development':
-    default:
-      serviceaccount = 'serviceaccount.json';
-      break;
-  }
-  return serviceaccount;
-};
 
 /**
  * Initialize the connection to Firebase and link it to the service account.
@@ -30,8 +12,12 @@ const _getServiceAccountPath = (): string => {
 export const initialize = (): void => {
   Logger.debug('Initializing Firebase...');
   firebase = admin.initializeApp({
-    credential: admin.credential.cert(_getServiceAccountPath()),
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
+    credential: admin.credential.cert(<admin.ServiceAccount>{
+      clientEmail: Environment.default.FIREBASE_CLIENT_EMAIL.read(),
+      projectId: Environment.default.FIREBASE_PROJECT_ID.read(),
+      privateKey: Environment.default.FIREBASE_PRIVATE_KEY.read(),
+    }),
+    databaseURL: Environment.default.FIREBASE_DATABASE_URL.read(),
   });
   Logger.debug('Initialized Firebase.');
 };
