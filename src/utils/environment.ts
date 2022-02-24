@@ -34,6 +34,5 @@ export default {
   REDIS_USER: new _Var('REDIS_USER', { fallback: '' }),
   REDIS_PASS: new _Var('REDIS_PASS', { fallback: '', secret: true }),
   // Other
-  LOG_LEVEL: new _Var('LOG_LEVEL', { fallback: 'warn' }),
   PORT: new _Var('PORT', { fallback: '9000' }),
 };

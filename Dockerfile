@@ -1,7 +1,6 @@
 FROM node:14.16-alpine
 LABEL org.opencontainers.image.source="https://github.com/CometTools/LunaSea-Notification-Service"
 ENV NODE_ENV="docker"
-ENV LOG_LEVEL="warn"
 # Install packages, copy data, build project
 WORKDIR /usr/src/app
 COPY package*.json ./
