@@ -2,7 +2,7 @@
   "name": "lunasea-notification-service",
   "version": "1.3.8",
   "description": "Notification service for LunaSea",
-  "repository": "https://github.com/CometTools/LunaSea-Notification-Service",
+  "repository": "https://github.com/JagandeepBrar/LunaSea-Notification-Service",
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --config nodemon.json src/index.ts",
@@ -10,13 +10,13 @@
     "serve": "cross-env NODE_ENV=production ts-node -r dotenv/config dist/index.js",
     "publish": "npm run docker:build && npm run docker:push",
     "docker:start": "ts-node -r dotenv/config dist/index.js",
-    "docker:build": "docker build -t ghcr.io/comettools/lunasea-notification-service:latest -t ghcr.io/comettools/lunasea-notification-service:v$(echo $npm_package_version) .",
-    "docker:push": "docker push ghcr.io/comettools/lunasea-notification-service:latest && docker push  ghcr.io/comettools/lunasea-notification-service:v$(echo $npm_package_version)",
+    "docker:build": "docker build -t ghcr.io/jagandeepbrar/lunasea-notification-service:latest -t ghcr.io/jagandeepbrar/lunasea-notification-service:v$(echo $npm_package_version) .",
+    "docker:push": "docker push ghcr.io/jagandeepbrar/lunasea-notification-service:latest && docker push  ghcr.io/jagandeepbrar/lunasea-notification-service:v$(echo $npm_package_version)",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "prepare": "husky install"
   },
-  "author": "Comet.Tools Software",
+  "author": "Jagandeep Brar",
   "license": "GPL-3.0-only",
   "dependencies": {
     "@types/basic-auth": "^1.1.3",
