@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { ContentResponse, ExternalSourceType, FindContentResponse } from './models';
-import { Constants } from '../../utils';
+import { Constants, Environment } from '../../utils';
 
 const http = axios.create({
   method: 'GET',
   baseURL: Constants.THE_MOVIE_DB.API.BASE_URL,
   params: {
-    api_key: process.env.THEMOVIEDB_API_KEY,
+    api_key: Environment.default.THEMOVIEDB_API_KEY.read(),
   },
 });
 
