@@ -15,7 +15,7 @@ export const initialize = (): void => {
     credential: admin.credential.cert(<admin.ServiceAccount>{
       clientEmail: Environment.default.FIREBASE_CLIENT_EMAIL.read(),
       projectId: Environment.default.FIREBASE_PROJECT_ID.read(),
-      privateKey: Environment.default.FIREBASE_PRIVATE_KEY.read(),
+      privateKey: Environment.default.FIREBASE_PRIVATE_KEY.read().replace(/\\n/gm, '\n'),
     }),
     databaseURL: Environment.default.FIREBASE_DATABASE_URL.read(),
   });
