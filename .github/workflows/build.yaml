@@ -23,7 +23,7 @@ jobs:
           password: ${{ github.token }}
 
       - name: Get current package version
-        uses: martinbeentjes/npm-get-version-action@v1
+        uses: martinbeentjes/npm-get-version-action@v1.1.0
         id: package
 
       - name: Build and Push Docker Image
