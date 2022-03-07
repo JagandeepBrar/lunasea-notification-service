@@ -1,6 +1,6 @@
 {
   "name": "lunasea-notification-service",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Notification service for LunaSea",
   "repository": "https://github.com/JagandeepBrar/LunaSea-Notification-Service",
   "main": "index.js",
@@ -9,9 +9,7 @@
     "build": "tsc",
     "serve": "cross-env NODE_ENV=production ts-node -r dotenv/config dist/index.js",
     "publish": "npm run docker:build && npm run docker:push",
-    "docker:start": "ts-node -r dotenv/config dist/index.js",
-    "docker:build": "docker build -t ghcr.io/jagandeepbrar/lunasea-notification-service:latest -t ghcr.io/jagandeepbrar/lunasea-notification-service:v$(echo $npm_package_version) .",
-    "docker:push": "docker push ghcr.io/jagandeepbrar/lunasea-notification-service:latest && docker push  ghcr.io/jagandeepbrar/lunasea-notification-service:v$(echo $npm_package_version)",
+    "docker": "ts-node -r dotenv/config dist/index.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "prepare": "husky install"
