@@ -1,6 +1,12 @@
 import pino from 'pino';
 
 export const Logger = pino({
+  mixin: () => {
+    return {
+      service: 'lunasea-notification-service',
+      version: process.env.npm_package_version,
+    };
+  },
   level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
 });
 

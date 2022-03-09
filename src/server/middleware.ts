@@ -4,12 +4,14 @@ import { Models } from './';
 import { Firebase } from '../services';
 import { Constants, Logger, Notifications } from '../utils';
 
+const logger = Logger.child({ module: 'middleware' });
+
 export async function startNewRequest(
   request: express.Request,
   response: express.Response,
   next: express.NextFunction,
 ): Promise<void> {
-  Logger.info(request.url);
+  logger.info({ url: request.url, ...request.headers });
   next();
 }
 
@@ -35,7 +37,7 @@ export async function extractNotificationOptions(
     },
   };
 
-  Logger.debug(`-> Settings: ${JSON.stringify(response.locals.notificationSettings)}`);
+  logger.debug({ ...response.locals.notificationSettings });
   next();
 }
 
@@ -48,7 +50,7 @@ export async function extractProfile(
   const auth = basicauth(request);
   response.locals.profile = auth?.name ?? 'default';
 
-  Logger.debug(`-> Profile: ${response.locals.profile}`);
+  logger.debug({ profile: response.locals.profile });
   next();
 }
 
@@ -59,12 +61,11 @@ export async function extractDeviceToken(
 ): Promise<void> {
   if (request.params.id) {
     response.locals.tokens = [request.params.id];
-    Logger.debug(`-> Device: ${request.params.id}`);
+    logger.debug({ device_id: request.params.id });
     next();
   } else {
-    Logger.warn('-> A request with no device ID was attempted. Cancelling request...');
+    logger.warn('A request with no device ID was attempted. Cancelling request...');
     response.status(400).json(<Models.Response>{ message: Constants.MESSAGE.NO_ID_SUPPLIED });
-    Logger.debug('-> HTTP response sent (400 Bad Request)');
   }
 }
 
@@ -78,12 +79,11 @@ export async function pullUserTokens(
 
   if (deviceCount > 0) {
     response.locals.tokens = devices;
-    Logger.debug(`-> Device(s): ${deviceCount} Found`);
+    logger.debug({ device_count: deviceCount });
     next();
   } else {
-    Logger.warn('-> Device(s): 0 Found. Cancelling request...');
+    logger.warn('-> No devices found. Cancelling request...');
     response.status(400).json(<Models.Response>{ message: Constants.MESSAGE.NO_DEVICES_FOUND });
-    Logger.debug('-> HTTP response sent (400 Bad Request)');
   }
 }
 
@@ -102,11 +102,10 @@ export async function validateUser(
   next: express.NextFunction,
 ): Promise<void> {
   if (request.params.id && (await Firebase.hasUserID(request.params.id))) {
-    Logger.debug(`-> User: ${request.params.id}`);
+    logger.debug({ user_id: request.params.id });
     next();
   } else {
-    Logger.warn(`-> Failed to find user: ${request.params.id}. Cancelling request...`);
+    logger.warn({ user: request.params.id }, 'Failed to find user. Cancelling request...');
     response.status(404).json(<Models.Response>{ message: Constants.MESSAGE.USER_NOT_FOUND });
-    Logger.debug('HTTP response sent (404 Not Found)');
   }
 }

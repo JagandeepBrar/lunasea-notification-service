@@ -5,10 +5,10 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getMessaging, MulticastMessage } from 'firebase-admin/messaging';
 import { Environment, Logger, Notifications } from '../../utils';
 
+const logger = Logger.child({ module: 'firebase' });
 let firebase: admin.app.App;
 
 export const initialize = (): void => {
-  Logger.debug('Initializing Firebase...');
   firebase = admin.initializeApp({
     credential: admin.credential.cert(<admin.ServiceAccount>{
       clientEmail: Environment.default.FIREBASE_CLIENT_EMAIL.read(),
@@ -17,7 +17,6 @@ export const initialize = (): void => {
     }),
     databaseURL: Environment.default.FIREBASE_DATABASE_URL.read(),
   });
-  Logger.debug('Initialized Firebase.');
 };
 
 export const hasUserID = async (uid: string): Promise<boolean> => {
@@ -30,7 +29,7 @@ export const hasUserID = async (uid: string): Promise<boolean> => {
         return false;
       });
   } catch (error) {
-    Logger.error(uid, '/', error);
+    logger.error(error);
     return false;
   }
 };
@@ -58,7 +57,7 @@ export const getUserDevices = async (uid: string): Promise<string[]> => {
         return [];
       });
   } catch (error) {
-    Logger.error(uid, '/', error);
+    logger.error(error);
     return [];
   }
 };
@@ -78,13 +77,17 @@ export const sendNotification = async (
     return await getMessaging(firebase)
       .sendMulticast(message)
       .then((response) => {
-        Logger.debug(
-          `-> Sent notification(s): success: ${response.successCount} / failure: ${response.failureCount}`,
+        logger.debug(
+          {
+            success: response.successCount,
+            failure: response.failureCount,
+          },
+          'Sent notification(s)',
         );
         return response.successCount > 0;
       });
   } catch (error) {
-    Logger.error(error);
+    logger.error(error);
     return false;
   }
 };

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Logger, Environment } from '../../utils';
 
+const logger = Logger.child({ module: 'fanart_tv' });
+
 const http = axios.create({
   baseURL: 'http://webservice.fanart.tv/v3/',
   params: {
@@ -26,7 +28,7 @@ export const getArtistThumbnail = async (artistId: string): Promise<string | und
       }
     });
   } catch (error) {
-    Logger.error(error);
+    logger.error(error);
   }
   return undefined;
 };
@@ -49,7 +51,7 @@ export const getAlbumCover = async (albumId: string): Promise<string | undefined
       }
     });
   } catch (error) {
-    Logger.error(error);
+    logger.error(error);
   }
   return undefined;
 };

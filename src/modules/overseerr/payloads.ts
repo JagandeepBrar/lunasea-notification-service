@@ -1,6 +1,6 @@
 import { Models } from './';
 import { TheMovieDB } from '../../api';
-import { Logger, Notifications } from '../../utils';
+import { Notifications } from '../../utils';
 
 const title = (profile: string, body: string): string =>
   Notifications.generateTitle('Overseerr', profile, body);
@@ -212,25 +212,17 @@ export const test = async (
 };
 
 const getSeriesImageURL = async (data: Models.RequestProperties): Promise<string | undefined> => {
-  try {
-    if (data.media?.tvdbId) {
-      const id = parseInt(data.media.tvdbId);
-      if (!isNaN(id)) return await TheMovieDB.getSeriesPoster(id);
-    }
-  } catch (error) {
-    Logger.error(error);
+  if (data.media?.tvdbId) {
+    const id = parseInt(data.media.tvdbId);
+    if (!isNaN(id)) return await TheMovieDB.getSeriesPoster(id);
   }
   return undefined;
 };
 
 const getMovieImageURL = async (data: Models.RequestProperties): Promise<string | undefined> => {
-  try {
-    if (data.media?.tmdbId) {
-      const id = parseInt(data.media.tmdbId);
-      if (!isNaN(id)) return await TheMovieDB.getMoviePoster(id);
-    }
-  } catch (error) {
-    Logger.error(error);
+  if (data.media?.tmdbId) {
+    const id = parseInt(data.media.tmdbId);
+    if (!isNaN(id)) return await TheMovieDB.getMoviePoster(id);
   }
   return undefined;
 };

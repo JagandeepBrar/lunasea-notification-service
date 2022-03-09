@@ -2,6 +2,8 @@ import { Constants, Logger } from '../../utils';
 import * as API from './api';
 import * as Cache from './cache';
 
+const logger = Logger.child({ module: 'the_movie_db' });
+
 const _constructImageURL = (path: string): string => {
   return `${Constants.THE_MOVIE_DB.IMAGE.BASE_URL}${Constants.THE_MOVIE_DB.IMAGE.SIZE}${path}`;
 };
@@ -19,7 +21,7 @@ export const getMoviePoster = async (movieId: number): Promise<string | undefine
       return _constructImageURL(api);
     }
   } catch (error) {
-    Logger.error(error);
+    logger.error(error);
   }
   return undefined;
 };
@@ -37,7 +39,7 @@ export const getSeriesPoster = async (seriesId: number): Promise<string | undefi
       return _constructImageURL(api);
     }
   } catch (error) {
-    Logger.error(error);
+    logger.error(error);
   }
   return undefined;
 };

@@ -2,6 +2,7 @@ import express from 'express';
 import { Environment, Logger } from '../utils';
 import { router } from '../modules';
 
+const logger = Logger.child({ module: 'express' });
 const server = express();
 
 const docs = async (request: express.Request, response: express.Response): Promise<void> => {
@@ -27,8 +28,8 @@ export const start = (): void => {
 
   const PORT = Environment.default.PORT.read();
   server.listen(PORT).on('error', (error: Error) => {
-    Logger.error(error);
+    logger.error(error);
     process.exit(1);
   });
-  Logger.info('Server Running / Port', PORT);
+  logger.info({ PORT }, 'Running');
 };

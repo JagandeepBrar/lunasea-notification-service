@@ -6,6 +6,7 @@ import { Constants, Logger, Notifications } from '../../utils';
 
 export const enable = (api: express.Router) => api.use(route, router);
 
+const logger = Logger.child({ module: 'sonarr' });
 const router = express.Router();
 const route = '/sonarr';
 
@@ -21,7 +22,6 @@ router.post('/device/:id', Middleware.extractDeviceToken, handler);
 async function handler(request: express.Request, response: express.Response): Promise<void> {
   try {
     response.status(200).json(<ServerModels.Response>{ message: Constants.MESSAGE.OK });
-    Logger.debug('-> HTTP response sent (200 OK)');
     await _handleWebhook(
       request.body,
       response.locals.tokens,
@@ -29,11 +29,10 @@ async function handler(request: express.Request, response: express.Response): Pr
       response.locals.notificationSettings,
     );
   } catch (error) {
-    Logger.error(error);
+    logger.error(error);
     response
       .status(500)
       .json(<ServerModels.Response>{ message: Constants.MESSAGE.INTERNAL_SERVER_ERROR });
-    Logger.debug('HTTP response sent (500 Internal Server Error)');
   }
 }
 
@@ -68,7 +67,7 @@ const _handleWebhook = async (
         payload = await Payloads.test(data, profile);
         break;
       default:
-        Logger.warn('-> An unknown eventType was received:', JSON.stringify(data));
+        logger.warn({ data }, '-> An unknown EventType was received');
         break;
     }
   }
