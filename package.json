@@ -1,6 +1,6 @@
 {
   "name": "lunasea-notification-service",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Notification service for LunaSea",
   "repository": "https://github.com/JagandeepBrar/LunaSea-Notification-Service",
   "main": "index.js",
@@ -31,7 +31,6 @@
     "ioredis": "^4.28.5",
     "node-typescript-compiler": "2.3.0",
     "pino": "^7.8.1",
-    "pino-http": "^6.6.0",
     "ts-node": "^10.7.0",
     "tslog": "^3.3.2",
     "typescript": "^4.6.2"
