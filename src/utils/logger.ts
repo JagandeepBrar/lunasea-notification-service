@@ -1,8 +1,8 @@
-import { Logger as TSLog } from 'tslog';
+import pino from 'pino';
 
-export const Logger = new TSLog({
-  displayInstanceName: false,
-  minLevel: 'silly',
-  displayFunctionName: false,
-  displayFilePath: 'hidden',
+export const Logger = pino({
+  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
 });
+
+process.on('uncaughtException', (e) => Logger.error(e));
+process.on('unhandledRejection', (e) => Logger.error(e));

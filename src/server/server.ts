@@ -1,5 +1,6 @@
-import { Environment, Logger } from '../utils';
 import express from 'express';
+import pino from 'pino-http';
+import { Environment, Logger } from '../utils';
 import { router } from '../modules';
 
 const server = express();
@@ -17,6 +18,7 @@ const health = async (request: express.Request, response: express.Response): Pro
 
 export const initialize = (): void => {
   server.use(express.json());
+  server.use(pino());
   server.get('/', docs);
   server.get('/health', health);
   server.use('/v1', router);
