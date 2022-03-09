@@ -1,6 +1,6 @@
 {
   "name": "lunasea-notification-service",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Notification service for LunaSea",
   "repository": "https://github.com/JagandeepBrar/LunaSea-Notification-Service",
   "main": "index.js",
@@ -29,13 +29,13 @@
     "firebase-admin": "^10.0.2",
     "ioredis": "^4.28.5",
     "node-typescript-compiler": "2.3.0",
-    "ts-node": "^10.6.0",
+    "ts-node": "^10.7.0",
     "tslog": "^3.3.2",
     "typescript": "^4.6.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "@typescript-eslint/parser": "^5.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
     "eslint": "^8.10.0",
     "husky": "^7.0.4",
     "nodemon": "^2.0.15",
