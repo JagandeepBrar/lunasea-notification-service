@@ -1,3 +1,8 @@
+export interface RedisExpiration {
+  mode: string;
+  ttl: number;
+}
+
 export const MESSAGE = {
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   NO_ID_SUPPLIED: 'No ID Supplied',
@@ -8,10 +13,17 @@ export const MESSAGE = {
 
 export const REDIS = {
   EXPIRE: {
-    MODE: 'EX', // Seconds
-    TTL: 60 * 60 * 24, // 24 Hours
+    DEVICES: <RedisExpiration>{
+      mode: 'EX', // Seconds
+      ttl: 30, // 30 Seconds
+    },
+    IMAGE_CACHE: <RedisExpiration>{
+      mode: 'EX', // Seconds
+      ttl: 60 * 60 * 24 * 7, // 7 Days
+    },
   },
-  PREFIXES: {
+  PREFIX: {
+    DEVICES: 'DEVICES',
     IMAGE_CACHE: 'IMAGE_CACHE',
   },
 };

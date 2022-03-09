@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import * as Cache from './cache';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getMessaging, MulticastMessage } from 'firebase-admin/messaging';
@@ -28,7 +29,7 @@ export const initialize = (): void => {
  * @param uid Firebase UID
  * @returns true if found, false if not found
  */
-export const validateUserID = async (uid: string): Promise<boolean> => {
+export const hasUserID = async (uid: string): Promise<boolean> => {
   try {
     if (!uid) return false;
     return await getAuth(firebase)
@@ -37,8 +38,8 @@ export const validateUserID = async (uid: string): Promise<boolean> => {
         if (user) return true;
         return false;
       });
-  } catch (error: any) {
-    Logger.error(uid, '/', error.message);
+  } catch (error) {
+    Logger.error(uid, '/', error);
     return false;
   }
 };
@@ -51,17 +52,28 @@ export const validateUserID = async (uid: string): Promise<boolean> => {
  */
 export const getDeviceTokenList = async (uid: string): Promise<string[]> => {
   try {
+    // Invalid UID
     if (!uid) return [];
+
+    // Cache
+    const cache = await Cache.getDeviceList(uid);
+    if (cache) return cache;
+
+    // Firestore
     return await getFirestore(firebase)
       .doc(`users/${uid}`)
       .get()
       .then((document) => {
         const data = document.data();
-        if (data) return data['devices'] ?? [];
+        if (data) {
+          const devices = data['devices'] ?? [];
+          Cache.setDeviceList(uid, devices);
+          return devices;
+        }
         return [];
       });
-  } catch (error: any) {
-    Logger.error(uid, '/', error.message);
+  } catch (error) {
+    Logger.error(uid, '/', error);
     return [];
   }
 };
@@ -79,7 +91,6 @@ export const sendNotification = async (
   payload: Notifications.Payload,
   settings: Notifications.Settings,
 ): Promise<boolean> => {
-  Logger.debug('Sending notification(s)...');
   try {
     const message: MulticastMessage = Notifications.buildMulticastMessage(
       tokens,
@@ -95,8 +106,8 @@ export const sendNotification = async (
         );
         return response.successCount > 0;
       });
-  } catch (error: any) {
-    Logger.error(error.message);
+  } catch (error) {
+    Logger.error(error);
     return false;
   }
 };
