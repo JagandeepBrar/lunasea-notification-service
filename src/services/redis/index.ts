@@ -37,27 +37,26 @@ export const initialize = (): void => {
  *
  * @param key Redis key
  * @param value Value to set to
+ * @param expiration Expiration configuration
  * @returns True if successful, False on any error or if Redis is disconnected.
  */
-export const set = async (key: string, value: string): Promise<boolean> => {
+export const set = async (
+  key: string,
+  value: string,
+  expiration: Constants.RedisExpiration,
+): Promise<boolean> => {
   const _isSetSuccess = (res: 'OK' | null): boolean => {
     return res === 'OK';
   };
 
-  Logger.debug(`Redis: Setting "${key}"...`);
   let res = false;
   try {
     if (redis) {
-      const set = await redis.set(
-        key,
-        value,
-        Constants.REDIS.EXPIRE.MODE,
-        Constants.REDIS.EXPIRE.TTL,
-      );
+      const set = await redis.set(key, value, expiration.mode, expiration.ttl);
       res = _isSetSuccess(set);
     }
-  } catch (error: any) {
-    Logger.error(error.message);
+  } catch (error) {
+    Logger.error(error);
   }
   return res;
 };
@@ -69,13 +68,11 @@ export const set = async (key: string, value: string): Promise<boolean> => {
  * @returns The string value if the key was found, else null
  */
 export const get = async (key: string): Promise<string | null> => {
-  Logger.debug(`Redis: Getting "${key}"...`);
   let res: string | null = null;
   try {
     if (redis) res = await redis.get(key);
-  } catch (error: any) {
-    Logger.error(error.message);
+  } catch (error) {
+    Logger.error(error);
   }
-  if (!res) Logger.debug(`Redis: Cache Miss`);
   return res;
 };
