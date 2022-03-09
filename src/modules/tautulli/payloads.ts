@@ -5,9 +5,6 @@ const createTitle = (profile: string, body: string): string =>
   Notifications.generateTitle('Tautulli', profile, body);
 const moduleKey = 'tautulli';
 
-/**
- * Construct a Notifications.Payload based on a buffer warning event.
- */
 export const bufferWarning = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -32,9 +29,6 @@ export const bufferWarning = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a playback error event.
- */
 export const playbackError = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -58,9 +52,6 @@ export const playbackError = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a playback pause event.
- */
 export const playbackPause = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -85,9 +76,6 @@ export const playbackPause = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a playback resume event.
- */
 export const playbackResume = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -112,9 +100,6 @@ export const playbackResume = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a playback start event.
- */
 export const playbackStart = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -139,9 +124,6 @@ export const playbackStart = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a playback stop event.
- */
 export const playbackStop = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -166,9 +148,6 @@ export const playbackStop = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a plex remote access back up event.
- */
 export const plexRemoteAccessBackUp = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -187,9 +166,6 @@ export const plexRemoteAccessBackUp = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a plex remote access down event.
- */
 export const plexRemoteAccessDown = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -209,9 +185,6 @@ export const plexRemoteAccessDown = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a plex server back up event.
- */
 export const plexServerBackUp = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -230,9 +203,6 @@ export const plexServerBackUp = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a plex server down event.
- */
 export const plexServerDown = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -251,9 +221,6 @@ export const plexServerDown = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a plex update available event.
- */
 export const plexUpdateAvailable = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -273,9 +240,6 @@ export const plexUpdateAvailable = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a recently added event.
- */
 export const recentlyAdded = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -296,9 +260,6 @@ export const recentlyAdded = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a tautulli database corruption event.
- */
 export const tautulliDatabaseCorruption = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -317,9 +278,6 @@ export const tautulliDatabaseCorruption = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a tautulli update available event.
- */
 export const tautulliUpdateAvailable = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -339,9 +297,6 @@ export const tautulliUpdateAvailable = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a test event.
- */
 export const test = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -359,9 +314,6 @@ export const test = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a transcode decision change event.
- */
 export const transcodeDecisionChange = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -386,9 +338,6 @@ export const transcodeDecisionChange = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a user concurrent streams event.
- */
 export const userConcurrentStreams = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -410,9 +359,6 @@ export const userConcurrentStreams = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a user concurrent streams event.
- */
 export const userNewDevice = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -434,9 +380,6 @@ export const userNewDevice = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a watched event.
- */
 export const watched = async (
   payload: Models.ActionTypePayload,
   profile: string,
@@ -460,14 +403,6 @@ export const watched = async (
   };
 };
 
-///////////////////////////
-/// DEPRECATED PAYLOADS ///
-///////////////////////////
-
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a buffer warning event.
- */
 export const bufferWarningDeprecated = async (
   data: Models.BufferWarningEventTypeDeprecated,
   profile: string,
@@ -491,10 +426,6 @@ export const bufferWarningDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a playback stop event.
- */
 export const playbackErrorDeprecated = async (
   data: Models.PlaybackErrorEventTypeDeprecated,
   profile: string,
@@ -519,10 +450,6 @@ export const playbackErrorDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a playback pause event.
- */
 export const playbackPauseDeprecated = async (
   data: Models.PlaybackPauseEventTypeDeprecated,
   profile: string,
@@ -546,10 +473,6 @@ export const playbackPauseDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a playback resume event.
- */
 export const playbackResumeDeprecated = async (
   data: Models.PlaybackResumeEventTypeDeprecated,
   profile: string,
@@ -573,10 +496,6 @@ export const playbackResumeDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a playback start event.
- */
 export const playbackStartDeprecated = async (
   data: Models.PlaybackStartEventTypeDeprecated,
   profile: string,
@@ -602,10 +521,6 @@ export const playbackStartDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a playback stop event.
- */
 export const playbackStopDeprecated = async (
   data: Models.PlaybackStopEventTypeDeprecated,
   profile: string,
@@ -628,10 +543,6 @@ export const playbackStopDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a plex remote access back up event.
- */
 export const plexRemoteAccessBackUpDeprecated = async (
   data: Models.PlexRemoteAccessBackUpEventTypeDeprecated,
   profile: string,
@@ -651,10 +562,6 @@ export const plexRemoteAccessBackUpDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a plex remote access down event.
- */
 export const plexRemoteAccessDownDeprecated = async (
   data: Models.PlexRemoteAccessDownEventTypeDeprecated,
   profile: string,
@@ -675,10 +582,6 @@ export const plexRemoteAccessDownDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a plex server back up event.
- */
 export const plexServerBackUpDeprecated = async (
   data: Models.PlexServerBackUpEventTypeDeprecated,
   profile: string,
@@ -695,10 +598,6 @@ export const plexServerBackUpDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a plex server down event.
- */
 export const plexServerDownDeprecated = async (
   data: Models.PlexServerDownEventTypeDeprecated,
   profile: string,
@@ -715,10 +614,6 @@ export const plexServerDownDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a plex update available event.
- */
 export const plexUpdateAvailableDeprecated = async (
   data: Models.PlexUpdateAvailableEventTypeDeprecated,
   profile: string,
@@ -739,10 +634,6 @@ export const plexUpdateAvailableDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a recently added event.
- */
 export const recentlyAddedDeprecated = async (
   data: Models.RecentlyAddedEventTypeDeprecated,
   profile: string,
@@ -762,10 +653,6 @@ export const recentlyAddedDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a tautulli database corruption event.
- */
 export const tautulliDatabaseCorruptionDeprecated = async (
   data: Models.TautulliDatabaseCorruptionEventTypeDeprecated,
   profile: string,
@@ -785,10 +672,6 @@ export const tautulliDatabaseCorruptionDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a tautulli update available event.
- */
 export const tautulliUpdateAvailableDeprecated = async (
   data: Models.TautulliUpdateAvailableEventTypeDeprecated,
   profile: string,
@@ -809,10 +692,6 @@ export const tautulliUpdateAvailableDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a transcode decision change event.
- */
 export const transcodeDecisionChangeDeprecated = async (
   data: Models.TranscodeDecisionChangeEventTypeDeprecated,
   profile: string,
@@ -838,10 +717,6 @@ export const transcodeDecisionChangeDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a user concurrent streams event.
- */
 export const userConcurrentStreamsDeprecated = async (
   data: Models.UserConcurrentStreamsEventTypeDeprecated,
   profile: string,
@@ -862,10 +737,6 @@ export const userConcurrentStreamsDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a user concurrent streams event.
- */
 export const userNewDeviceDeprecated = async (
   data: Models.UserNewDeviceEventTypeDeprecated,
   profile: string,
@@ -888,10 +759,6 @@ export const userNewDeviceDeprecated = async (
   };
 };
 
-/**
- * **DEPRECATED**: Should now use the built-in agent
- * Construct a Notifications.Payload based on a watched event.
- */
 export const watchedDeprecated = async (
   data: Models.WatchedEventTypeDeprecated,
   profile: string,

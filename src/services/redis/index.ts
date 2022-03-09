@@ -3,9 +3,6 @@ import { Logger, Constants, Environment } from '../../utils';
 
 let redis: Redis.Redis | undefined;
 
-/**
- * Initialize the connection to Redis.
- */
 export const initialize = (): void => {
   Logger.debug('Initializing Redis...');
 
@@ -32,18 +29,10 @@ export const initialize = (): void => {
   Logger.debug('Initialized Redis.');
 };
 
-/**
- * Set the given key to the given value in the Redis instance.
- *
- * @param key Redis key
- * @param value Value to set to
- * @param expiration Expiration configuration
- * @returns True if successful, False on any error or if Redis is disconnected.
- */
 export const set = async (
   key: string,
   value: string,
-  expiration: Constants.RedisExpiration,
+  expiration: Constants.RedisExpirationConfig,
 ): Promise<boolean> => {
   const _isSetSuccess = (res: 'OK' | null): boolean => {
     return res === 'OK';
@@ -61,12 +50,6 @@ export const set = async (
   return res;
 };
 
-/**
- * Get the given key from the Redis instance.
- *
- * @param key Redis key
- * @returns The string value if the key was found, else null
- */
 export const get = async (key: string): Promise<string | null> => {
   let res: string | null = null;
   try {

@@ -2,10 +2,10 @@ import { Redis } from '../../services';
 import { Constants } from '../../utils';
 
 const _keyBuilderSeries = (seriesId: number): string => {
-  return `${Constants.REDIS.PREFIXES.IMAGE_CACHE}:THE_MOVIE_DB:SERIES:${seriesId}`;
+  return `${Constants.REDIS.PREFIX.IMAGE_CACHE}:THE_MOVIE_DB:SERIES:${seriesId}`;
 };
 const _keyBuilderMovie = (movieId: number): string => {
-  return `${Constants.REDIS.PREFIXES.IMAGE_CACHE}:THE_MOVIE_DB:MOVIES:${movieId}`;
+  return `${Constants.REDIS.PREFIX.IMAGE_CACHE}:THE_MOVIE_DB:MOVIES:${movieId}`;
 };
 
 export const getMoviePoster = async (movieId: number): Promise<string | undefined> => {
@@ -17,7 +17,7 @@ export const getMoviePoster = async (movieId: number): Promise<string | undefine
 
 export const setMoviePoster = async (movieId: number, url: string): Promise<boolean> => {
   const key = _keyBuilderMovie(movieId);
-  const res = await Redis.set(key, url);
+  const res = await Redis.set(key, url, Constants.REDIS.EXPIRE.IMAGE_CACHE);
   if (res) return true;
   return false;
 };
@@ -31,7 +31,7 @@ export const getSeriesPoster = async (seriesId: number): Promise<string | undefi
 
 export const setSeriesPoster = async (seriesId: number, url: string): Promise<boolean> => {
   const key = _keyBuilderSeries(seriesId);
-  const res = await Redis.set(key, url);
+  const res = await Redis.set(key, url, Constants.REDIS.EXPIRE.IMAGE_CACHE);
   if (res) return true;
   return false;
 };

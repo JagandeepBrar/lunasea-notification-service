@@ -1,5 +1,9 @@
-export interface RedisExpiration {
-  mode: string;
+export enum RedisExpirationMode {
+  SECONDS = 'EX',
+}
+
+export interface RedisExpirationConfig {
+  mode: RedisExpirationMode;
   ttl: number;
 }
 
@@ -13,12 +17,12 @@ export const MESSAGE = {
 
 export const REDIS = {
   EXPIRE: {
-    DEVICES: <RedisExpiration>{
-      mode: 'EX', // Seconds
-      ttl: 30, // 30 Seconds
+    DEVICES: <RedisExpirationConfig>{
+      mode: RedisExpirationMode.SECONDS,
+      ttl: 30,
     },
-    IMAGE_CACHE: <RedisExpiration>{
-      mode: 'EX', // Seconds
+    IMAGE_CACHE: <RedisExpirationConfig>{
+      mode: RedisExpirationMode.SECONDS,
       ttl: 60 * 60 * 24 * 7, // 7 Days
     },
   },

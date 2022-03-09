@@ -9,17 +9,11 @@ export enum ExternalSourceType {
   twitterId = 'twitter_id',
 }
 
-/**
- * Interface that only maps to fields important to the notification service.
- */
 export interface ContentResponse {
   backdrop_path?: string;
   poster_path?: string;
 }
 
-/**
- * Interface for the `find` command in TMDB.
- */
 export interface FindContentResponse {
   movie_results: ContentResponse[];
   person_results: ContentResponse[];

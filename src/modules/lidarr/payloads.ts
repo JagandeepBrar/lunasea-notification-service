@@ -6,9 +6,6 @@ const title = (profile: string, body: string): string =>
   Notifications.generateTitle('Lidarr', profile, body);
 const moduleKey = 'lidarr';
 
-/**
- * Construct a Notifications.Payload based on a grab event.
- */
 export const grab = async (
   data: Models.GrabEventType,
   profile: string,
@@ -35,9 +32,6 @@ export const grab = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a download event.
- */
 export const download = async (
   data: Models.DownloadEventType,
   profile: string,
@@ -65,9 +59,6 @@ export const download = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a rename event.
- */
 export const rename = async (
   data: Models.RenameEventType,
   profile: string,
@@ -86,9 +77,6 @@ export const rename = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a retag event.
- */
 export const retag = async (
   data: Models.RetagEventType,
   profile: string,
@@ -107,9 +95,6 @@ export const retag = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a test event.
- */
 export const test = async (
   data: Models.TestEventType,
   profile: string,

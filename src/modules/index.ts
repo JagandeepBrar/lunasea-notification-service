@@ -7,12 +7,14 @@ import { Controller as Radarr } from './radarr';
 import { Controller as Sonarr } from './sonarr';
 import { Controller as Tautulli } from './tautulli';
 
-// Create a router and use each of the modules' own router instance for each subroute
 export const router = express.Router();
 
 // Shared Middleware
+router.use(Middleware.startNewRequest);
 router.use(Middleware.extractNotificationOptions);
 router.use(Middleware.extractProfile);
+
+// Modules
 Custom.enable(router);
 Lidarr.enable(router);
 Overseerr.enable(router);
