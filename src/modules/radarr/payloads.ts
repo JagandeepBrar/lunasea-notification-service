@@ -6,9 +6,6 @@ const title = (profile: string, body: string): string =>
   Notifications.generateTitle('Radarr', profile, body);
 const moduleKey = 'radarr';
 
-/**
- * Construct a Notifications.Payload based on a download event.
- */
 export const download = async (
   data: Models.DownloadEventType,
   profile: string,
@@ -29,9 +26,6 @@ export const download = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a grab event.
- */
 export const grab = async (
   data: Models.GrabEventType,
   profile: string,
@@ -52,9 +46,6 @@ export const grab = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a health event.
- */
 export const health = async (
   data: Models.HealthEventType,
   profile: string,
@@ -70,9 +61,6 @@ export const health = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a movie delete event.
- */
 export const movieDelete = async (
   data: Models.MovieDeleteEventType,
   profile: string,
@@ -91,9 +79,6 @@ export const movieDelete = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a movie file delete event.
- */
 export const movieFileDelete = async (
   data: Models.MovieDeleteEventType,
   profile: string,
@@ -112,9 +97,6 @@ export const movieFileDelete = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a rename event.
- */
 export const rename = async (
   data: Models.RenameEventType,
   profile: string,
@@ -133,9 +115,6 @@ export const rename = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a test event.
- */
 export const test = async (
   data: Models.TestEventType,
   profile: string,

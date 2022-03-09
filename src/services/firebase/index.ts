@@ -7,9 +7,6 @@ import { Environment, Logger, Notifications } from '../../utils';
 
 let firebase: admin.app.App;
 
-/**
- * Initialize the connection to Firebase and link it to the service account.
- */
 export const initialize = (): void => {
   Logger.debug('Initializing Firebase...');
   firebase = admin.initializeApp({
@@ -23,12 +20,6 @@ export const initialize = (): void => {
   Logger.debug('Initialized Firebase.');
 };
 
-/**
- * Validate that the a user with the given UID exists in the Firebase project.
- *
- * @param uid Firebase UID
- * @returns true if found, false if not found
- */
 export const hasUserID = async (uid: string): Promise<boolean> => {
   try {
     if (!uid) return false;
@@ -44,13 +35,7 @@ export const hasUserID = async (uid: string): Promise<boolean> => {
   }
 };
 
-/**
- * Returns a list of device tokens that are attached to the given UID.
- *
- * @param uid Firebase UID
- * @returns list of string device token IDs
- */
-export const getDeviceTokenList = async (uid: string): Promise<string[]> => {
+export const getUserDevices = async (uid: string): Promise<string[]> => {
   try {
     // Invalid UID
     if (!uid) return [];
@@ -78,14 +63,6 @@ export const getDeviceTokenList = async (uid: string): Promise<string[]> => {
   }
 };
 
-/**
- * Send a message to the supplied device token list.
- *
- * @param tokens Firebase device token list
- * @param payload Preconstructed NotificationPayload
- * @param settings Notification settings
- * @param data Data message payload
- */
 export const sendNotification = async (
   tokens: string[],
   payload: Notifications.Payload,
@@ -97,7 +74,7 @@ export const sendNotification = async (
       payload,
       settings,
     );
-    // Send the message
+
     return await getMessaging(firebase)
       .sendMulticast(message)
       .then((response) => {

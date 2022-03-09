@@ -6,9 +6,6 @@ const title = (profile: string, body: string): string =>
   Notifications.generateTitle('Sonarr', profile, body);
 const moduleKey = 'sonarr';
 
-/**
- * Construct a Notifications.Payload based on a delete episode file event.
- */
 export const deleteEpisodeFile = async (
   data: Models.EpisodeFileDeleteEventType,
   profile: string,
@@ -38,9 +35,6 @@ export const deleteEpisodeFile = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a delete series event.
- */
 export const deleteSeries = async (
   data: Models.SeriesDeleteEventType,
   profile: string,
@@ -62,9 +56,6 @@ export const deleteSeries = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a download event.
- */
 export const download = async (
   data: Models.DownloadEventType,
   profile: string,
@@ -97,9 +88,6 @@ export const download = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a grab event.
- */
 export const grab = async (
   data: Models.GrabEventType,
   profile: string,
@@ -130,9 +118,6 @@ export const grab = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a health event.
- */
 export const health = async (
   data: Models.HealthEventType,
   profile: string,
@@ -148,9 +133,6 @@ export const health = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a rename event.
- */
 export const rename = async (
   data: Models.RenameEventType,
   profile: string,
@@ -171,9 +153,6 @@ export const rename = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a test event.
- */
 export const test = async (
   data: Models.TestEventType,
   profile: string,

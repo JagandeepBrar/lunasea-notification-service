@@ -5,9 +5,6 @@ import { Logger, Notifications } from '../../utils';
 const title = (profile: string, body: string): string =>
   Notifications.generateTitle('Overseerr', profile, body);
 
-/**
- * Construct a Notifications.Payload based on a media approved event.
- */
 export const mediaApproved = async (
   data: Models.RequestProperties,
   profile: string,
@@ -28,9 +25,6 @@ export const mediaApproved = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a media auto approved event.
- */
 export const mediaAutoApproved = async (
   data: Models.RequestProperties,
   profile: string,
@@ -51,9 +45,6 @@ export const mediaAutoApproved = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a media available event.
- */
 export const mediaAvailable = async (
   data: Models.RequestProperties,
   profile: string,
@@ -74,9 +65,6 @@ export const mediaAvailable = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a media declined event.
- */
 export const mediaDeclined = async (
   data: Models.RequestProperties,
   profile: string,
@@ -97,9 +85,6 @@ export const mediaDeclined = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a media failed event.
- */
 export const mediaFailed = async (
   data: Models.RequestProperties,
   profile: string,
@@ -120,9 +105,6 @@ export const mediaFailed = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a media pending event.
- */
 export const mediaPending = async (
   data: Models.RequestProperties,
   profile: string,
@@ -143,9 +125,6 @@ export const mediaPending = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on an issue created event.
- */
 export const issueCreated = async (
   data: Models.RequestProperties,
   profile: string,
@@ -165,9 +144,6 @@ export const issueCreated = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on an issue resolved event.
- */
 export const issueResolved = async (
   data: Models.RequestProperties,
   profile: string,
@@ -187,9 +163,6 @@ export const issueResolved = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on an issue reopened event.
- */
 export const issueReopened = async (
   data: Models.RequestProperties,
   profile: string,
@@ -209,9 +182,6 @@ export const issueReopened = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on an issue commented event.
- */
 export const issueCommented = async (
   data: Models.RequestProperties,
   profile: string,
@@ -231,9 +201,6 @@ export const issueCommented = async (
   };
 };
 
-/**
- * Construct a Notifications.Payload based on a test event.
- */
 export const test = async (
   data: Models.RequestProperties,
   profile: string,
@@ -244,36 +211,26 @@ export const test = async (
   };
 };
 
-/**
- * Pull the TVDB ID and fetch the series poster URL
- *
- * @param data RequestProperties from Overseerr
- */
 const getSeriesImageURL = async (data: Models.RequestProperties): Promise<string | undefined> => {
   try {
     if (data.media?.tvdbId) {
       const id = parseInt(data.media.tvdbId);
       if (!isNaN(id)) return await TheMovieDB.getSeriesPoster(id);
     }
-  } catch (error: any) {
-    Logger.error(error.message);
+  } catch (error) {
+    Logger.error(error);
   }
   return undefined;
 };
 
-/**
- * Pull the TMDB ID and fetch the movie poster URL
- *
- * @param data RequestProperties from Overseerr
- */
 const getMovieImageURL = async (data: Models.RequestProperties): Promise<string | undefined> => {
   try {
     if (data.media?.tmdbId) {
       const id = parseInt(data.media.tmdbId);
       if (!isNaN(id)) return await TheMovieDB.getMoviePoster(id);
     }
-  } catch (error: any) {
-    Logger.error(error.message);
+  } catch (error) {
+    Logger.error(error);
   }
   return undefined;
 };

@@ -39,10 +39,6 @@ export interface ActionTypePayloadData {
   tautulli_update_version?: string;
 }
 
-/**
- * Deprecated: Old method via Webhooks
- */
-
 export enum EventTypeDeprecated {
   BufferWarning = 'BufferWarning',
   PlaybackError = 'PlaybackError',
