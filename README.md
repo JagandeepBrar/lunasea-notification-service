@@ -1,14 +1,14 @@
 # LunaSea Notification Service
 
-A simple TypeScript backend system that handles receiving webhooks from applications supported in [LunaSea](https://github.com/JagandeepBrar/LunaSea) and sends notifications to the respective user or device.
+A TypeScript backend service that handles receiving webhooks from applications supported in [LunaSea](https://www.lunasea.app/github) and sends notifications to the respective user or device.
 
-> Setting up an instance of your own notification service is **not** necessary to get webhook notifications in LunaSea. Simply use the hosted notification service, available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance _will not_ send notifications to the officially published LunaSea application.
+> Setting up an instance of your own notification service is **not** necessary to get webhook notifications in LunaSea, simply use the hosted notification service available at [https://notify.lunasea.app](https://notify.lunasea.app). Setting up your own instance _will not_ send notifications to the officially published LunaSea application.
 >
 > Setting up your own instance of the notification service is only necessary when building your own version of LunaSea, which utilizes a different Firebase project.
 
 ## Usage
 
-For documentation on setting up the webhooks, please look at LunaSea's documentation [available here](https://docs.lunasea.app/lunasea/notifications).
+For documentation on setting up the webhooks, please look at LunaSea's documentation [available here](https://notify.lunasea.app).
 
 ## Installation (Docker)
 
