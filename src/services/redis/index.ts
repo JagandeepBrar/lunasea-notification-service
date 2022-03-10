@@ -5,11 +5,11 @@ const logger = Logger.child({ module: 'redis' });
 let redis: Redis.Redis | undefined;
 
 export const initialize = (): void => {
-  const host = Environment.default.REDIS_HOST.read();
-  const port = Number(Environment.default.REDIS_PORT.read());
-  const username = Environment.default.REDIS_USER.read();
-  const password = Environment.default.REDIS_PASS.read();
-  const useTLS = Environment.default.REDIS_USE_TLS.read() === 'true';
+  const host = Environment.REDIS_HOST.read();
+  const port = Number(Environment.REDIS_PORT.read());
+  const username = Environment.REDIS_USER.read();
+  const password = Environment.REDIS_PASS.read();
+  const useTLS = Environment.REDIS_USE_TLS.read() === 'true';
 
   redis = new Redis({
     host,

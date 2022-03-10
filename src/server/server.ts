@@ -26,7 +26,7 @@ export const initialize = (): void => {
 export const start = (): void => {
   initialize();
 
-  const PORT = Environment.default.PORT.read();
+  const PORT = Environment.PORT.read();
   server.listen(PORT).on('error', (error: Error) => {
     logger.error(error);
     process.exit(1);

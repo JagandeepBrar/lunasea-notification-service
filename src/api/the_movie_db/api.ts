@@ -6,7 +6,7 @@ const http = axios.create({
   method: 'GET',
   baseURL: Constants.THE_MOVIE_DB.API.BASE_URL,
   params: {
-    api_key: Environment.default.THEMOVIEDB_API_KEY.read(),
+    api_key: Environment.THEMOVIEDB_API_KEY.read(),
   },
 });
 

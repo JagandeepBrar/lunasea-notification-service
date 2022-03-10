@@ -6,7 +6,7 @@ const logger = Logger.child({ module: 'fanart_tv' });
 const http = axios.create({
   baseURL: 'http://webservice.fanart.tv/v3/',
   params: {
-    api_key: Environment.default.FANART_TV_API_KEY.read(),
+    api_key: Environment.FANART_TV_API_KEY.read(),
   },
 });
 
