@@ -1,6 +1,6 @@
 {
   "name": "lunasea-notification-service",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Notification service for LunaSea",
   "repository": "https://github.com/JagandeepBrar/LunaSea-Notification-Service",
   "main": "index.js",
