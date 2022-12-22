@@ -33,6 +33,7 @@ export interface ActionTypePayloadData {
   title?: string;
   poster_url?: string;
   session_id?: string;
+  session_key?: string;
   user_streams?: number;
   remote_access_reason?: string;
   update_version?: string;
@@ -68,6 +69,7 @@ export interface BufferWarningEventTypeDeprecated {
   title?: string;
   poster_url?: string;
   session_id?: string;
+  session_key?: string;
   message?: string;
 }
 
@@ -89,6 +91,7 @@ export interface PlaybackPauseEventTypeDeprecated {
   title?: string;
   poster_url?: string;
   session_id?: string;
+  session_key?: string;
   message?: string;
 }
 
@@ -100,6 +103,7 @@ export interface PlaybackResumeEventTypeDeprecated {
   title?: string;
   poster_url?: string;
   session_id?: string;
+  session_key?: string;
   message?: string;
 }
 
@@ -111,6 +115,7 @@ export interface PlaybackStartEventTypeDeprecated {
   title?: string;
   poster_url?: string;
   session_id?: string;
+  session_key?: string;
   message?: string;
 }
 
@@ -177,6 +182,7 @@ export interface TranscodeDecisionChangeEventTypeDeprecated {
   title?: string;
   poster_url?: string;
   session_id?: string;
+  session_key?: string;
   message?: string;
 }
 
