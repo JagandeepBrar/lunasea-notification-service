@@ -25,6 +25,7 @@ export const bufferWarning = async (
       event: Models.EventTypeDeprecated.BufferWarning,
       user_id: String(payload?.data?.user_id ?? ''),
       session_id: payload?.data?.session_id ?? '',
+      session_key: payload?.data?.session_key ?? '',
     },
   };
 };
@@ -72,6 +73,7 @@ export const playbackPause = async (
       event: Models.EventTypeDeprecated.PlaybackPause,
       user_id: String(payload?.data?.user_id ?? ''),
       session_id: payload?.data?.session_id ?? '',
+      session_key: payload?.data?.session_key ?? '',
     },
   };
 };
@@ -96,6 +98,7 @@ export const playbackResume = async (
       event: Models.EventTypeDeprecated.PlaybackResume,
       user_id: String(payload?.data?.user_id ?? ''),
       session_id: payload?.data?.session_id ?? '',
+      session_key: payload?.data?.session_key ?? '',
     },
   };
 };
@@ -120,6 +123,7 @@ export const playbackStart = async (
       event: Models.EventTypeDeprecated.PlaybackStart,
       user_id: String(payload?.data?.user_id ?? ''),
       session_id: payload?.data?.session_id ?? '',
+      session_key: payload?.data?.session_key ?? '',
     },
   };
 };
@@ -144,6 +148,7 @@ export const playbackStop = async (
       event: Models.EventTypeDeprecated.PlaybackStop,
       user_id: String(payload?.data?.user_id ?? ''),
       session_id: payload?.data?.session_id ?? '',
+      session_key: payload?.data?.session_key ?? '',
     },
   };
 };
@@ -334,6 +339,7 @@ export const transcodeDecisionChange = async (
       event: Models.EventTypeDeprecated.TranscodeDecisionChange,
       user_id: String(payload?.data?.user_id ?? ''),
       session_id: payload?.data?.session_id ?? '',
+      session_key: payload?.data?.session_key ?? '',
     },
   };
 };
@@ -422,6 +428,7 @@ export const bufferWarningDeprecated = async (
       event: data.event_type,
       user_id: data.user_id ?? '',
       session_id: data.session_id ?? '',
+      session_key: data.session_key ?? '',
     },
   };
 };
@@ -469,6 +476,7 @@ export const playbackPauseDeprecated = async (
       event: data.event_type,
       user_id: data.user_id ?? '',
       session_id: data.session_id ?? '',
+      session_key: data.session_key ?? '',
     },
   };
 };
@@ -492,6 +500,7 @@ export const playbackResumeDeprecated = async (
       event: data.event_type,
       user_id: data.user_id ?? '',
       session_id: data.session_id ?? '',
+      session_key: data.session_key ?? '',
     },
   };
 };
@@ -517,6 +526,7 @@ export const playbackStartDeprecated = async (
       event: data.event_type,
       user_id: data.user_id ?? '',
       session_id: data.session_id ?? '',
+      session_key: data.session_key ?? '',
     },
   };
 };
@@ -713,6 +723,7 @@ export const transcodeDecisionChangeDeprecated = async (
       event: data.event_type,
       user_id: data.user_id ?? '',
       session_id: data.session_id ?? '',
+      session_key: data.session_key ?? '',
     },
   };
 };
