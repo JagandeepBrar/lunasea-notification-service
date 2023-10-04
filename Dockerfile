@@ -1,11 +1,12 @@
-FROM node:14.16-alpine
+FROM node:18-alpine
 LABEL org.opencontainers.image.source="https://github.com/JagandeepBrar/LunaSea-Notification-Service"
 # Install packages, copy data, build project
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install
 COPY . .
 RUN npm run build
+RUN npm prune --production
 # Add Tini
 RUN apk add --no-cache tini
 ENTRYPOINT ["/sbin/tini", "--"]
