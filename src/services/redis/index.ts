@@ -2,7 +2,7 @@ import Redis from 'ioredis';
 import { Logger, Constants, Environment } from '../../utils';
 
 const logger = Logger.child({ module: 'redis' });
-let redis: Redis.Redis | undefined;
+let redis: Redis | undefined;
 
 export const initialize = (): void => {
   const host = Environment.REDIS_HOST.read();

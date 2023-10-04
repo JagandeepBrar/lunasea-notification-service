@@ -27,6 +27,11 @@ export const buildMulticastMessage = (
   payload: Payload,
   settings: Settings,
 ): MulticastMessage => {
+  const data: { [key: string]: string } = {};
+  for (const key of Object.keys(payload.data ?? {})) {
+    data[key] = String((payload.data ?? {})[key]);
+  }
+
   return <MulticastMessage>{
     tokens: tokens,
     notification: {
@@ -34,7 +39,7 @@ export const buildMulticastMessage = (
       body: payload.body,
       imageUrl: payload.image,
     },
-    data: payload.data,
+    data,
     android: {
       notification: {
         sound: settings.sound ? 'default' : undefined,
