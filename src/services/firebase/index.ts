@@ -75,7 +75,7 @@ export const sendNotification = async (
     );
 
     return await getMessaging(firebase)
-      .sendMulticast(message)
+      .sendEachForMulticast(message)
       .then((response) => {
         logger.debug(
           {
